@@ -25,29 +25,48 @@ export async function loginAction(
   redirect(result.redirectTo);
 }
 
-export async function logoutAction(): Promise<void> {
+async function clearAuthCookiesAndSession() {
   if (isSupabaseConfigured()) {
-    const supabase = await createClient();
-    await supabase.auth.signOut({ scope: "local" });
+    try {
+      const supabase = await createClient();
+      await supabase.auth.signOut({ scope: "local" });
+    } catch {
+      // Do not let sign-out errors block redirect to login.
+    }
   }
-  const cookieStore = await cookies();
-  cookieStore.set(SESSION_MODE_COOKIE, "", {
-    path: "/",
-    maxAge: 0,
-  });
+
+  try {
+    const cookieStore = await cookies();
+    cookieStore.set(SESSION_MODE_COOKIE, "", {
+      path: "/",
+      maxAge: 0,
+      expires: new Date(0),
+    });
+    for (const c of cookieStore.getAll()) {
+      if (
+        c.name.startsWith("sb-") ||
+        c.name.includes("supabase") ||
+        c.name.includes("auth-token")
+      ) {
+        cookieStore.set(c.name, "", {
+          path: "/",
+          maxAge: 0,
+          expires: new Date(0),
+        });
+      }
+    }
+  } catch {
+    // ignore
+  }
+}
+
+export async function logoutAction(): Promise<void> {
+  await clearAuthCookiesAndSession();
   redirect("/login");
 }
 
 /** Sign out and open the login form (even if cookies briefly linger). */
 export async function switchAccountAction(): Promise<void> {
-  if (isSupabaseConfigured()) {
-    const supabase = await createClient();
-    await supabase.auth.signOut({ scope: "local" });
-  }
-  const cookieStore = await cookies();
-  cookieStore.set(SESSION_MODE_COOKIE, "", {
-    path: "/",
-    maxAge: 0,
-  });
+  await clearAuthCookiesAndSession();
   redirect("/login?switch=1");
 }

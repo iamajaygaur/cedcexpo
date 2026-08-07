@@ -11,11 +11,7 @@ import {
   User,
 } from "lucide-react";
 
-import {
-  logoutAction,
-  switchAccountAction,
-} from "@/lib/auth/actions";
-import { clearClientAuthArtifacts } from "@/lib/auth/clear-client-session";
+import { clientSignOut } from "@/lib/auth/client-sign-out";
 import { NotificationBell } from "@/components/shared/notification-bell";
 import { SearchInput } from "@/components/ui/search-input";
 import { cn } from "@/lib/utils";
@@ -202,35 +198,33 @@ export function AppTopBar({
                   <User className="size-4 text-muted-foreground" aria-hidden />
                   Settings
                 </Link>
-                <form
-                  action={switchAccountAction}
-                  onSubmit={() => clearClientAuthArtifacts()}
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-foreground transition-colors hover:bg-muted hover:text-foreground"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    void clientSignOut({ switchAccount: true });
+                  }}
                 >
-                  <button
-                    type="submit"
-                    role="menuitem"
-                    className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-foreground transition-colors hover:bg-muted hover:text-foreground"
-                  >
-                    <RefreshCw
-                      className="size-4 text-muted-foreground"
-                      aria-hidden
-                    />
-                    Switch account
-                  </button>
-                </form>
-                <form
-                  action={logoutAction}
-                  onSubmit={() => clearClientAuthArtifacts()}
+                  <RefreshCw
+                    className="size-4 text-muted-foreground"
+                    aria-hidden
+                  />
+                  Switch account
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-destructive transition-colors hover:bg-destructive/10"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    void clientSignOut();
+                  }}
                 >
-                  <button
-                    type="submit"
-                    role="menuitem"
-                    className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-destructive transition-colors hover:bg-destructive/10"
-                  >
-                    <LogOut className="size-4" aria-hidden />
-                    Sign out
-                  </button>
-                </form>
+                  <LogOut className="size-4" aria-hidden />
+                  Sign out
+                </button>
               </div>
             ) : null}
           </div>
