@@ -249,6 +249,65 @@
     animation: blob-drift 12s ease-in-out infinite alternate;
   }
 
+  /* Home hero mesh: soft gold (NW) + teal (SE) on cool off-white */
+  .home-mesh {
+    background-color: #f4f6f8;
+  }
+  .home-mesh__layer {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        70% 55% at 12% 8%,
+        color-mix(in srgb, var(--cu-gold) 42%, transparent) 0%,
+        transparent 62%
+      ),
+      radial-gradient(
+        65% 50% at 88% 92%,
+        color-mix(in srgb, var(--tertiary) 36%, transparent) 0%,
+        transparent 68%
+      ),
+      radial-gradient(
+        45% 40% at 70% 28%,
+        color-mix(in srgb, var(--cu-gold) 14%, transparent) 0%,
+        transparent 70%
+      ),
+      linear-gradient(165deg, #fafbfc 0%, #f3f5f7 48%, #eef3f4 100%);
+  }
+  .home-mesh__orb {
+    filter: blur(72px);
+    will-change: transform, opacity;
+  }
+  .home-mesh__orb--gold {
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--cu-gold) 75%, white) 0%,
+      color-mix(in srgb, var(--cu-gold) 35%, transparent) 55%,
+      transparent 70%
+    );
+  }
+  .home-mesh__orb--gold-soft {
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--primary-container) 55%, white) 0%,
+      transparent 70%
+    );
+    filter: blur(60px);
+  }
+  .home-mesh__orb--teal {
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--tertiary) 70%, white) 0%,
+      color-mix(in srgb, var(--tertiary) 28%, transparent) 55%,
+      transparent 72%
+    );
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .home-mesh__orb {
+      animation: none !important;
+    }
+  }
+
   /* Nav active gold accent bar (sidebar remains dark) */
   .nav-active-bar::before {
     content: "";

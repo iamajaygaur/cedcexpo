@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import {
   Gavel,
   Trophy,
@@ -65,28 +65,51 @@ const bentoFeatures = [
 ];
 
 export function HomeHero() {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <div className="relative flex min-h-dvh flex-col overflow-x-hidden bg-background">
-      {/* ── Subtle ambient blobs ─── */}
-      <motion.div
-        className="glow-blob pointer-events-none absolute -top-40 -left-40 h-[min(500px,80vw)] w-[min(500px,80vw)] bg-[#d4b773]"
-        style={{ opacity: 0.15 }}
-        animate={{ scale: [1, 1.06, 1], opacity: [0.15, 0.2, 0.15] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        aria-hidden
-      />
-      <motion.div
-        className="glow-blob pointer-events-none absolute top-1/2 -right-24 h-[min(400px,70vw)] w-[min(400px,70vw)] bg-[#2d8289]"
-        style={{ opacity: 0.08 }}
-        animate={{ scale: [1, 1.08, 1], opacity: [0.08, 0.14, 0.08] }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 2,
-        }}
-        aria-hidden
-      />
+    <div className="home-mesh relative flex min-h-svh flex-col overflow-x-clip">
+      {/* Soft mesh orbs — gold (top-left) + teal (bottom-right), matching CU brand */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+        <div className="home-mesh__layer" />
+        <motion.div
+          className="home-mesh__orb home-mesh__orb--gold absolute -top-24 -left-20 h-[min(520px,90vw)] w-[min(520px,90vw)] rounded-full sm:-top-32 sm:-left-28 sm:h-[560px] sm:w-[560px]"
+          animate={
+            reduceMotion
+              ? undefined
+              : { scale: [1, 1.05, 1], opacity: [0.55, 0.7, 0.55] }
+          }
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="home-mesh__orb home-mesh__orb--teal absolute -right-28 bottom-[-8%] h-[min(480px,85vw)] w-[min(480px,85vw)] rounded-full sm:-right-36 sm:bottom-[-12%] sm:h-[580px] sm:w-[580px]"
+          animate={
+            reduceMotion
+              ? undefined
+              : { scale: [1, 1.07, 1], opacity: [0.45, 0.6, 0.45] }
+          }
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1.5,
+          }}
+        />
+        <motion.div
+          className="home-mesh__orb home-mesh__orb--gold-soft absolute top-[38%] right-[8%] h-[min(220px,45vw)] w-[min(220px,45vw)] rounded-full opacity-40 sm:h-64 sm:w-64"
+          animate={
+            reduceMotion
+              ? undefined
+              : { scale: [1, 1.08, 1], opacity: [0.25, 0.4, 0.25] }
+          }
+          transition={{
+            duration: 14,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 3,
+          }}
+        />
+      </div>
 
       {/* ── Hero ───────────────────────────────────────── */}
       <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col items-center justify-center gap-5 px-4 py-8 text-center sm:gap-6 sm:px-8 sm:py-10 md:gap-7 md:px-10">
@@ -212,7 +235,7 @@ export function HomeHero() {
       </main>
 
       {/* ── Footer ─────────────────────────────────────── */}
-      <footer className="relative z-10 shrink-0 border-t border-border bg-card/60 px-4 py-3 text-center text-[10px] leading-relaxed text-muted-foreground backdrop-blur-sm sm:px-8 sm:text-[11px]">
+      <footer className="relative z-10 shrink-0 border-t border-border/50 bg-white/40 px-4 py-3 text-center text-[10px] leading-relaxed text-muted-foreground backdrop-blur-sm sm:px-8 sm:text-[11px]">
         <p className="mx-auto max-w-full text-balance break-words">
           © {new Date().getFullYear()} University of Colorado Denver · College
           of Engineering, Design and Computing
