@@ -1,0 +1,443 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Admin Dashboard - Senior Design Expo</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#5c470e",
+                        "tertiary-fixed-dim": "#84d3db",
+                        "inverse-surface": "#2e3132",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#002022",
+                        "on-primary-fixed": "#251a00",
+                        "on-surface": "#191c1d",
+                        "on-primary-fixed-variant": "#58440a",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#004f54",
+                        "surface-container-low": "#f3f4f5",
+                        "secondary-fixed-dim": "#c6c6c6",
+                        "background": "#f8f9fa",
+                        "inverse-on-surface": "#f0f1f2",
+                        "surface-dim": "#d9dadb",
+                        "on-surface-variant": "#4c4639",
+                        "primary-fixed": "#ffdf97",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#e1c37e",
+                        "tertiary-fixed": "#a0f0f7",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#006970",
+                        "on-background": "#191c1d",
+                        "surface-tint": "#725c21",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-bright": "#f8f9fa",
+                        "on-tertiary-container": "#005358",
+                        "outline-variant": "#cfc5b5",
+                        "secondary-fixed": "#e2e2e2",
+                        "tertiary-container": "#78c7ce",
+                        "primary-container": "#d4b773",
+                        "secondary": "#5e5e5e",
+                        "secondary-container": "#e2e2e2",
+                        "outline": "#7e7668",
+                        "primary": "#725c21",
+                        "surface-variant": "#e1e3e4",
+                        "on-secondary-fixed-variant": "#474747",
+                        "on-secondary-fixed": "#1b1b1b",
+                        "on-secondary-container": "#646464",
+                        "primary-fixed-dim": "#e1c37e",
+                        "surface": "#f8f9fa",
+                        "on-error": "#ffffff",
+                        "surface-container": "#edeeef",
+                        "surface-container-high": "#e7e8e9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "sm": "12px",
+                        "xl": "48px",
+                        "md": "24px",
+                        "xs": "4px",
+                        "lg": "32px",
+                        "gutter": "24px",
+                        "container-margin": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-lg": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    },
+                    "boxShadow": {
+                        "level-1": "0px 4px 20px rgba(0, 0, 0, 0.05)",
+                        "level-2": "0px 8px 30px rgba(0, 0, 0, 0.12)"
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .pulse-dot {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .5; transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-lg min-h-screen flex">
+<!-- Shared Component: SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-on-tertiary-fixed text-primary-fixed shadow-xl flex flex-col py-base z-50 transition-all duration-300 ease-in-out hidden md:flex">
+<!-- Header -->
+<div class="px-md py-md mb-md flex items-center gap-sm">
+<div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center shrink-0">
+<img class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEbBhtUtFiIj3dAJu6RCH28hoYOEOJ-vBIe9AZR1alOrERENT-FlUFQMUYOwePA74c9s9wmEm0_dNhp92Bhr3Uw0YOUh4FZ8vHsCR1JjxZh-LIY3-WRMuKvpAYnV8vfWg570DZU-n1TTorGzhhZFvKOtnmeFYMrli_MpSZrf6NkkBOFcSPzi1krnujFIRsQt6XJd2nKzS8TJXGKEKPoJYfE8wkoDMm7BWKVm-RymeN9rtqmuy7No1qHd8mlYEIV1sW00VW3Cl_5w" alt="CEDC Logo">
+</div>
+<div><h1 class="text-primary-fixed font-title-lg text-title-lg font-bold tracking-tight">Admin Panel</h1>
+<p class="text-primary-fixed-dim font-label-lg text-label-lg opacity-70">Management Console</p></div>
+</div>
+<!-- CTA -->
+<div class="px-md mb-md">
+<button class="w-full bg-primary text-on-primary font-label-lg text-label-lg py-sm px-md rounded-lg flex items-center justify-center gap-sm min-h-[48px] hover:bg-surface-tint transition-colors shadow-level-1">
+<span class="material-symbols-outlined">add</span>
+                New Event
+            </button>
+</div>
+<!-- Navigation Tabs -->
+<nav class="flex-1 overflow-y-auto font-body-md text-body-md flex flex-col gap-xs px-xs">
+<!-- Active Tab: Dashboard -->
+<a class="bg-primary-fixed text-on-primary-fixed rounded-lg mx-2 my-1 px-sm py-sm flex items-center gap-sm group" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">event</span>
+                Events
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">groups</span>
+                Teams
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">gavel</span>
+                Judges
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">category</span>
+                Groups
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">assignment_turned_in</span>
+                Assignments
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">sensors</span>
+                Live Monitor
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">analytics</span>
+                Evaluations
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">emoji_events</span>
+                Results
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">description</span>
+                Reports
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">settings</span>
+                Settings
+            </a>
+</nav>
+<!-- Footer Tabs -->
+<div class="mt-auto px-xs pt-md border-t border-on-tertiary-fixed-variant font-body-md text-body-md flex flex-col gap-xs">
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">help</span>
+                Help
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">logout</span>
+                Logout
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-[280px] flex flex-col min-h-screen">
+<!-- Mobile Header Fallback -->
+<header class="md:hidden flex items-center justify-between px-md py-4 bg-surface-container-lowest shadow-sm border-b border-surface-variant">
+<span class="font-title-lg text-title-lg font-bold">Admin Panel</span>
+<button class="p-2"><span class="material-symbols-outlined">menu</span></button>
+</header>
+<!-- Dashboard Content -->
+<div class="flex-1 p-6 md:p-md lg:p-lg space-y-lg max-w-[1600px] mx-auto w-full">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-md mb-md">
+<div>
+<div class="flex items-center gap-sm mb-2">
+<div class="flex items-center gap-2 bg-error-container text-on-error-container px-3 py-1 rounded-full font-label-lg text-label-lg">
+<div class="w-2 h-2 rounded-full bg-error pulse-dot"></div>
+                            LIVE
+                        </div>
+<span class="text-on-surface-variant font-body-md text-body-md">Auto-refreshing every 30s</span>
+</div>
+<h2 class="font-display-lg text-display-lg text-on-surface tracking-tight">Spring 2027 Senior Design Competition</h2>
+</div>
+<div class="flex gap-sm">
+<button class="flex items-center justify-center gap-xs px-md py-sm bg-surface-container border border-outline-variant text-on-surface font-label-lg text-label-lg rounded-lg hover:bg-surface-container-highest transition-colors min-h-[48px]"><span class="material-symbols-outlined">upload_file</span>Export Data</button>
+<button class="flex items-center justify-center gap-xs px-md py-sm bg-primary text-on-primary font-label-lg text-label-lg rounded-lg hover:bg-on-primary-container hover:text-white transition-colors min-h-[48px] shadow-md"><span class="material-symbols-outlined">pause</span>Pause Event</button>
+</div>
+</div>
+<!-- Top Level KPIs (Bento Grid) -->
+<section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-md">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-level-1 border border-surface-container-low flex flex-col justify-between">
+<div class="flex items-start justify-between mb-4">
+<span class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">Total Teams</span>
+<span class="material-symbols-outlined text-outline">groups</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-on-surface">44</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-level-1 border border-surface-container-low flex flex-col justify-between">
+<div class="flex items-start justify-between mb-4">
+<span class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">Req. Evals</span>
+<span class="material-symbols-outlined text-outline">assignment</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-on-surface">88</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-level-1 border border-surface-container-low flex flex-col justify-between">
+<div class="flex items-start justify-between mb-4">
+<span class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">Completed</span>
+<span class="material-symbols-outlined text-tertiary">check_circle</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-tertiary">63</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-level-1 border border-surface-container-low flex flex-col justify-between">
+<div class="flex items-start justify-between mb-4">
+<span class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">Remaining</span>
+<span class="material-symbols-outlined text-error">pending_actions</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-error">25</div>
+</div>
+<!-- Card 5 -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-level-1 border border-surface-container-low flex flex-col justify-between col-span-2 lg:col-span-1">
+<div class="flex items-start justify-between mb-4">
+<span class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">Progress</span>
+<span class="material-symbols-outlined text-primary">trending_up</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-on-surface mb-2">71.6%</div>
+<div class="w-full bg-surface-container-highest rounded-full h-2 overflow-hidden">
+<div class="bg-primary h-2 rounded-full" style="width: 71.6%"></div>
+</div>
+</div>
+<!-- Card 6 -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-level-1 border border-surface-container-low flex flex-col justify-between col-span-2 lg:col-span-1">
+<div class="flex items-start justify-between mb-4">
+<span class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">Active Judges</span>
+<span class="material-symbols-outlined text-secondary">gavel</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-on-surface">18</div>
+</div>
+</section>
+<!-- Main Sections Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-md">
+<!-- TEAM EVALUATION STATUS (Visually Prominent) -->
+<section class="lg:col-span-1 bg-surface-container-lowest rounded-xl shadow-level-1 border border-surface-container-low overflow-hidden flex flex-col">
+<div class="p-md border-b border-surface-container-high bg-surface-bright">
+<h3 class="font-title-lg text-title-lg text-on-surface flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">donut_large</span>
+                            Team Evaluation Status
+                        </h3>
+</div>
+<div class="p-md flex-1 flex flex-col justify-center space-y-xl">
+<!-- Visual Bar -->
+<div class="flex w-full h-4 rounded-full overflow-hidden shadow-inner bg-surface-container-high">
+<div class="bg-tertiary-container h-full transition-all duration-1000" style="width: 70.4%;" title="Complete: 31"></div>
+<div class="bg-primary-container h-full transition-all duration-1000" style="width: 15.9%;" title="Partial: 7"></div>
+<div class="bg-error-container h-full transition-all duration-1000" style="width: 13.7%;" title="Not Evaluated: 6"></div>
+</div>
+<!-- Legend/Stats -->
+<div class="space-y-sm">
+<!-- Complete -->
+<div class="flex items-center justify-between p-sm rounded-lg hover:bg-surface-container-lowest transition-colors group cursor-default border border-transparent hover:border-surface-variant">
+<div class="flex items-center gap-sm">
+<div class="w-4 h-4 rounded-full bg-tertiary-container shadow-sm group-hover:scale-110 transition-transform"></div>
+<div>
+<div class="font-label-lg text-label-lg text-on-surface">Complete</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-[12px]">2/2 Evaluations</div>
+</div>
+</div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-tertiary">31</div>
+</div>
+<!-- Partial -->
+<div class="flex items-center justify-between p-sm rounded-lg hover:bg-surface-container-lowest transition-colors group cursor-default border border-transparent hover:border-surface-variant">
+<div class="flex items-center gap-sm">
+<div class="w-4 h-4 rounded-full bg-primary-container shadow-sm group-hover:scale-110 transition-transform"></div>
+<div>
+<div class="font-label-lg text-label-lg text-on-surface">Partial</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-[12px]">1/2 Evaluations</div>
+</div>
+</div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-primary">7</div>
+</div>
+<!-- Not Evaluated -->
+<div class="flex items-center justify-between p-sm rounded-lg hover:bg-surface-container-lowest transition-colors group cursor-default border border-transparent hover:border-surface-variant">
+<div class="flex items-center gap-sm">
+<div class="w-4 h-4 rounded-full bg-error-container shadow-sm group-hover:scale-110 transition-transform"></div>
+<div>
+<div class="font-label-lg text-label-lg text-on-surface">Not Evaluated</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-[12px]">0/2 Evaluations</div>
+</div>
+</div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-on-error-container">6</div>
+</div>
+</div>
+</div>
+</section>
+<!-- LIVE GROUP PROGRESS -->
+<section class="lg:col-span-2 bg-surface-container-lowest rounded-xl shadow-level-1 border border-surface-container-low flex flex-col">
+<div class="p-md border-b border-surface-container-high bg-surface-bright flex justify-between items-center">
+<h3 class="font-title-lg text-title-lg text-on-surface flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">schema</span>
+                            Live Group Progress
+                        </h3>
+<span class="font-label-lg text-label-lg text-on-surface-variant">4 Active Clusters</span>
+</div>
+<div class="p-md grid grid-cols-1 md:grid-cols-2 gap-md flex-1">
+<!-- Red Group (Using Error colors for accent) -->
+<div class="rounded-xl border border-surface-variant p-md flex flex-col gap-4 relative overflow-hidden group hover:shadow-level-2 transition-shadow bg-surface-container-lowest">
+<div class="absolute top-0 left-0 w-full h-1 bg-error"></div>
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-title-lg text-title-lg text-on-surface">Red Group</h4>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[16px]">person</span> 7 Judges
+                                    </p>
+</div>
+<span class="bg-error-container text-on-error-container px-2 py-1 rounded font-label-lg text-label-lg">80%</span>
+</div>
+<div class="mt-auto pt-4">
+<div class="w-full bg-surface-container-highest rounded-full h-2 mb-2">
+<div class="bg-error h-2 rounded-full" style="width: 80%"></div>
+</div>
+<div class="flex justify-between text-[12px] text-on-surface-variant">
+<span class="">24/30 Evals</span>
+<span class="">6 Remaining</span>
+</div>
+</div>
+</div>
+<!-- Green Group (Using Tertiary colors for accent) -->
+<div class="rounded-xl border border-surface-variant p-md flex flex-col gap-4 relative overflow-hidden group hover:shadow-level-2 transition-shadow bg-surface-container-lowest">
+<div class="absolute top-0 left-0 w-full h-1 bg-tertiary"></div>
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-title-lg text-title-lg text-on-surface">Green Group</h4>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[16px]">person</span> 4 Judges
+                                    </p>
+</div>
+<span class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded font-label-lg text-label-lg">90%</span>
+</div>
+<div class="mt-auto pt-4">
+<div class="w-full bg-surface-container-highest rounded-full h-2 mb-2">
+<div class="bg-tertiary h-2 rounded-full" style="width: 90%"></div>
+</div>
+<div class="flex justify-between text-[12px] text-on-surface-variant">
+<span class="">18/20 Evals</span>
+<span class="">2 Remaining</span>
+</div>
+</div>
+</div>
+<!-- Yellow Group (Using Primary colors for accent) -->
+<div class="rounded-xl border border-surface-variant p-md flex flex-col gap-4 relative overflow-hidden group hover:shadow-level-2 transition-shadow bg-surface-container-lowest">
+<div class="absolute top-0 left-0 w-full h-1 bg-primary"></div>
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-title-lg text-title-lg text-on-surface">Yellow Group</h4>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[16px]">person</span> 6 Judges
+                                    </p>
+</div>
+<span class="bg-primary-container text-on-primary-container px-2 py-1 rounded font-label-lg text-label-lg">45%</span>
+</div>
+<div class="mt-auto pt-4">
+<div class="w-full bg-surface-container-highest rounded-full h-2 mb-2">
+<div class="bg-primary h-2 rounded-full" style="width: 45%"></div>
+</div>
+<div class="flex justify-between text-[12px] text-on-surface-variant">
+<span class="">11/24 Evals</span>
+<span class="">13 Remaining</span>
+</div>
+</div>
+</div>
+<!-- Blue Group (Using Tertiary Fixed Dim for accent) -->
+<div class="rounded-xl border border-surface-variant p-md flex flex-col gap-4 relative overflow-hidden group hover:shadow-level-2 transition-shadow bg-surface-container-lowest">
+<div class="absolute top-0 left-0 w-full h-1 bg-tertiary-fixed-dim"></div>
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-title-lg text-title-lg text-on-surface">Blue Group</h4>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[16px]">person</span> 3 Judges
+                                    </p>
+</div>
+<span class="bg-surface-container-high text-on-surface px-2 py-1 rounded font-label-lg text-label-lg">15%</span>
+</div>
+<div class="mt-auto pt-4">
+<div class="w-full bg-surface-container-highest rounded-full h-2 mb-2">
+<div class="bg-tertiary-fixed-dim h-2 rounded-full" style="width: 15%"></div>
+</div>
+<div class="flex justify-between text-[12px] text-on-surface-variant">
+<span class="">2/14 Evals</span>
+<span class="">12 Remaining</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Shared Component: Footer -->
+<footer class="mt-auto bg-surface-container-lowest text-secondary font-body-md text-body-md border-t border-outline-variant flex flex-col items-center justify-center p-md w-full gap-sm">
+<div class="font-label-lg text-label-lg text-primary">Senior Design Expo</div>
+<div class="flex gap-md">
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Contact Support</a>
+</div>
+<div class="text-center">© 2024 University of Colorado Denver | College of Engineering, Design and Computing</div>
+</footer>
+</main>
+
+
+</body></html>

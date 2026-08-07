@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "motion": {
+      "source": "oakoss/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/motion/SKILL.md",
+      "computedHash": "7a4520281629452f1e2352936ca05301eab84603d36adb2bc775d0ec121ac607"
+    }
+  }
+}

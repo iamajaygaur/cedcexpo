@@ -1,0 +1,316 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Judge Dashboard - Senior Design Expo</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary": "#ffffff",
+                      "on-primary-container": "#5c470e",
+                      "tertiary-fixed-dim": "#84d3db",
+                      "inverse-surface": "#2e3132",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-fixed": "#002022",
+                      "on-primary-fixed": "#251a00",
+                      "on-surface": "#191c1d",
+                      "on-primary-fixed-variant": "#58440a",
+                      "error": "#ba1a1a",
+                      "on-tertiary-fixed-variant": "#004f54",
+                      "surface-container-low": "#f3f4f5",
+                      "secondary-fixed-dim": "#c6c6c6",
+                      "background": "#f8f9fa",
+                      "inverse-on-surface": "#f0f1f2",
+                      "surface-dim": "#d9dadb",
+                      "on-surface-variant": "#4c4639",
+                      "primary-fixed": "#ffdf97",
+                      "on-error-container": "#93000a",
+                      "inverse-primary": "#e1c37e",
+                      "tertiary-fixed": "#a0f0f7",
+                      "on-primary": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "on-secondary": "#ffffff",
+                      "tertiary": "#006970",
+                      "on-background": "#191c1d",
+                      "surface-tint": "#725c21",
+                      "surface-container-highest": "#e1e3e4",
+                      "surface-bright": "#f8f9fa",
+                      "on-tertiary-container": "#005358",
+                      "outline-variant": "#cfc5b5",
+                      "secondary-fixed": "#e2e2e2",
+                      "tertiary-container": "#78c7ce",
+                      "primary-container": "#d4b773",
+                      "secondary": "#5e5e5e",
+                      "secondary-container": "#e2e2e2",
+                      "outline": "#7e7668",
+                      "primary": "#725c21",
+                      "surface-variant": "#e1e3e4",
+                      "on-secondary-fixed-variant": "#474747",
+                      "on-secondary-fixed": "#1b1b1b",
+                      "on-secondary-container": "#646464",
+                      "primary-fixed-dim": "#e1c37e",
+                      "surface": "#f8f9fa",
+                      "on-error": "#ffffff",
+                      "surface-container": "#edeeef",
+                      "surface-container-high": "#e7e8e9"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "8px",
+                      "sm": "12px",
+                      "xl": "48px",
+                      "md": "24px",
+                      "xs": "4px",
+                      "lg": "32px",
+                      "gutter": "24px",
+                      "container-margin": "24px"
+              },
+              "fontFamily": {
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "label-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "title-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-lg": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "title-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-background antialiased min-h-screen flex flex-col font-body-lg"><aside class="fixed left-0 top-0 h-full w-[280px] bg-on-tertiary-fixed text-primary-fixed shadow-xl flex flex-col py-base z-50 transition-all duration-300 ease-in-out hidden md:flex">
+<div class="px-md py-md mb-md flex items-center gap-sm">
+<div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center shrink-0">
+<img class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqz4Sj5Xm1STk6TeHOcyxAdZgfBFEHxmw8yvrU5wxZkWy-uvg1OqIIOUTW9kiJkkDXHYZGoolsB3-Ub_yW5-lIgyK27tjuSrjRVF2_tIuESwGiLDRjVZsVB0zDV-71YVFnurh7Df0cNS2zSOMYtqM_2G6DKPZf8GbTHxjf0OdnIh7Y1Xivqt50jOB146Ngep7CnSlqc-oaYVf0Wr0piiIvFmkq3dizgP1AwRbrIO9Da6iIbdsPj4fmqESisPeMrxgX" alt="CEDC Logo">
+</div>
+<div><h1 class="text-primary-container font-title-lg text-title-lg font-bold tracking-tight">Judge Panel</h1>
+<p class="text-primary-fixed-dim font-label-lg text-label-lg opacity-70">Judging Workspace</p></div>
+</div>
+<div class="px-md mb-md">
+<button class="w-full bg-primary text-on-primary font-label-lg text-label-lg py-sm px-md rounded-lg flex items-center justify-center gap-sm min-h-[48px] hover:bg-surface-tint transition-colors shadow-sm">
+<span class="material-symbols-outlined">add</span>
+                New Event
+            </button>
+</div>
+<nav class="flex-1 overflow-y-auto font-body-md text-body-md flex flex-col gap-xs px-xs"><a class="bg-primary-fixed text-on-primary-fixed rounded-lg mx-2 my-1 px-sm py-sm flex items-center gap-sm group" href="#"><span class="material-symbols-outlined">dashboard</span>Dashboard</a><a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#"><span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">analytics</span>Evaluations</a></nav>
+<div class="mt-auto px-xs pt-md border-t border-on-tertiary-fixed-variant font-body-md text-body-md flex flex-col gap-xs">
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">help</span>
+                Help
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">logout</span>
+                Logout
+            </a>
+</div>
+</aside>
+<!-- TopNavBar -->
+<nav class="bg-surface dark:bg-surface-container-low docked full-width top-0 border-b border-outline-variant dark:border-outline shadow-sm flex items-center justify-between px-6 py-4 w-full h-16 sticky z-50 md:hidden">
+<div class="flex items-center gap-md">
+<span class="font-display-lg text-title-lg font-bold text-on-surface dark:text-inverse-on-surface tracking-tight">Senior Design Expo</span>
+</div>
+<div class="hidden md:flex items-center gap-md">
+<!-- Navigation items intentionally omitted as this is a focused judge view, prioritizing canvas -->
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden sm:flex items-center gap-base">
+<span class="font-label-lg text-label-lg text-on-surface-variant font-medium">Judge View</span>
+</div>
+<button aria-label="notifications" class="text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full p-2 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button aria-label="help" class="text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full p-2 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-variant ml-sm">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="A professional headshot of a middle-aged academic, Dr. John Smith, wearing glasses and a dark blazer. The lighting is bright and even, set against a clean, light-colored background. The overall tone is authoritative yet approachable, fitting a modern university design expo context. The image has high contrast and sharp focus, typical of modern corporate photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDahhGrBn3jLwJ4HKpbZwpPK84rfFawfiE8qK-Z8kX0CfgxlYWSLH4vs9onHPJHqLAarbg-izVYqg4d0SJjJhjVLLqlCXDuJPB9jEvY55jtv-WVjjga49wfhJwjpKLP3_E8rv0tvSYaqk7LeEmlp9JB0zchhnDdrv_FI6xI2X52kUb4YKW7eQi-OzwwOIr7fnV3IXbbeQfkw85RGCBV5r5YlN6xsTFnh-uCEMmdiJeKsPwP43xq-JtHfF7RfGHC8Ok7rqUShAooxQ">
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-[1200px] mx-auto px-6 py-8 md:px-gutter md:py-lg flex flex-col gap-lg md:ml-[280px]">
+<!-- Header Section -->
+<header class="flex flex-col md:flex-row justify-between items-start md:items-end gap-md">
+<div>
+<h1 class="font-display-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-xs">Welcome, Dr. John Smith</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Review and evaluate your assigned engineering projects.</p>
+</div>
+<div class="bg-surface-container-lowest px-4 py-2 rounded-lg shadow-[0px_4px_20px_rgba(0,0,0,0.05)] border border-outline-variant flex items-center gap-sm">
+<div class="w-3 h-3 rounded-full bg-error"></div>
+<span class="font-label-lg text-label-lg uppercase tracking-wider text-on-surface">Red Group</span>
+</div>
+</header>
+<!-- KPI Progress Card -->
+<section class="bg-surface-container-lowest rounded-xl p-md shadow-[0px_4px_20px_rgba(0,0,0,0.05)] border border-surface-variant w-full relative overflow-hidden group">
+<div class="flex justify-between items-end mb-sm">
+<div>
+<h2 class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider mb-sm">Your Progress</h2>
+<div class="flex items-baseline gap-sm">
+<span class="font-display-lg text-display-lg text-primary">5</span>
+<span class="font-title-lg text-title-lg text-on-surface-variant">/ 8</span>
+<span class="font-body-lg text-body-lg text-on-surface ml-sm hidden sm:inline">Projects Evaluated</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-lg text-label-lg text-primary bg-primary-container px-3 py-1 rounded-full">3 Remaining</span>
+</div>
+</div>
+<div class="w-full h-4 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-1000 ease-out" style="width: 62.5%;"></div>
+</div>
+</section>
+<!-- Assigned Projects List -->
+<section class="flex flex-col gap-md">
+<h2 class="font-title-lg text-title-lg text-on-surface mb-xs">Your Assigned Projects</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Card 1: Not Evaluated -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-[0px_4px_20px_rgba(0,0,0,0.05)] border border-outline-variant flex flex-col h-full hover:shadow-[0px_8px_30px_rgba(0,0,0,0.12)] transition-shadow duration-300">
+<div class="flex justify-between items-start mb-md">
+<div>
+<span class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-widest mb-xs block">Team 14</span>
+<h3 class="font-title-lg text-title-lg text-on-surface leading-tight">AI-Powered Traffic Management</h3>
+</div>
+<div class="bg-surface-container-high text-on-surface-variant px-3 py-1 rounded font-label-lg text-label-lg whitespace-nowrap">
+                            Booth 14
+                        </div>
+</div>
+<div class="flex items-center gap-xs mb-lg">
+<span class="w-2 h-2 rounded-full bg-[#E9ECEF] border border-outline"></span>
+<span class="font-body-md text-body-md text-on-surface-variant">Not Evaluated</span>
+</div>
+<div class="mt-auto">
+<button class="w-full bg-primary text-on-primary font-label-lg text-label-lg uppercase tracking-wider py-3 px-6 rounded-lg min-h-[48px] hover:bg-on-primary-container transition-colors shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-primary flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="assignment">assignment</span>
+                            Evaluate Project
+                        </button>
+</div>
+</div>
+<!-- Card 2: Submitted -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-[0px_4px_20px_rgba(0,0,0,0.05)] border border-surface-variant flex flex-col h-full opacity-80 hover:opacity-100 transition-opacity duration-300">
+<div class="flex justify-between items-start mb-md">
+<div>
+<span class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-widest mb-xs block">Team 22</span>
+<h3 class="font-title-lg text-title-lg text-on-surface leading-tight">Autonomous Drone Pollination</h3>
+</div>
+<div class="bg-surface-container-high text-on-surface-variant px-3 py-1 rounded font-label-lg text-label-lg whitespace-nowrap">
+                            Booth 22
+                        </div>
+</div>
+<div class="flex items-center gap-xs mb-lg">
+<span class="w-2 h-2 rounded-full bg-[#198754]"></span>
+<span class="font-body-md text-body-md text-[#198754] font-medium">Submitted</span>
+</div>
+<div class="mt-auto">
+<button class="w-full bg-surface text-primary border border-primary font-label-lg text-label-lg uppercase tracking-wider py-3 px-6 rounded-lg min-h-[48px] hover:bg-surface-container-highest transition-colors flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span>
+                            View Evaluation
+                        </button>
+</div>
+</div>
+<!-- Card 3: Partial -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-[0px_4px_20px_rgba(0,0,0,0.05)] border border-outline-variant flex flex-col h-full hover:shadow-[0px_8px_30px_rgba(0,0,0,0.12)] transition-shadow duration-300">
+<div class="flex justify-between items-start mb-md">
+<div>
+<span class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-widest mb-xs block">Team 08</span>
+<h3 class="font-title-lg text-title-lg text-on-surface leading-tight">Smart Prosthetic Interface</h3>
+</div>
+<div class="bg-surface-container-high text-on-surface-variant px-3 py-1 rounded font-label-lg text-label-lg whitespace-nowrap">
+                            Booth 08
+                        </div>
+</div>
+<div class="flex items-center gap-xs mb-lg">
+<span class="w-2 h-2 rounded-full bg-[#CB5A08]"></span>
+<span class="font-body-md text-body-md text-[#CB5A08] font-medium">Draft Saved</span>
+</div>
+<div class="mt-auto">
+<button class="w-full bg-primary text-on-primary font-label-lg text-label-lg uppercase tracking-wider py-3 px-6 rounded-lg min-h-[48px] hover:bg-on-primary-container transition-colors shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-primary flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+                            Continue Evaluation
+                        </button>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+
+</body></html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Login - Senior Design Expo Judging System</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS Setup -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#5c470e",
+                        "tertiary-fixed-dim": "#84d3db",
+                        "inverse-surface": "#2e3132",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#002022",
+                        "on-primary-fixed": "#251a00",
+                        "on-surface": "#191c1d",
+                        "on-primary-fixed-variant": "#58440a",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#004f54",
+                        "surface-container-low": "#f3f4f5",
+                        "secondary-fixed-dim": "#c6c6c6",
+                        "background": "#f8f9fa",
+                        "inverse-on-surface": "#f0f1f2",
+                        "surface-dim": "#d9dadb",
+                        "on-surface-variant": "#4c4639",
+                        "primary-fixed": "#ffdf97",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#e1c37e",
+                        "tertiary-fixed": "#a0f0f7",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#006970",
+                        "on-background": "#191c1d",
+                        "surface-tint": "#725c21",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-bright": "#f8f9fa",
+                        "on-tertiary-container": "#005358",
+                        "outline-variant": "#cfc5b5",
+                        "secondary-fixed": "#e2e2e2",
+                        "tertiary-container": "#78c7ce",
+                        "primary-container": "#d4b773",
+                        "secondary": "#5e5e5e",
+                        "secondary-container": "#e2e2e2",
+                        "outline": "#7e7668",
+                        "primary": "#725c21",
+                        "surface-variant": "#e1e3e4",
+                        "on-secondary-fixed-variant": "#474747",
+                        "on-secondary-fixed": "#1b1b1b",
+                        "on-secondary-container": "#646464",
+                        "primary-fixed-dim": "#e1c37e",
+                        "surface": "#f8f9fa",
+                        "on-error": "#ffffff",
+                        "surface-container": "#edeeef",
+                        "surface-container-high": "#e7e8e9"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "base": "8px",
+                        "sm": "12px",
+                        "xl": "48px",
+                        "md": "24px",
+                        "xs": "4px",
+                        "lg": "32px",
+                        "gutter": "24px",
+                        "container-margin": "24px"
+                    },
+                    fontFamily: {
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    fontSize: {
+                        "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "label-lg": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600" }],
+                        "headline-lg": ["32px", { lineHeight: "40px", fontWeight: "600" }],
+                        "title-lg": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+                        "headline-lg-mobile": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                        "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background min-h-screen flex items-center justify-center p-md md:p-xl font-body-lg text-body-lg text-on-surface">
+<!-- Main Container: Asymmetric Glassmorphism/Bento Card -->
+<main class="w-full max-w-[1200px] flex flex-col md:flex-row bg-surface-container-lowest rounded-xl shadow-xl overflow-hidden min-h-[700px] border border-outline-variant">
+<!-- Left Panel: Branding & Context -->
+<div class="hidden md:flex md:w-5/12 bg-surface-container-highest relative flex-col justify-between p-lg md:p-xl border-r border-outline-variant overflow-hidden">
+<!-- Subtle Background Image/Pattern -->
+<div class="absolute inset-0 z-0 opacity-40 mix-blend-multiply" data-alt="A highly abstract, subtle geometric pattern resembling architectural blueprints or engineering schematics. The image is mostly white and very light grey, with faint, elegant gold lines intersecting to form complex, modern grid structures. The lighting is soft and diffused, creating a premium, clean, academic aesthetic suitable for a high-end university system background. The mood is precise, authoritative, and intellectual." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAvZv-BjZ0lSxW6tTrgNd4_a4_6GV9uvv93aqXb1LCS4UmvzS2ROG0O4-JSwTe6jZd1fgp5bvswQo8DXWQlz2MSwGrDeqCruUg3UoM2QWfvgLsYl8NFhY9cNaxLWVgNNF0jbhk3yOrbU4EEZ_qm9il7nELHH_d78uZ8jvC3SS3zgdwbBEKRHl8PbFXld4mbmKlDEYfwx5x747RyeHMff7cdDHtLTktLcCdQg0R8asavwIYpgGwDMC0fyqwb6nLEVP0JW4ew1lQSjA'); background-size: cover; background-position: center;">
+</div>
+<!-- Header Content -->
+<div class="relative z-10 flex flex-col gap-sm mt-xl">
+<div class="flex items-center gap-sm mb-md">
+<img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCh1jOQsHVbk5SvPgmavdeBS22lOD05tLISfGE3O4LU9YGljl6XtBMKZ1hjuLpwhK2_rpzhBqHFTgAA-io0OXvemxnSpecbZiIQOgwoGGaGvoCOd8-IC6hFNeiJyrFT5t7CFuP-GwpR3ExZ8SRTrFhf68l1yoSfpVXR8Yh0M2P97Twxx4KCDdDiz35S6OfIsp5QA4O7RRSB0Q3UYvTpJFnplOgnpjVIjyLTo0sa9fclaFC8V_KnOzKJk3RmhvJ8Sw-U2ppqEsebyQ" alt="College of Engineering, Design and Computing Logo" class="h-12 w-auto object-contain">
+<div class="flex flex-col">
+
+
+</div>
+</div>
+<h1 class="font-display-lg text-display-lg text-on-surface leading-tight mt-lg">
+                    Senior Design Expo
+                </h1>
+<h2 class="font-headline-lg text-headline-lg text-primary-container font-medium max-w-sm">
+                    Judging &amp; Evaluation System
+                </h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-md max-w-sm">
+                    Secure access portal for faculty, industry partners, and authorized adjudicators to review and score capstone engineering projects.
+                </p>
+</div>
+<!-- Atmospheric element -->
+<div class="relative z-10 mt-auto pt-xl">
+<div class="w-16 h-1 bg-primary rounded-full mb-sm"></div>
+<p class="font-body-md text-body-md text-on-surface-variant italic">Empowering the next generation of engineers through rigorous evaluation.</p>
+</div>
+</div>
+<!-- Right Panel: Login Form -->
+<div class="w-full md:w-7/12 flex flex-col justify-center p-md md:p-[64px] bg-surface-container-lowest relative">
+<!-- Mobile Header (Hidden on Desktop) -->
+<div class="md:hidden flex flex-col items-center text-center mb-lg">
+<span class="material-symbols-outlined text-primary text-[48px] mb-sm">account_balance</span>
+<span class="font-label-lg text-label-lg text-primary uppercase tracking-wider">CU Denver Engineering</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mt-xs">Senior Design Expo</h1>
+<h2 class="font-title-lg text-title-lg text-on-surface-variant">Judging System</h2>
+</div>
+<div class="w-full max-w-[420px] mx-auto flex flex-col gap-lg">
+<div class="flex flex-col gap-xs">
+<h3 class="font-headline-lg text-headline-lg text-on-surface">Sign In</h3>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Please enter your credentials to access the evaluation dashboard.</p>
+</div>
+<form class="flex flex-col gap-md" onsubmit="event.preventDefault();">
+<!-- Email / Judge ID Input -->
+<div class="flex flex-col gap-xs relative group">
+<label class="font-label-lg text-label-lg text-on-surface" for="judge-id">Email / Judge ID</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-sm text-on-surface-variant group-focus-within:text-primary transition-colors">person</span>
+<input class="w-full pl-[40px] pr-sm py-[12px] bg-surface border border-outline-variant rounded-lg font-body-lg text-body-lg text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200" id="judge-id" name="judge-id" placeholder="Enter your registered email" type="text">
+</div>
+</div>
+<!-- Password Input -->
+<div class="flex flex-col gap-xs relative group">
+<label class="font-label-lg text-label-lg text-on-surface" for="password">Password</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-sm text-on-surface-variant group-focus-within:text-primary transition-colors">lock</span>
+<input class="w-full pl-[40px] pr-sm py-[12px] bg-surface border border-outline-variant rounded-lg font-body-lg text-body-lg text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200" id="password" name="password" placeholder="••••••••" type="password">
+<button class="absolute right-sm text-on-surface-variant hover:text-on-surface transition-colors focus:outline-none" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility_off</span>
+</button>
+</div>
+</div>
+<!-- Actions Row -->
+<div class="flex items-center justify-between mt-xs">
+<label class="flex items-center gap-xs cursor-pointer group">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary bg-surface transition-colors cursor-pointer" type="checkbox">
+<span class="font-body-md text-body-md text-on-surface group-hover:text-primary transition-colors">Remember Me</span>
+</label>
+<a class="font-label-lg text-label-lg text-primary hover:underline hover:text-primary-container transition-colors" href="#">Forgot Password?</a>
+</div>
+<!-- Submit Button -->
+<button class="mt-sm w-full bg-primary-fixed text-on-primary-fixed font-title-lg text-title-lg rounded-lg py-[14px] px-md hover:bg-primary-fixed-dim hover:shadow-md transition-all duration-300 flex items-center justify-center gap-xs group" type="submit">
+                        Sign In
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</form>
+<!-- Help / Support -->
+<div class="mt-md text-center border-t border-outline-variant pt-md">
+<p class="font-body-md text-body-md text-on-surface-variant">
+                        Need access or experiencing issues? <br class="md:hidden">
+<a class="text-primary font-medium hover:underline" href="#">Contact Expo Support</a>
+</p>
+</div>
+</div>
+<!-- Inline Footer (Sourced from JSON components but adapted for login screen context to avoid floating shell) -->
+<div class="absolute bottom-md left-0 right-0 flex flex-col items-center justify-center px-md w-full">
+<p class="font-body-md text-body-md text-secondary dark:text-secondary-fixed text-center opacity-80">
+                    © 2024 University of Colorado Denver | College of Engineering, Design and Computing
+                </p>
+<div class="flex gap-sm mt-xs">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<span class="text-outline-variant">•</span>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+</main>
+</body></html>

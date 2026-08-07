@@ -1,0 +1,443 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Events Management | Senior Design Expo</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed-dim": "#c6c6c6",
+                      "outline-variant": "#cfc5b5",
+                      "inverse-primary": "#e1c37e",
+                      "tertiary-fixed": "#a0f0f7",
+                      "on-secondary": "#ffffff",
+                      "outline": "#7e7668",
+                      "on-secondary-fixed": "#1b1b1b",
+                      "primary": "#725c21",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-fixed-dim": "#e1c37e",
+                      "on-primary-fixed-variant": "#58440a",
+                      "surface-container-highest": "#e1e3e4",
+                      "surface": "#f8f9fa",
+                      "on-tertiary-fixed": "#002022",
+                      "on-tertiary-container": "#005358",
+                      "on-error-container": "#93000a",
+                      "inverse-on-surface": "#f0f1f2",
+                      "on-secondary-fixed-variant": "#474747",
+                      "tertiary-container": "#78c7ce",
+                      "surface-container": "#edeeef",
+                      "primary-fixed": "#ffdf97",
+                      "on-primary-container": "#5c470e",
+                      "surface-container-low": "#f3f4f5",
+                      "on-background": "#191c1d",
+                      "inverse-surface": "#2e3132",
+                      "tertiary-fixed-dim": "#84d3db",
+                      "surface-container-high": "#e7e8e9",
+                      "tertiary": "#006970",
+                      "on-surface-variant": "#4c4639",
+                      "surface-tint": "#725c21",
+                      "secondary-container": "#e2e2e2",
+                      "on-surface": "#191c1d",
+                      "on-secondary-container": "#646464",
+                      "on-primary-fixed": "#251a00",
+                      "primary-container": "#d4b773",
+                      "background": "#f8f9fa",
+                      "error-container": "#ffdad6",
+                      "surface-bright": "#f8f9fa",
+                      "on-tertiary-fixed-variant": "#004f54",
+                      "secondary-fixed": "#e2e2e2",
+                      "on-tertiary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "on-error": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "secondary": "#5e5e5e",
+                      "surface-dim": "#d9dadb",
+                      "surface-variant": "#e1e3e4"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {},
+              "fontFamily": {
+                      "headline": [
+                              "Inter"
+                      ],
+                      "display": [
+                              "Inter"
+                      ],
+                      "body": [
+                              "Inter"
+                      ],
+                      "label": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {}
+      },
+          },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background flex h-screen overflow-hidden">
+<!-- SideNavBar (from JSON) -->
+<nav class="bg-on-tertiary-fixed dark:bg-inverse-surface fixed left-0 top-0 h-full w-[280px] shadow-lg shadow-xl flex flex-col h-full py-base Transition-all duration-300 ease-in-out z-50">
+<div class="px-6 py-6 mb-6 flex items-center gap-4"><div class="w-12 h-12 rounded-lg bg-white flex items-center justify-center shrink-0 overflow-hidden shadow-sm"><img class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKdJJ4brtvmM0ahOZHBRajVvdFziBBsoa0YY4G361SoBtB-Ttb8MCl2dy4-eFIxOROfh7GTf1fHnZnWQrMBFKeqFTW7LZrNFoE_uQGa8VoMUoHnydje5LFhU3hksoCWVlHcOau_DaW2XNwoVcVthTrqbpxH8ESQYwbnwNN4LMgsJZ9CGgm6L0AAqk5WtJPqUUsxarY2H2d7-ehs-xCNLvjziA3ByZgtyXfUOc8bkDs-8LoAdaYFTjWE3Xk0upKzpEa" alt="CEDC Logo"></div><div class=""><h1 class="text-primary-fixed font-display-lg text-[20px] font-bold tracking-tight leading-tight">Admin Panel</h1><p class="text-primary-fixed-dim font-label-lg text-xs font-medium opacity-75 mt-0.5">Management Console</p></div></div>
+<div class="px-md mb-md">
+<button class="w-full bg-primary-container text-on-primary-container font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 min-h-[48px] hover:opacity-90 transition-all shadow-sm">
+<span class="material-symbols-outlined">add</span>
+                New Event
+            </button>
+</div>
+<div class="flex-1 overflow-y-auto font-body-md text-body-md flex flex-col gap-xs px-xs">
+<ul class="space-y-1">
+<li class="">
+<a class="text-on-tertiary dark:text-surface-variant mx-2 my-1 flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-on-tertiary-fixed-variant dark:hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+</li>
+<li class="">
+<!-- Active State for Events -->
+<a class="bg-primary-fixed text-on-primary-fixed rounded-lg mx-2 my-1 flex items-center gap-3 px-4 py-3 font-bold" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">event</span>
+<span class="">Events</span>
+</a>
+</li>
+<li class="">
+<a class="text-on-tertiary dark:text-surface-variant mx-2 my-1 flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-on-tertiary-fixed-variant dark:hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-medium">Teams</span>
+</a>
+</li>
+<li class="">
+<a class="text-on-tertiary dark:text-surface-variant mx-2 my-1 flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-on-tertiary-fixed-variant dark:hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">gavel</span>
+<span class="font-medium">Judges</span>
+</a>
+</li>
+<li class="">
+<a class="text-on-tertiary dark:text-surface-variant mx-2 my-1 flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-on-tertiary-fixed-variant dark:hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">category</span>
+<span class="font-medium">Groups</span>
+</a>
+</li>
+<li class="">
+<a class="text-on-tertiary dark:text-surface-variant mx-2 my-1 flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-on-tertiary-fixed-variant dark:hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+<span class="font-medium">Assignments</span>
+</a>
+</li>
+<li class="">
+<a class="text-on-tertiary dark:text-surface-variant mx-2 my-1 flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-on-tertiary-fixed-variant dark:hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">sensors</span>
+<span class="font-medium">Live Monitor</span>
+</a>
+</li>
+<li class="">
+<a class="text-on-tertiary dark:text-surface-variant mx-2 my-1 flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-on-tertiary-fixed-variant dark:hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-medium">Evaluations</span>
+</a>
+</li>
+<li class="">
+<a class="text-on-tertiary dark:text-surface-variant mx-2 my-1 flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-on-tertiary-fixed-variant dark:hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">emoji_events</span>
+<span class="font-medium">Results</span>
+</a>
+</li>
+<li class="">
+<a class="text-on-tertiary dark:text-surface-variant mx-2 my-1 flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-on-tertiary-fixed-variant dark:hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-medium">Reports</span>
+</a>
+</li>
+<li class="">
+<a class="text-on-tertiary dark:text-surface-variant mx-2 my-1 flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-on-tertiary-fixed-variant dark:hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+</li>
+</ul>
+</div>
+<div class="mt-auto px-xs pt-md border-t border-on-tertiary-fixed-variant font-body-md text-body-md flex flex-col gap-xs">
+<ul class="space-y-1">
+<li class="">
+<a class="text-on-tertiary dark:text-surface-variant mx-2 my-1 flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-on-tertiary-fixed-variant dark:hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-medium">Help</span>
+</a>
+</li>
+<li class="">
+<a class="text-on-tertiary dark:text-surface-variant mx-2 my-1 flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-on-tertiary-fixed-variant dark:hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-medium">Logout</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="ml-[280px] flex-1 flex flex-col h-screen overflow-hidden bg-background relative">
+<!-- TopAppBar (from JSON) -->
+<header class="bg-surface dark:bg-surface-container-low docked full-width top-0 border-b border-outline-variant dark:border-outline shadow-sm flex items-center justify-between px-6 py-4 w-full h-16 z-40 shrink-0">
+<div class="flex items-center gap-4">
+<span class="font-display-lg text-title-lg font-bold text-on-surface dark:text-inverse-on-surface">Senior Design Expo</span>
+</div>
+<div class="flex items-center gap-6">
+<!-- Search Bar on Right -->
+<div class="relative hidden md:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container rounded-full border-none focus:ring-2 focus:ring-primary outline-none text-sm w-64 placeholder-outline" placeholder="Search events..." type="text">
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full p-2 flex items-center justify-center">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full p-2 flex items-center justify-center">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+<div class="h-8 w-px bg-outline-variant mx-2"></div>
+<button class="text-primary font-semibold hover:bg-surface-container-highest transition-colors px-3 py-1 rounded-md text-sm">
+                    Judge View
+                </button>
+<img alt="User profile" class="w-8 h-8 rounded-full object-cover border border-outline-variant" data-alt="User profile picture of a professional admin, clean lighting, smiling slightly, fitting for a modern corporate SaaS platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBBZvNRHIajXAJXHDl4YURNB5Le7sBJoGlCWzjrYIPxk5_HMAOBam-xY-B4ATeaJSbOhwRyhNfylr32A47mofuNAwBLhx2YElMHEa2pj6qHgIbArm7v5s3uiEOrAYqStmh7-6viwHBAAgk-DiGyXIw5WBKF0704og0MGafq8bTpVJLtVWSCaxWPecSXrnVEBu8lTMaoCLvgdxvFkiwCutUhAj3oq4BUiuraF4gW4pUDHuQ27cLN6U">
+</div>
+</header>
+<!-- Page Content -->
+<div class="flex-1 overflow-y-auto p-6 md:p-8">
+<div class="max-w-7xl mx-auto space-y-6">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+<div>
+<h2 class="text-[32px] font-semibold text-on-background leading-tight">Events Management</h2>
+<p class="text-on-surface-variant text-base mt-1">Manage and monitor past, current, and upcoming expo events.</p>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-md font-semibold flex items-center gap-2 hover:opacity-90 transition-opacity shadow-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">add</span>
+                        Create New Event
+                    </button>
+</div>
+<!-- Filters & Controls Bar -->
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-sm border border-outline-variant flex flex-col sm:flex-row gap-4 justify-between items-center">
+<div class="flex items-center gap-2 w-full sm:w-auto">
+<div class="relative w-full sm:w-80">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="pl-10 pr-4 py-2 w-full bg-surface rounded-md border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm text-on-surface" placeholder="Filter events by name or location..." type="text">
+</div>
+</div>
+<div class="flex items-center gap-3 w-full sm:w-auto overflow-x-auto pb-2 sm:pb-0">
+<button class="px-4 py-1.5 rounded-full text-sm font-semibold bg-surface-variant text-on-surface whitespace-nowrap">All Events</button>
+<button class="px-4 py-1.5 rounded-full text-sm font-semibold bg-surface text-on-surface border border-outline-variant hover:bg-surface-container whitespace-nowrap">Active</button>
+<button class="px-4 py-1.5 rounded-full text-sm font-semibold bg-surface text-on-surface border border-outline-variant hover:bg-surface-container whitespace-nowrap">Scheduled</button>
+<button class="px-4 py-1.5 rounded-full text-sm font-semibold bg-surface text-on-surface border border-outline-variant hover:bg-surface-container whitespace-nowrap">Completed</button>
+</div>
+</div>
+<!-- Events Data Table Container (Bento/Card Style) -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant text-xs uppercase tracking-wider text-on-surface-variant font-semibold">
+<th class="p-4 pl-6">Event Name</th>
+<th class="p-4">Date &amp; Time</th>
+<th class="p-4">Location</th>
+<th class="p-4">Status</th>
+<th class="p-4 text-center">Registered Teams</th>
+<th class="p-4 pr-6 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1: Active Event -->
+<tr class="hover:bg-surface-container-lowest/50 transition-colors group">
+<td class="p-4 pl-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-md bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: &quot;FILL&quot; 1;">event</span>
+</div>
+<div>
+<p class="font-semibold text-on-surface text-base">Spring 2024 Senior Design Expo</p>
+<p class="text-xs text-on-surface-variant">ID: EVT-2024-SP</p>
+</div>
+</div>
+</td>
+<td class="p-4 text-sm text-on-surface">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-outline">calendar_today</span>
+                                            May 10, 2024
+                                        </div>
+<div class="text-xs text-on-surface-variant mt-0.5 ml-6">9:00 AM - 4:00 PM</div>
+</td>
+<td class="p-4 text-sm text-on-surface">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-outline">location_on</span>
+                                            Lola &amp; Rob Salazar Student Wellness Center
+                                        </div>
+</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-[#E8F5E9] text-[#1B5E20]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#4CAF50] mr-1.5"></span>
+                                            Active
+                                        </span>
+</td>
+<td class="p-4 text-center">
+<div class="inline-flex items-center justify-center bg-surface-container px-3 py-1 rounded-md font-semibold text-on-surface">
+                                            42 / 50
+                                        </div>
+</td>
+<td class="p-4 pr-6 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-on-surface-variant hover:text-primary rounded hover:bg-surface-container transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:text-primary rounded hover:bg-surface-container transition-colors" title="Manage Judges">
+<span class="material-symbols-outlined text-[20px]">group</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:text-error rounded hover:bg-error-container transition-colors" title="More">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Scheduled Event -->
+<tr class="hover:bg-surface-container-lowest/50 transition-colors group">
+<td class="p-4 pl-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-md bg-surface-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-surface-variant">event_upcoming</span>
+</div>
+<div>
+<p class="font-semibold text-on-surface text-base">Fall 2024 Project Showcase</p>
+<p class="text-xs text-on-surface-variant">ID: EVT-2024-FA</p>
+</div>
+</div>
+</td>
+<td class="p-4 text-sm text-on-surface">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-outline">calendar_today</span>
+                                            Dec 06, 2024
+                                        </div>
+<div class="text-xs text-on-surface-variant mt-0.5 ml-6">10:00 AM - 3:00 PM</div>
+</td>
+<td class="p-4 text-sm text-on-surface">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-outline">location_on</span>
+                                            North Classroom Atrium
+                                        </div>
+</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-surface-container text-on-surface-variant">
+                                            Scheduled
+                                        </span>
+</td>
+<td class="p-4 text-center">
+<div class="inline-flex items-center justify-center bg-surface-container px-3 py-1 rounded-md font-semibold text-on-surface">
+                                            12 / 60
+                                        </div>
+</td>
+<td class="p-4 pr-6 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-on-surface-variant hover:text-primary rounded hover:bg-surface-container transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:text-primary rounded hover:bg-surface-container transition-colors" title="Manage Judges">
+<span class="material-symbols-outlined text-[20px]">group</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:text-error rounded hover:bg-error-container transition-colors" title="More">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Completed Event -->
+<tr class="hover:bg-surface-container-lowest/50 transition-colors group bg-surface/30">
+<td class="p-4 pl-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-md bg-surface-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-outline">history</span>
+</div>
+<div>
+<p class="font-semibold text-on-surface text-base">Fall 2023 Expo</p>
+<p class="text-xs text-on-surface-variant">ID: EVT-2023-FA</p>
+</div>
+</div>
+</td>
+<td class="p-4 text-sm text-on-surface">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-outline">calendar_today</span>
+                                            Dec 08, 2023
+                                        </div>
+<div class="text-xs text-on-surface-variant mt-0.5 ml-6">9:00 AM - 4:00 PM</div>
+</td>
+<td class="p-4 text-sm text-on-surface">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-outline">location_on</span>
+                                            Tivoli Turnhalle
+                                        </div>
+</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-surface-container text-on-surface-variant">
+                                            Completed
+                                        </span>
+</td>
+<td class="p-4 text-center">
+<div class="inline-flex items-center justify-center bg-surface-container px-3 py-1 rounded-md font-semibold text-on-surface opacity-75">
+                                            55 / 55
+                                        </div>
+</td>
+<td class="p-4 pr-6 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-on-surface-variant hover:text-primary rounded hover:bg-surface-container transition-colors" title="View Results">
+<span class="material-symbols-outlined text-[20px]">assessment</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="border-t border-outline-variant bg-surface px-6 py-3 flex items-center justify-between">
+<span class="text-sm text-on-surface-variant">Showing 1 to 3 of 12 events</span>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded hover:bg-surface-container text-outline" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded bg-primary text-on-primary font-semibold text-sm">1</button>
+<button class="w-8 h-8 rounded hover:bg-surface-container text-on-surface font-medium text-sm transition-colors">2</button>
+<button class="w-8 h-8 rounded hover:bg-surface-container text-on-surface font-medium text-sm transition-colors">3</button>
+<button class="p-1 rounded hover:bg-surface-container text-on-surface-variant">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer (from JSON) -->
+<footer class="mt-12 bg-surface-container-lowest dark:bg-surface-dim full-width bottom-0 border-t border-outline-variant flex flex-col items-center justify-center p-md w-full gap-4">
+<div class="flex flex-wrap justify-center gap-6">
+<a class="text-on-surface-variant hover:text-primary transition-colors text-sm" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-sm" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-sm" href="#">Contact Support</a>
+</div>
+<p class="font-body-md text-body-md text-secondary dark:text-secondary-fixed text-center max-w-2xl">
+                    © 2024 University of Colorado Denver | College of Engineering, Design and Computing
+                </p>
+</footer>
+</div>
+</main>
+
+
+</body></html>

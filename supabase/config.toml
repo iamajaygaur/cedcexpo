@@ -1,0 +1,17 @@
+# Supabase local/project config (minimal).
+# Link a remote project with: supabase link --project-ref <ref>
+# Apply migrations: supabase db push
+# Seed: supabase db reset  (applies migrations + seed.sql)
+
+[project]
+id = "cedc-design-expo"
+
+[api]
+enabled = true
+
+[db]
+major_version = 15
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]

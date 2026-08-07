@@ -1,0 +1,474 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Teams Management - Admin Panel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#5c470e",
+                        "tertiary-fixed-dim": "#84d3db",
+                        "inverse-surface": "#2e3132",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#002022",
+                        "on-primary-fixed": "#251a00",
+                        "on-surface": "#191c1d",
+                        "on-primary-fixed-variant": "#58440a",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#004f54",
+                        "surface-container-low": "#f3f4f5",
+                        "secondary-fixed-dim": "#c6c6c6",
+                        "background": "#f8f9fa",
+                        "inverse-on-surface": "#f0f1f2",
+                        "surface-dim": "#d9dadb",
+                        "on-surface-variant": "#4c4639",
+                        "primary-fixed": "#ffdf97",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#e1c37e",
+                        "tertiary-fixed": "#a0f0f7",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#006970",
+                        "on-background": "#191c1d",
+                        "surface-tint": "#725c21",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-bright": "#f8f9fa",
+                        "on-tertiary-container": "#005358",
+                        "outline-variant": "#cfc5b5",
+                        "secondary-fixed": "#e2e2e2",
+                        "tertiary-container": "#78c7ce",
+                        "primary-container": "#d4b773",
+                        "secondary": "#5e5e5e",
+                        "secondary-container": "#e2e2e2",
+                        "outline": "#7e7668",
+                        "primary": "#725c21",
+                        "surface-variant": "#e1e3e4",
+                        "on-secondary-fixed-variant": "#474747",
+                        "on-secondary-fixed": "#1b1b1b",
+                        "on-secondary-container": "#646464",
+                        "primary-fixed-dim": "#e1c37e",
+                        "surface": "#f8f9fa",
+                        "on-error": "#ffffff",
+                        "surface-container": "#edeeef",
+                        "surface-container-high": "#e7e8e9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "sm": "12px",
+                        "xl": "48px",
+                        "md": "24px",
+                        "xs": "4px",
+                        "lg": "32px",
+                        "gutter": "24px",
+                        "container-margin": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-lg": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Ambient shadow for cards */
+        .ambient-shadow {
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        /* Custom scrollbar for table container */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f8f9fa;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #cfc5b5;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-lg min-h-screen flex text-body-lg">
+<!-- SideNavBar Component -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-on-tertiary-fixed text-primary-fixed shadow-xl flex flex-col py-base z-50 transition-all duration-300 ease-in-out hidden md:flex">
+<!-- Header -->
+<div class="px-md py-md mb-md flex items-center gap-sm">
+<div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center shrink-0">
+<img class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdkq9kS45ZflbLEmK4z6WPTsWa5JV22OtohwHGlRpHzU1qyIs7nAFemLLFTy_t9nXcDgyAQpT2tt2ZG6yB-dNeUFD9uqVSGENL3xp0nFkQvNDFpzU2jyTXGXgJGV__v7k6mSpWgMy2bXpPYR-cpKVWjuTHcMXOn75OepoeyyI5Unj5N6K0VS5tm17O5wSLxWANYktBiOgZMX4O5A3SK6DvU4Xzk1m19aP6KuFPjGEncMdLFwUJJr4l5_UobDK8H_3M" alt="CEDC Logo">
+</div>
+<div><h1 class="text-primary-fixed font-title-lg text-title-lg font-bold tracking-tight">Admin Panel</h1>
+<p class="text-primary-fixed-dim font-label-lg text-label-lg opacity-70">Management Console</p></div>
+</div>
+<!-- CTA -->
+<div class="px-md mb-md">
+<button class="w-full bg-primary text-on-primary font-label-lg text-label-lg py-sm px-md rounded-lg flex items-center justify-center gap-sm min-h-[48px] hover:bg-surface-tint transition-colors shadow-level-1">
+<span class="material-symbols-outlined">add</span>
+                New Event
+            </button>
+</div>
+<!-- Navigation Tabs -->
+<nav class="flex-1 overflow-y-auto font-body-md text-body-md flex flex-col gap-xs px-xs">
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">dashboard</span>
+                Dashboard
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">event</span>
+                Events
+            </a>
+<!-- Active Tab: Teams -->
+<a class="bg-primary-fixed text-on-primary-fixed rounded-lg mx-2 my-1 px-sm py-sm flex items-center gap-sm group" href="#">
+<span class="material-symbols-outlined">groups</span>
+                Teams
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">gavel</span>
+                Judges
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">category</span>
+                Groups
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">assignment_turned_in</span>
+                Assignments
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">sensors</span>
+                Live Monitor
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">analytics</span>
+                Evaluations
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">emoji_events</span>
+                Results
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">description</span>
+                Reports
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">settings</span>
+                Settings
+            </a>
+</nav>
+<!-- Footer Tabs -->
+<div class="mt-auto px-xs pt-md border-t border-on-tertiary-fixed-variant font-body-md text-body-md flex flex-col gap-xs">
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">help</span>
+                Help
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">logout</span>
+                Logout
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-[280px] w-full flex flex-col min-h-screen">
+<!-- TopAppBar Component (Mobile Only) -->
+<header class="flex md:hidden items-center justify-between px-6 py-4 w-full h-16 bg-surface text-primary border-b border-outline-variant shadow-sm z-40 sticky top-0">
+<div class="flex items-center gap-sm">
+<button class="text-on-surface hover:bg-surface-container-highest p-xs rounded-full transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<span class="font-title-lg text-title-lg font-bold text-on-surface">Senior Design Expo</span>
+</div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-highest p-xs rounded-full cursor-pointer transition-colors">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-highest p-xs rounded-full cursor-pointer transition-colors">help</span>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant ml-2" data-alt="A small circular avatar placeholder showing a generic user profile icon in a minimalist grey and white style, suitable for a professional dashboard top navigation bar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEIFtrAqVVl7axn2iu2HDHYjSXIB9D3aRy3to9Flzuk13fgcrpa2zE3f3Pybo-u2Ipxmv03IR35gV9cNIZPnZ76frBPlRJOdkkrAVyIseIo1R0BKWMd6EN5VSzGzIYHnGcabbfpocGIH8Ha6ajM36F8H4KhBeRXI8tzEOc8aQiwKuIASB2yTOF3pjPnagaQeMzNLzal3zR6kuPiDYTxxIZEpufzrWZpJaI8luMbraZNlcFu3Rxxx3klvpawAuoDDPml3qxnFPsBw">
+</div>
+</header>
+<!-- Page Header -->
+<div class="px-container-margin py-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Teams Management</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Manage participating teams, view assignments, and track evaluation progress.</p>
+</div>
+<div class="flex flex-wrap items-center gap-sm">
+<button class="flex items-center justify-center gap-xs px-md py-sm bg-surface-container border border-outline-variant text-on-surface font-label-lg text-label-lg rounded-lg hover:bg-surface-container-highest transition-colors min-h-[48px]">
+<span class="material-symbols-outlined">upload_file</span>
+                    Import Teams
+                </button>
+<div class="relative group">
+    <button class="flex items-center justify-center gap-xs px-md py-sm bg-primary text-on-primary font-label-lg text-label-lg rounded-lg hover:bg-on-primary-container hover:text-white transition-colors min-h-[48px] shadow-md">
+        <span class="material-symbols-outlined">add</span>
+        Add New
+        <span class="material-symbols-outlined">arrow_drop_down</span>
+    </button>
+    <div class="absolute right-0 top-full mt-xs w-48 bg-surface-container-lowest border border-outline-variant rounded-lg shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-none group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition-all z-50">
+        <div class="py-xs">
+            <a href="#" class="flex items-center gap-sm px-md py-sm hover:bg-surface-container-highest text-on-surface font-body-md transition-colors">
+                <span class="material-symbols-outlined text-primary">groups</span>
+                Add Team
+            </a>
+            <a href="#" class="flex items-center gap-sm px-md py-sm hover:bg-surface-container-highest text-on-surface font-body-md transition-colors">
+                <span class="material-symbols-outlined text-primary">gavel</span>
+                Add Judge
+            </a>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<!-- Controls Toolbar -->
+<div class="px-container-margin pb-md">
+<div class="bg-surface ambient-shadow rounded-xl p-md flex flex-col lg:flex-row gap-md items-center justify-between border border-surface-container-highest">
+<!-- Search -->
+<div class="relative w-full lg:w-96">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-xl pr-sm py-sm bg-background border border-outline-variant rounded-lg font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" placeholder="Search by team #, title, or name..." type="text">
+</div>
+<!-- Filters -->
+<div class="flex flex-wrap items-center gap-sm w-full lg:w-auto">
+<div class="relative flex-1 sm:flex-none min-w-[140px]">
+<select class="w-full appearance-none pl-sm pr-xl py-sm bg-background border border-outline-variant rounded-lg font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary cursor-pointer text-on-surface">
+<option value="">All Depts</option>
+<option value="cs">Computer Science</option>
+<option value="me">Mechanical Eng</option>
+<option value="ee">Electrical Eng</option>
+</select>
+<span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">arrow_drop_down</span>
+</div>
+<div class="relative flex-1 sm:flex-none min-w-[140px]">
+<select class="w-full appearance-none pl-sm pr-xl py-sm bg-background border border-outline-variant rounded-lg font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary cursor-pointer text-on-surface">
+<option value="">All Status</option>
+<option value="complete">Complete</option>
+<option value="partial">Partial</option>
+<option value="pending">Pending</option>
+</select>
+<span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">arrow_drop_down</span>
+</div>
+<button class="flex items-center justify-center gap-xs px-sm py-sm text-secondary hover:text-on-surface hover:bg-surface-container-highest rounded-lg transition-colors border border-transparent">
+<span class="material-symbols-outlined">filter_list</span>
+<span class="font-label-lg text-label-lg">More Filters</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Data Table Container -->
+<div class="px-container-margin pb-xl flex-1 flex flex-col">
+<div class="bg-surface ambient-shadow rounded-xl border border-surface-container-highest overflow-hidden flex-1 flex flex-col">
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse min-w-[1000px]">
+<thead class="bg-surface-container-lowest border-b border-outline-variant sticky top-0 z-10">
+<tr>
+<th class="px-md py-sm font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">Team #</th>
+<th class="px-md py-sm font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">Project Details</th>
+<th class="px-md py-sm font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">Dept &amp; Booth</th>
+<th class="px-md py-sm font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider text-center">Eval 1</th>
+<th class="px-md py-sm font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider text-center">Eval 2</th>
+<th class="px-md py-sm font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider text-right">Overall Status</th>
+<th class="px-md py-sm font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider text-center">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-highest">
+<!-- Row 1: Complete -->
+<tr class="hover:bg-surface-bright transition-colors group">
+<td class="px-md py-sm align-top pt-md">
+<span class="font-title-lg text-title-lg text-on-surface font-bold">01</span>
+</td>
+<td class="px-md py-sm align-top pt-md">
+<div class="flex flex-col gap-xs">
+<span class="font-title-lg text-title-lg text-on-surface font-bold">Smart Mobility System</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Team Alpha</span>
+<div class="flex -space-x-2 mt-xs">
+<img alt="Student 1" class="w-6 h-6 rounded-full border-2 border-surface" data-alt="A tiny profile photo of a student." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAzhq4zuow1KwrrLykolTzzjszEdY30f8ukOvpHc6tCf6cNCAfYWNQDMQoK-l1UN3e_XjN2pacp6SVtWFuEdcboWiaEHk3HNas2LsKWbMPnPtUWBsYDeLNxLr5uWlIME_Qd40L4lPAed3cvquXc3hjQo3CcJG55rvuivfR3R2rGUjtuarKiHP2qjC_hL9dudhfZKIXttTgeKFB9yKso76OtlJz9XyFRiIDqyVTlUqjp4BIO6Xwo2bcZWJDju-j6Bf_jSOAxY9S1Q">
+<img alt="Student 2" class="w-6 h-6 rounded-full border-2 border-surface" data-alt="A tiny profile photo of a student." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtWJw2orbJRdkB-R8BLbUCC1f0qyd7cmM4JXyQVSFJZSx-zdaDZadCLHSbmOtUgUUh2IGeV1gFj5p-HgDQMJcxMI1ns0mLmOqc6ZsJ98PEOKMmQuecsxYlA9kcLesTCB9bXr9q47-Es9ugRZkHlpHypsjpuwCo3K-x9l76IP5yeKz3sR9SKiPhvgNDeXBjhSsmLL34Yx_J318ORLlR_cTcDPSDQ_iNZtW3AHW-Tx4X_59WFAVd_CP06T0_1XwN6n8_Hr8mIjDYVQ">
+<img alt="Student 3" class="w-6 h-6 rounded-full border-2 border-surface" data-alt="A tiny profile photo of a student." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPJDXsBl57Br9NIWZ2fwNjWMIeHyImEgFny0pr7bEBNmefIxuF4txlHdazl8V0sZjFO519qprvXMRDr3BWXtqpfGgkf3Rm_ZOo4glBmEgjJIe3Cb9ii0MJb4VCbrbSzHw79sE9utEcayCgDPHes1RwSph1R5n7g-YgNYV5UMYezi8C_ve8pmUc-DHJ0Ucm_Sd0f1nMjXhHTTGkyzf83uP5O5nSsp7MxNOpM7Z8OdFOaOe-llpZbvT-dNJ5dYkIh1AbWCpKOsQECw">
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-surface-container-highest flex items-center justify-center text-[10px] font-bold text-on-surface-variant">+2</div>
+</div>
+</div>
+</td>
+<td class="px-md py-sm align-top pt-md">
+<div class="flex flex-col gap-xs">
+<span class="inline-flex items-center px-2 py-1 rounded bg-surface-container-low text-on-surface font-label-lg text-label-lg w-fit">CS</span>
+<span class="font-body-md text-body-md text-on-surface-variant flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">storefront</span> Booth A-12</span>
+</div>
+</td>
+<td class="px-md py-sm align-top pt-md text-center">
+<div class="flex flex-col items-center gap-xs">
+<span class="material-symbols-outlined text-[#146c2e]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-lg text-[10px] text-on-surface-variant">Dr. Smith</span>
+</div>
+</td>
+<td class="px-md py-sm align-top pt-md text-center">
+<div class="flex flex-col items-center gap-xs">
+<span class="material-symbols-outlined text-[#146c2e]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-lg text-[10px] text-on-surface-variant">Prof. Jones</span>
+</div>
+</td>
+<td class="px-md py-sm align-top pt-md text-right">
+<div class="flex flex-col items-end gap-xs">
+<span class="inline-flex items-center gap-xs px-2 py-1 rounded-full bg-[#e8f5e9] text-[#1b5e20] font-label-lg text-label-lg border border-[#c8e6c9]">
+                                            2/2 Complete
+                                        </span>
+<div class="w-24 h-1.5 bg-surface-container rounded-full mt-1 overflow-hidden">
+<div class="w-full h-full bg-[#146c2e]"></div>
+</div>
+</div>
+</td>
+<td class="px-md py-sm align-top pt-md text-center">
+<button class="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-container-highest rounded-full transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: Partial -->
+<tr class="hover:bg-surface-bright transition-colors group">
+<td class="px-md py-sm align-top pt-md">
+<span class="font-title-lg text-title-lg text-on-surface font-bold">02</span>
+</td>
+<td class="px-md py-sm align-top pt-md">
+<div class="flex flex-col gap-xs">
+<span class="font-title-lg text-title-lg text-on-surface font-bold">EcoBuild Materials</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Green Innovators</span>
+<div class="flex -space-x-2 mt-xs">
+<img alt="Student 1" class="w-6 h-6 rounded-full border-2 border-surface" data-alt="A tiny profile photo of a student." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDomNJ9eYhFkaVdjcpT7JZAAl7gQDLw7aw0rgSzLfUvu9chsKQFrHuKhHvqJ9VI9ODAqS7Y0WKx8gOUMu6Nm9xz36yzV5DdTkmmQOs5pnjdIzT8Giy3f-vQ2utv-WKkpRxtwA6n7F_sod02AOaZqSgQQo4HeYZ8rClCaIyI28Fk2SPLB0Li2xItEosTUAaUllVjXAF9STIU3yhuqekjtIMQM6EdRKr3sXIzBAkQBbadr1XFIUzt4vdja4HrxjT6UUmt9DNf8o5bHw">
+<img alt="Student 2" class="w-6 h-6 rounded-full border-2 border-surface" data-alt="A tiny profile photo of a student." src="https://lh3.googleusercontent.com/aida-public/AB6AXuALjIPYQyeD1TDffQmUob_DHN5QziNGQvFEiql03SVphAx4Qz--NxVANmFL8zTyyu0msr7-deshcc4WhUyd4MA91ctwIVvxMomeO8X3EzjLIfLyrtNeWDJa-5RZDw5POiPsfxnlqty4re74ERsB2elwZkqV0nQyFyGNn10jSalqAaNVhHRWnEzOPvPTfUvH7KXU9kPp8ywfiYRirJGOQ-Wn9ba--Uzj_x2LOpiNIpVmwYSgv2E32YBSL6LOIfxDqGqwX8fxnvx1CA">
+</div>
+</div>
+</td>
+<td class="px-md py-sm align-top pt-md">
+<div class="flex flex-col gap-xs">
+<span class="inline-flex items-center px-2 py-1 rounded bg-surface-container-low text-on-surface font-label-lg text-label-lg w-fit">CEM</span>
+<span class="font-body-md text-body-md text-on-surface-variant flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">storefront</span> Booth B-04</span>
+</div>
+</td>
+<td class="px-md py-sm align-top pt-md text-center">
+<div class="flex flex-col items-center gap-xs">
+<span class="material-symbols-outlined text-[#146c2e]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-lg text-[10px] text-on-surface-variant">Dr. Patel</span>
+</div>
+</td>
+<td class="px-md py-sm align-top pt-md text-center">
+<div class="flex flex-col items-center gap-xs">
+<span class="material-symbols-outlined text-outline">radio_button_unchecked</span>
+<span class="font-label-lg text-[10px] text-on-surface-variant">Pending</span>
+</div>
+</td>
+<td class="px-md py-sm align-top pt-md text-right">
+<div class="flex flex-col items-end gap-xs">
+<span class="inline-flex items-center gap-xs px-2 py-1 rounded-full bg-[#fff3e0] text-[#e65100] font-label-lg text-label-lg border border-[#ffe0b2]">
+                                            1/2 Partial
+                                        </span>
+<div class="w-24 h-1.5 bg-surface-container rounded-full mt-1 overflow-hidden">
+<div class="w-1/2 h-full bg-[#CB5A08]"></div>
+</div>
+</div>
+</td>
+<td class="px-md py-sm align-top pt-md text-center">
+<button class="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-container-highest rounded-full transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3: Pending -->
+<tr class="hover:bg-surface-bright transition-colors group">
+<td class="px-md py-sm align-top pt-md">
+<span class="font-title-lg text-title-lg text-on-surface font-bold">03</span>
+</td>
+<td class="px-md py-sm align-top pt-md">
+<div class="flex flex-col gap-xs">
+<span class="font-title-lg text-title-lg text-on-surface font-bold">NextGen Robotics Arm</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Mecha Squad</span>
+<div class="flex -space-x-2 mt-xs">
+<img alt="Student 1" class="w-6 h-6 rounded-full border-2 border-surface" data-alt="A tiny profile photo of a student." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCb7xKdOAFUvkGkscJimIce_ymDqh7FdxnEo5vw7RJ6nxUAeaA5GljqZBEnvQOms6tuyIroq7mdJXcq0p0H6bYq4FA-QbB4-CshGN8fGK1DTcSd6HCkHa3H5ahRXtA5oWq-E6ju4bnbPeVmfNWPoqX6p6vMssVUdSQRP0HkXgoPfl6wEV0lGm-KGInOsfI-yspLJfjjhKzde4eRSMvLbR8l834J5wZ18gddAGu0XmPHeQwKwxH3qkumDP907Q6salygR92EZdZNQ">
+<img alt="Student 2" class="w-6 h-6 rounded-full border-2 border-surface" data-alt="A tiny profile photo of a student." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBU2e-8qmHWNuOz5IzMEZvyR1DMVO81MRREWY2bJSz1pHmWuinmPmNtjps6QuBWAAYsQZgmon8SNWuRjEJc3bHE_KgDZoh8oBJ68nlWvSxT5nnGccPnMGXNyxiYAd9Kdl2UTztmZZtVP7lNXziKkqABR4AI-IirmJvfD-wSnLliF_Qm_WrWcqNGllXt3V8ZrTcyIbvJd3Xfwnrtha4aShlm4Dau-xl0ZVpfRWtMjo7IIfEq4QK48v4uSuY18gBWC0TR8EnbM5I7bA">
+<img alt="Student 3" class="w-6 h-6 rounded-full border-2 border-surface" data-alt="A tiny profile photo of a student." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfgfSgPtFEySCiP3jKEgFjkbWFO3jdhla9u3qn0voTl0zEw5xNbxNKprxaQt3J9pFMurVz3N2ARPMaQ9RGZ1DUCFbWnz-sAKDBIgt025a5d0pC4OfQtKs0YOQeXhIbSO4-ND3_iePMeW-neHSp-rrkuDg6d6wCkM8YntI2WiVRY8BijUMwzci01Kc8FkvdQlb6URs0fOIFWE-P0v0xCPWsGRAM-opEpgAfQkl2liBT6_euqQ-486CZeIJtILSP6caklVRIwXzumw">
+<img alt="Student 4" class="w-6 h-6 rounded-full border-2 border-surface" data-alt="A tiny profile photo of a student." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKWCD8cPWWPxu7GfKnY8BFtgk0mecGGfj9EK0602upp_Y-q6eJ9wLz8tXKg0ktxiDSx1EAnA_xmZshpErZVhwxUNVeux34_nD7GdJc7ZcsrenLiguMRYBak1FQF8c04l8jGhj-KPHiZ6uF_eoj56wmWFxF_ZklmlJfztS3HBVKLUp3Wc6ryNQYGuOUQbPzPnZuCcXNjPUCZxq96kB4T-V5aH6GG3mpkUkcrhhQH99johW1ANWtOpL3Gnvkw01eHJMBMnjOlB0SYw">
+</div>
+</div>
+</td>
+<td class="px-md py-sm align-top pt-md">
+<div class="flex flex-col gap-xs">
+<span class="inline-flex items-center px-2 py-1 rounded bg-surface-container-low text-on-surface font-label-lg text-label-lg w-fit">ME</span>
+<span class="font-body-md text-body-md text-on-surface-variant flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">storefront</span> Booth C-22</span>
+</div>
+</td>
+<td class="px-md py-sm align-top pt-md text-center">
+<div class="flex flex-col items-center gap-xs">
+<span class="material-symbols-outlined text-outline">radio_button_unchecked</span>
+<span class="font-label-lg text-[10px] text-on-surface-variant">Pending</span>
+</div>
+</td>
+<td class="px-md py-sm align-top pt-md text-center">
+<div class="flex flex-col items-center gap-xs">
+<span class="material-symbols-outlined text-outline">radio_button_unchecked</span>
+<span class="font-label-lg text-[10px] text-on-surface-variant">Pending</span>
+</div>
+</td>
+<td class="px-md py-sm align-top pt-md text-right">
+<div class="flex flex-col items-end gap-xs">
+<span class="inline-flex items-center gap-xs px-2 py-1 rounded-full bg-[#E9ECEF] text-[#495057] font-label-lg text-label-lg border border-[#dee2e6]">
+                                            0/2 Pending
+                                        </span>
+<div class="w-24 h-1.5 bg-surface-container rounded-full mt-1 overflow-hidden">
+<div class="w-0 h-full bg-secondary"></div>
+</div>
+</div>
+</td>
+<td class="px-md py-sm align-top pt-md text-center">
+<button class="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-container-highest rounded-full transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-md py-sm border-t border-surface-container-highest flex items-center justify-between bg-surface-container-lowest mt-auto">
+<span class="font-body-md text-body-md text-on-surface-variant">Showing 1 to 3 of 45 teams</span>
+<div class="flex items-center gap-xs">
+<button class="p-xs text-on-surface-variant hover:bg-surface-container-highest rounded transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-primary-container text-on-primary-container font-label-lg text-label-lg">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface font-label-lg text-label-lg transition-colors">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container-highest text-on-surface font-label-lg text-label-lg transition-colors">3</button>
+<span class="text-on-surface-variant">...</span>
+<button class="p-xs text-on-surface-variant hover:bg-surface-container-highest rounded transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+
+
+
+</body></html>

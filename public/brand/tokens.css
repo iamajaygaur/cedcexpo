@@ -1,0 +1,25 @@
+/* CU Denver CEDC brand tokens — from design system asset */
+:root {
+  /* Primary — muted gold */
+  --color-primary: #d4b773;
+  --color-primary-dark: #8b7355;
+  --color-cu-gold: #cfb87c;
+
+  /* Secondary — black / charcoal */
+  --color-secondary: #000000;
+  --color-secondary-soft: #2d2d2d;
+
+  /* Tertiary — teal */
+  --color-tertiary: #2d8289;
+
+  /* Neutral */
+  --color-neutral: #f8f9fa;
+  --color-white: #ffffff;
+
+  /* Typography */
+  --font-family: "Inter", system-ui, sans-serif;
+
+  /* Radius */
+  --radius: 0.75rem;
+  --radius-pill: 9999px;
+}

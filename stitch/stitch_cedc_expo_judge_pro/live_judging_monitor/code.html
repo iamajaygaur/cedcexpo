@@ -1,0 +1,428 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Admin Live Judging Monitor</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#5c470e",
+                        "tertiary-fixed-dim": "#84d3db",
+                        "inverse-surface": "#2e3132",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#002022",
+                        "on-primary-fixed": "#251a00",
+                        "on-surface": "#191c1d",
+                        "on-primary-fixed-variant": "#58440a",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#004f54",
+                        "surface-container-low": "#f3f4f5",
+                        "secondary-fixed-dim": "#c6c6c6",
+                        "background": "#f8f9fa",
+                        "inverse-on-surface": "#f0f1f2",
+                        "surface-dim": "#d9dadb",
+                        "on-surface-variant": "#4c4639",
+                        "primary-fixed": "#ffdf97",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#e1c37e",
+                        "tertiary-fixed": "#a0f0f7",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#006970",
+                        "on-background": "#191c1d",
+                        "surface-tint": "#725c21",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-bright": "#f8f9fa",
+                        "on-tertiary-container": "#005358",
+                        "outline-variant": "#cfc5b5",
+                        "secondary-fixed": "#e2e2e2",
+                        "tertiary-container": "#78c7ce",
+                        "primary-container": "#d4b773",
+                        "secondary": "#5e5e5e",
+                        "secondary-container": "#e2e2e2",
+                        "outline": "#7e7668",
+                        "primary": "#725c21",
+                        "surface-variant": "#e1e3e4",
+                        "on-secondary-fixed-variant": "#474747",
+                        "on-secondary-fixed": "#1b1b1b",
+                        "on-secondary-container": "#646464",
+                        "primary-fixed-dim": "#e1c37e",
+                        "surface": "#f8f9fa",
+                        "on-error": "#ffffff",
+                        "surface-container": "#edeeef",
+                        "surface-container-high": "#e7e8e9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "sm": "12px",
+                        "xl": "48px",
+                        "md": "24px",
+                        "xs": "4px",
+                        "lg": "32px",
+                        "gutter": "24px",
+                        "container-margin": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .material-symbols-outlined.filled { font-variation-settings: 'FILL' 1; }
+        
+        /* Custom Scrollbar for inner elements if needed */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cfc5b5; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #7e7668; }
+    </style>
+</head>
+<body class="bg-background text-on-surface overflow-hidden flex h-screen w-full">
+<nav class="fixed left-0 top-0 h-full w-[280px] bg-on-tertiary-fixed text-primary-fixed shadow-xl flex flex-col py-base z-50">
+<div class="px-md py-md mb-md flex items-center gap-sm"><div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center shrink-0"><img class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0OlbrLcE8YklCDiBFVlAzsKC8enAo-Nt6MKMQbUNQGkVaI6nZ4dO89RHxem8fnlNKRJFA3hPYSEIneS9M9IG1d-R3vdSFIC7Ozu8dG4-fiO7AkwAxCmL9Fy-LbV8UJCuVvmUahjSOJtbKzu9aBOz7GFjJK7Rfr1_mPjKBfE0C9eb9sGNxBQTShMoiij9kU70H4yr-knzQAWoYw_zgAQxO7OnVqvV3dd4O2VrrZHsyCMBbKdV9bxJjIc0SLIBfcWfk" alt="CEDC Logo"></div><div><h1 class="text-primary-fixed font-title-lg text-title-lg font-bold tracking-tight">Admin Panel</h1><p class="text-primary-fixed-dim font-label-lg text-label-lg opacity-70">Management Console</p></div></div>
+<div class="px-md mb-lg">
+<button class="w-full bg-primary text-on-primary font-label-lg text-label-lg uppercase rounded-lg h-12 flex items-center justify-center gap-2 hover:bg-surface-tint transition-colors shadow-sm">
+<span class="material-symbols-outlined">add</span>
+                New Event
+            </button>
+</div>
+<div class="flex-1 overflow-y-auto px-xs flex flex-col gap-1">
+<a class="flex items-center gap-sm px-4 py-3 text-on-tertiary mx-2 my-1 rounded-lg hover:bg-on-tertiary-fixed-variant transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">dashboard</span>
+<span class="font-body-md text-body-md font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-tertiary mx-2 my-1 rounded-lg hover:bg-on-tertiary-fixed-variant transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">event</span>
+<span class="font-body-md text-body-md font-medium">Events</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-tertiary mx-2 my-1 rounded-lg hover:bg-on-tertiary-fixed-variant transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">groups</span>
+<span class="font-body-md text-body-md font-medium">Teams</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-tertiary mx-2 my-1 rounded-lg hover:bg-on-tertiary-fixed-variant transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">gavel</span>
+<span class="font-body-md text-body-md font-medium">Judges</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-tertiary mx-2 my-1 rounded-lg hover:bg-on-tertiary-fixed-variant transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">category</span>
+<span class="font-body-md text-body-md font-medium">Groups</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-tertiary mx-2 my-1 rounded-lg hover:bg-on-tertiary-fixed-variant transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">assignment_turned_in</span>
+<span class="font-body-md text-body-md font-medium">Assignments</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 bg-primary-fixed text-on-primary-fixed rounded-lg mx-2 my-1 transition-all duration-300 ease-in-out shadow-sm" href="#">
+<span class="material-symbols-outlined filled">sensors</span>
+<span class="font-body-md text-body-md font-semibold">Live Monitor</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-tertiary mx-2 my-1 rounded-lg hover:bg-on-tertiary-fixed-variant transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">analytics</span>
+<span class="font-body-md text-body-md font-medium">Evaluations</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-tertiary mx-2 my-1 rounded-lg hover:bg-on-tertiary-fixed-variant transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">emoji_events</span>
+<span class="font-body-md text-body-md font-medium">Results</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-tertiary mx-2 my-1 rounded-lg hover:bg-on-tertiary-fixed-variant transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">description</span>
+<span class="font-body-md text-body-md font-medium">Reports</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-tertiary mx-2 my-1 rounded-lg hover:bg-on-tertiary-fixed-variant transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">settings</span>
+<span class="font-body-md text-body-md font-medium">Settings</span>
+</a>
+</div>
+<div class="mt-auto px-xs flex flex-col gap-1 border-t border-on-tertiary-fixed-variant pt-sm">
+<a class="flex items-center gap-sm px-4 py-3 text-on-tertiary mx-2 my-1 rounded-lg hover:bg-on-tertiary-fixed-variant transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md text-body-md font-medium">Help</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-tertiary mx-2 my-1 rounded-lg hover:bg-on-tertiary-fixed-variant transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-md text-body-md font-medium">Logout</span>
+</a>
+</div>
+</nav>
+<main class="ml-[280px] flex-1 flex flex-col h-full overflow-y-auto px-lg py-lg gap-lg">
+<header class="flex flex-col md:flex-row justify-between items-start md:items-end gap-md">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight mb-2">Live Status Board</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Real-time monitoring of event progress and active judging sessions.</p>
+</div>
+<div class="flex items-center gap-sm text-sm font-label-lg text-secondary">
+<span class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-error"></span>
+</span>
+                LIVE SYNC ACTIVE
+            </div>
+</header>
+<section class="bg-surface border border-outline-variant rounded-xl p-md shadow-sm flex flex-col md:flex-row items-center gap-lg">
+<div class="flex-1 w-full">
+<div class="flex justify-between items-end mb-sm">
+<span class="font-title-lg text-title-lg text-on-surface">Overall Evaluation Progress</span>
+<span class="font-display-lg text-display-lg text-primary tracking-tighter">71.6%</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-4 overflow-hidden shadow-inner">
+<div class="bg-primary h-full rounded-full transition-all duration-1000 ease-out relative" style="width: 71.6%">
+<div class="absolute inset-0 bg-white/20 w-full h-full" style="background-image: linear-gradient(45deg, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent); background-size: 1rem 1rem;"></div>
+</div>
+</div>
+<div class="mt-sm flex justify-between text-on-surface-variant font-label-lg text-label-lg uppercase">
+<span class="">63 Completed</span>
+<span class="">88 Total Target</span>
+</div>
+</div>
+<div class="hidden md:block w-px h-24 bg-outline-variant self-center"></div>
+<div class="flex-1 w-full flex flex-col gap-sm">
+<div class="bg-error-container text-on-error-container rounded-lg p-sm flex items-start gap-sm shadow-sm border border-error/20">
+<span class="material-symbols-outlined text-error mt-0.5">warning</span>
+<div class="flex-1">
+<h4 class="font-label-lg text-label-lg uppercase font-bold mb-0.5 tracking-wide">Reassignment Required</h4>
+<p class="font-body-md text-body-md">Judge Sarah Jenkins is marked absent. Team 04 (Group Yellow) requires immediate reassignment for Eval 2.</p>
+</div>
+<button class="bg-error text-on-error px-3 py-1.5 rounded-md font-label-lg text-label-lg hover:bg-error/90 transition-colors shadow-sm whitespace-nowrap">
+                        Reassign
+                    </button>
+</div>
+</div>
+</section>
+<section>
+<h3 class="font-title-lg text-title-lg text-on-surface mb-md">Group Live Status</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-md">
+<div class="bg-surface rounded-xl p-md border border-outline-variant shadow-sm flex flex-col relative overflow-hidden group hover:shadow-md transition-shadow cursor-default">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-[#E53935]"></div>
+<div class="flex justify-between items-start mb-sm pl-xs">
+<span class="font-title-lg text-title-lg text-on-surface">Group Red</span>
+<span class="px-2 py-1 bg-surface-container-highest text-on-surface-variant rounded-md font-label-lg text-label-lg flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-[#E53935]"></span> Active
+                        </span>
+</div>
+<div class="flex flex-col gap-xs mt-auto pl-xs">
+<div class="flex justify-between items-center font-body-md text-body-md border-b border-surface-container pb-xs">
+<span class="text-on-surface-variant">Judges Present</span>
+<span class="font-semibold text-on-surface">5/5</span>
+</div>
+<div class="flex justify-between items-center font-body-md text-body-md pt-xs">
+<span class="text-on-surface-variant">Evals Completed</span>
+<span class="font-semibold text-on-surface">18/20</span>
+</div>
+</div>
+</div>
+<div class="bg-surface rounded-xl p-md border border-outline-variant shadow-sm flex flex-col relative overflow-hidden group hover:shadow-md transition-shadow cursor-default">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-[#43A047]"></div>
+<div class="flex justify-between items-start mb-sm pl-xs">
+<span class="font-title-lg text-title-lg text-on-surface">Group Green</span>
+<span class="px-2 py-1 bg-tertiary-container text-on-tertiary-container rounded-md font-label-lg text-label-lg flex items-center gap-1 border border-tertiary/20">
+<span class="w-2 h-2 rounded-full bg-[#43A047]"></span> Finished
+                        </span>
+</div>
+<div class="flex flex-col gap-xs mt-auto pl-xs">
+<div class="flex justify-between items-center font-body-md text-body-md border-b border-surface-container pb-xs">
+<span class="text-on-surface-variant">Judges Present</span>
+<span class="font-semibold text-on-surface">4/4</span>
+</div>
+<div class="flex justify-between items-center font-body-md text-body-md pt-xs">
+<span class="text-on-surface-variant">Evals Completed</span>
+<span class="font-semibold text-on-surface">16/16</span>
+</div>
+</div>
+</div>
+<div class="bg-surface rounded-xl p-md border-error shadow-md flex flex-col relative overflow-hidden group bg-error/5 ring-1 ring-error">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-[#FDD835]"></div>
+<div class="flex justify-between items-start mb-sm pl-xs">
+<span class="font-title-lg text-title-lg text-on-surface">Group Yellow</span>
+<span class="px-2 py-1 bg-error-container text-on-error-container rounded-md font-label-lg text-label-lg flex items-center gap-1 animate-pulse">
+<span class="w-2 h-2 rounded-full bg-error"></span> Alert
+                        </span>
+</div>
+<div class="flex flex-col gap-xs mt-auto pl-xs">
+<div class="flex justify-between items-center font-body-md text-body-md border-b border-error/10 pb-xs">
+<span class="text-on-surface-variant">Judges Present</span>
+<span class="font-bold text-error flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">warning</span> 4/5</span>
+</div>
+<div class="flex justify-between items-center font-body-md text-body-md pt-xs">
+<span class="text-on-surface-variant">Evals Completed</span>
+<span class="font-semibold text-on-surface">12/20</span>
+</div>
+</div>
+</div>
+<div class="bg-surface rounded-xl p-md border border-outline-variant shadow-sm flex flex-col relative overflow-hidden group hover:shadow-md transition-shadow cursor-default">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-[#1E88E5]"></div>
+<div class="flex justify-between items-start mb-sm pl-xs">
+<span class="font-title-lg text-title-lg text-on-surface">Group Blue</span>
+<span class="px-2 py-1 bg-surface-container-highest text-on-surface-variant rounded-md font-label-lg text-label-lg flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-[#1E88E5]"></span> Active
+                        </span>
+</div>
+<div class="flex flex-col gap-xs mt-auto pl-xs">
+<div class="flex justify-between items-center font-body-md text-body-md border-b border-surface-container pb-xs">
+<span class="text-on-surface-variant">Judges Present</span>
+<span class="font-semibold text-on-surface">6/6</span>
+</div>
+<div class="flex justify-between items-center font-body-md text-body-md pt-xs">
+<span class="text-on-surface-variant">Evals Completed</span>
+<span class="font-semibold text-on-surface">17/24</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="flex-1 flex flex-col min-h-[400px]">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-title-lg text-title-lg text-on-surface">Team Live Status</h3>
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface border border-outline-variant rounded-lg font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-shadow" placeholder="Search teams or groups..." type="text">
+</div>
+</div>
+<div class="bg-surface border border-outline-variant rounded-xl shadow-sm overflow-hidden flex-1 flex flex-col">
+<div class="overflow-x-auto flex-1">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low border-b border-outline-variant sticky top-0 z-10">
+<tr>
+<th class="py-3 px-4 font-label-lg text-label-lg uppercase text-on-surface-variant tracking-wider w-16 text-center">ID</th>
+<th class="py-3 px-4 font-label-lg text-label-lg uppercase text-on-surface-variant tracking-wider">Project Title</th>
+<th class="py-3 px-4 font-label-lg text-label-lg uppercase text-on-surface-variant tracking-wider">Group</th>
+<th class="py-3 px-4 font-label-lg text-label-lg uppercase text-on-surface-variant tracking-wider text-center">Eval 1</th>
+<th class="py-3 px-4 font-label-lg text-label-lg uppercase text-on-surface-variant tracking-wider text-center">Eval 2</th>
+<th class="py-3 px-4 font-label-lg text-label-lg uppercase text-on-surface-variant tracking-wider text-right">Overall Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/50">
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="py-3 px-4 font-body-md text-body-md font-semibold text-on-surface text-center">01</td>
+<td class="py-3 px-4 font-body-md text-body-md text-on-surface font-medium truncate max-w-[250px]">Autonomous Rover Navigation System</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-lg text-[11px] uppercase tracking-wider border border-surface-dim">
+<span class="w-1.5 h-1.5 rounded-full bg-[#E53935]"></span> Red
+                                    </span>
+</td>
+<td class="py-3 px-4 text-center">
+<span class="inline-flex items-center justify-center bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded-md font-label-lg text-label-lg shadow-sm border border-tertiary/10">2/2</span>
+</td>
+<td class="py-3 px-4 text-center">
+<span class="inline-flex items-center justify-center bg-primary-fixed text-on-primary-fixed px-2 py-1 rounded-md font-label-lg text-label-lg shadow-sm border border-primary-container">1/2</span>
+</td>
+<td class="py-3 px-4 text-right">
+<span class="inline-flex items-center gap-1 text-primary font-label-lg text-label-lg uppercase"><span class="material-symbols-outlined text-[18px]">sync</span> In Progress</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="py-3 px-4 font-body-md text-body-md font-semibold text-on-surface text-center">02</td>
+<td class="py-3 px-4 font-body-md text-body-md text-on-surface font-medium truncate max-w-[250px]">Biodegradable Polymer Synthesis</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-lg text-[11px] uppercase tracking-wider border border-surface-dim">
+<span class="w-1.5 h-1.5 rounded-full bg-[#43A047]"></span> Green
+                                    </span>
+</td>
+<td class="py-3 px-4 text-center">
+<span class="inline-flex items-center justify-center bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded-md font-label-lg text-label-lg shadow-sm border border-tertiary/10">2/2</span>
+</td>
+<td class="py-3 px-4 text-center">
+<span class="inline-flex items-center justify-center bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded-md font-label-lg text-label-lg shadow-sm border border-tertiary/10">2/2</span>
+</td>
+<td class="py-3 px-4 text-right">
+<span class="inline-flex items-center gap-1 text-tertiary font-label-lg text-label-lg uppercase"><span class="material-symbols-outlined text-[18px] filled">check_circle</span> Complete</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="py-3 px-4 font-body-md text-body-md font-semibold text-on-surface text-center">03</td>
+<td class="py-3 px-4 font-body-md text-body-md text-on-surface font-medium truncate max-w-[250px]">Smart City Traffic Optimization AI</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-lg text-[11px] uppercase tracking-wider border border-surface-dim">
+<span class="w-1.5 h-1.5 rounded-full bg-[#1E88E5]"></span> Blue
+                                    </span>
+</td>
+<td class="py-3 px-4 text-center">
+<span class="inline-flex items-center justify-center bg-surface-container-highest text-on-surface-variant px-2 py-1 rounded-md font-label-lg text-label-lg border border-outline-variant/30">0/2</span>
+</td>
+<td class="py-3 px-4 text-center">
+<span class="inline-flex items-center justify-center bg-surface-container-highest text-on-surface-variant px-2 py-1 rounded-md font-label-lg text-label-lg border border-outline-variant/30">0/2</span>
+</td>
+<td class="py-3 px-4 text-right">
+<span class="inline-flex items-center gap-1 text-on-surface-variant font-label-lg text-label-lg uppercase"><span class="material-symbols-outlined text-[18px]">pending</span> Pending</span>
+</td>
+</tr>
+<tr class="bg-error/5 hover:bg-error/10 transition-colors group relative">
+<td class="py-3 px-4 font-body-md text-body-md font-bold text-on-surface text-center">04</td>
+<td class="py-3 px-4 font-body-md text-body-md text-on-surface font-medium truncate max-w-[250px]">Wind Turbine Blade Stress Analysis</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-lg text-[11px] uppercase tracking-wider border border-surface-dim">
+<span class="w-1.5 h-1.5 rounded-full bg-[#FDD835]"></span> Yellow
+                                    </span>
+</td>
+<td class="py-3 px-4 text-center">
+<span class="inline-flex items-center justify-center bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded-md font-label-lg text-label-lg shadow-sm border border-tertiary/10">2/2</span>
+</td>
+<td class="py-3 px-4 text-center relative">
+<span class="inline-flex items-center justify-center bg-error-container text-on-error-container px-2 py-1 rounded-md font-label-lg text-label-lg shadow-sm border border-error/30 animate-pulse">0/2</span>
+</td>
+<td class="py-3 px-4 text-right">
+<span class="inline-flex items-center gap-1 text-error font-label-lg text-label-lg uppercase font-bold"><span class="material-symbols-outlined text-[18px]">error</span> Blocked</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="py-3 px-4 font-body-md text-body-md font-semibold text-on-surface text-center">05</td>
+<td class="py-3 px-4 font-body-md text-body-md text-on-surface font-medium truncate max-w-[250px]">Modular Prosthetic Limb Design</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-lg text-[11px] uppercase tracking-wider border border-surface-dim">
+<span class="w-1.5 h-1.5 rounded-full bg-[#E53935]"></span> Red
+                                    </span>
+</td>
+<td class="py-3 px-4 text-center">
+<span class="inline-flex items-center justify-center bg-primary-fixed text-on-primary-fixed px-2 py-1 rounded-md font-label-lg text-label-lg shadow-sm border border-primary-container">1/2</span>
+</td>
+<td class="py-3 px-4 text-center">
+<span class="inline-flex items-center justify-center bg-surface-container-highest text-on-surface-variant px-2 py-1 rounded-md font-label-lg text-label-lg border border-outline-variant/30">0/2</span>
+</td>
+<td class="py-3 px-4 text-right">
+<span class="inline-flex items-center gap-1 text-primary font-label-lg text-label-lg uppercase"><span class="material-symbols-outlined text-[18px]">sync</span> In Progress</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</main>
+
+
+
+
+
+
+</body></html>

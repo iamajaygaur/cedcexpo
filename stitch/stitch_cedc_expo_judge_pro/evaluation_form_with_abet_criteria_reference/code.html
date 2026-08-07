@@ -1,0 +1,613 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Judge Evaluation Form</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary": "#ffffff",
+                      "on-primary-container": "#5c470e",
+                      "tertiary-fixed-dim": "#84d3db",
+                      "inverse-surface": "#2e3132",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-fixed": "#002022",
+                      "on-primary-fixed": "#251a00",
+                      "on-surface": "#191c1d",
+                      "on-primary-fixed-variant": "#58440a",
+                      "error": "#ba1a1a",
+                      "on-tertiary-fixed-variant": "#004f54",
+                      "surface-container-low": "#f3f4f5",
+                      "secondary-fixed-dim": "#c6c6c6",
+                      "background": "#f8f9fa",
+                      "inverse-on-surface": "#f0f1f2",
+                      "surface-dim": "#d9dadb",
+                      "on-surface-variant": "#4c4639",
+                      "primary-fixed": "#ffdf97",
+                      "on-error-container": "#93000a",
+                      "inverse-primary": "#e1c37e",
+                      "tertiary-fixed": "#a0f0f7",
+                      "on-primary": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "on-secondary": "#ffffff",
+                      "tertiary": "#006970",
+                      "on-background": "#191c1d",
+                      "surface-tint": "#725c21",
+                      "surface-container-highest": "#e1e3e4",
+                      "surface-bright": "#f8f9fa",
+                      "on-tertiary-container": "#005358",
+                      "outline-variant": "#cfc5b5",
+                      "secondary-fixed": "#e2e2e2",
+                      "tertiary-container": "#78c7ce",
+                      "primary-container": "#d4b773",
+                      "secondary": "#5e5e5e",
+                      "secondary-container": "#e2e2e2",
+                      "outline": "#7e7668",
+                      "primary": "#725c21",
+                      "surface-variant": "#e1e3e4",
+                      "on-secondary-fixed-variant": "#474747",
+                      "on-secondary-fixed": "#1b1b1b",
+                      "on-secondary-container": "#646464",
+                      "primary-fixed-dim": "#e1c37e",
+                      "surface": "#f8f9fa",
+                      "on-error": "#ffffff",
+                      "surface-container": "#edeeef",
+                      "surface-container-high": "#e7e8e9"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "8px",
+                      "sm": "12px",
+                      "xl": "48px",
+                      "md": "24px",
+                      "xs": "4px",
+                      "lg": "32px",
+                      "gutter": "24px",
+                      "container-margin": "24px"
+              },
+              "fontFamily": {
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "label-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "title-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-lg": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "title-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #cfc5b5; /* outline-variant */
+            border-radius: 9999px;
+        }
+        .score-btn.active {
+            background-color: #ffdf97; /* primary-fixed */
+            color: #251a00; /* on-primary-fixed */
+            border-color: #725c21; /* primary */
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-lg min-h-screen flex flex-col md:flex-row">
+<!-- TopNavBar for Mobile (Hidden on Desktop) -->
+<header class="md:hidden flex items-center justify-between px-6 py-4 w-full h-16 bg-surface dark:bg-surface-container-low border-b border-outline-variant shadow-sm z-50 sticky top-0">
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full p-2 flex items-center justify-center h-10 w-10">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-display-lg text-title-lg font-bold text-on-surface">Senior Design Expo</h1>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-lg text-label-lg text-primary">Judge View</span>
+<button class="text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full p-2 flex items-center justify-center h-10 w-10">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-full p-2 flex items-center justify-center h-10 w-10">
+<span class="material-symbols-outlined">help</span>
+</button>
+<img alt="User profile" class="w-8 h-8 rounded-full object-cover" data-alt="A small, circular avatar portrait of a professional individual in a corporate setting. High-key lighting, bright and modern light-mode aesthetic. Clean, sharp focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbVXWwByQw-CUZWleUHD8R8inqLkKYIHL99crAPd3gR9Xb8WsfKQ9gKWo3KdxJWCoENfxhvj1yuoxPIz43Di14pSb2B_1NBKCZGP9sp9tJarx7j92uEGLTUApKjOY6lZ5ojEIsOBTvldm6zS2-WDZw-uXDt-xnmaZ37RG_N8cmVyfGAogR-L5otlmjkDn7E4GungLgw0saGSEd3LPrLqMzBFw0vyvFxcQHW0zrCGT5d198G9cJ91iIMI9mBOPVVIXRbsHt4l4tPA">
+</div>
+</header>
+<!-- SideNavBar (Hidden on Mobile) -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-on-tertiary-fixed text-primary-fixed shadow-xl flex flex-col py-base z-50 transition-all duration-300 ease-in-out hidden md:flex">
+<div class="px-md py-md mb-md flex items-center gap-sm">
+<div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center shrink-0">
+<img class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZrIZbuK8i1K6fd4Kayqu7YpXc-RNriCJUKq0ofb7zxesOlmbqprtuDyOhfVkozPTwM1Z_KpNRrSeM5mj9Gu8QB0os4WwVWvZH2GV0zUKP3PCEx4bHbEGDzgNZTjn6wxGfOkJaGYINzZEG8B9MjQ8YcLqcLRMKGmiGU0gb2--rAACgKmpSS371yndzHa_lC5rEOl1pf3FnzyzX7irn0GrcA_ieNiwnRRekuJpH6DP7ue6M3QIfxqV1VDv-hEHbciSf" alt="CEDC Logo">
+</div>
+<div><h1 class="text-primary-fixed font-title-lg text-title-lg font-bold tracking-tight">Admin Panel</h1>
+<p class="text-primary-fixed-dim font-label-lg text-label-lg opacity-70">Management Console</p></div>
+</div>
+<div class="px-md mb-md">
+<button class="w-full bg-primary text-on-primary font-label-lg text-label-lg py-sm px-md rounded-lg flex items-center justify-center gap-sm min-h-[48px] hover:bg-surface-tint transition-colors shadow-level-1">
+<span class="material-symbols-outlined">add</span>
+                New Event
+            </button>
+</div>
+<nav class="flex-1 overflow-y-auto font-body-md text-body-md flex flex-col gap-xs px-xs">
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">dashboard</span>
+                Dashboard
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">event</span>
+                Events
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">groups</span>
+                Teams
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">gavel</span>
+                Judges
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">category</span>
+                Groups
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">assignment_turned_in</span>
+                Assignments
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">sensors</span>
+                Live Monitor
+            </a>
+<a class="bg-primary-fixed text-on-primary-fixed rounded-lg mx-2 my-1 px-sm py-sm flex items-center gap-sm group" href="#">
+<span class="material-symbols-outlined">assignment</span>
+                Evaluations
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">emoji_events</span>
+                Results
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">description</span>
+                Reports
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="mt-auto px-xs pt-md border-t border-on-tertiary-fixed-variant font-body-md text-body-md flex flex-col gap-xs">
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">help</span>
+                Help
+            </a>
+<a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">logout</span>
+                Logout
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-[280px] flex flex-col min-h-screen pb-24 md:pb-0 relative w-full">
+<!-- Header: Project Info (Read-Only) -->
+<div class="bg-surface p-md md:p-lg border-b border-outline-variant sticky top-0 md:top-0 z-30 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="bg-primary-container text-on-primary-container font-label-lg text-label-lg px-2 py-1 rounded">Team #42</span>
+<span class="bg-surface-container-highest text-on-surface-variant font-label-lg text-label-lg px-2 py-1 rounded border border-outline-variant">Booth B-14</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-1">Autonomous Drone Delivery System</h2>
+<p class="font-body-md text-body-md text-secondary">Dept: Mechanical Engineering</p>
+</div>
+<div class="bg-surface-container-lowest p-sm rounded-lg border border-outline-variant w-full md:w-auto shadow-[0px_4px_20px_rgba(0,0,0,0.05)]">
+<h3 class="font-label-lg text-label-lg text-on-surface-variant mb-2 uppercase tracking-wider">Team Members</h3>
+<ul class="font-body-md text-body-md text-on-surface grid grid-cols-2 gap-x-4 gap-y-1">
+<li class="">Alice Johnson</li>
+<li class="">Bob Smith</li>
+<li class="">Charlie Davis</li>
+<li class="">Diana Prince</li>
+</ul>
+</div>
+</div>
+<div class="p-md md:p-lg flex-1 max-w-4xl mx-auto w-full">
+<!-- Instructions -->
+<div class="bg-surface-container-highest p-md rounded-xl mb-lg border border-outline-variant">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary mt-1" style="font-variation-settings: &quot;FILL&quot; 1;">info</span>
+<div>
+<h4 class="font-title-lg text-title-lg text-on-surface mb-1">Evaluation Instructions</h4>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Rate each criterion from 1 (Poor) to 10 (Excellent). The maximum total score is 50. Optional comments can be provided for detailed feedback.</p>
+</div>
+</div>
+</div>
+<!-- Criteria Form -->
+<form class="space-y-md" id="evaluationForm">
+<!-- Section 1 -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant overflow-hidden">
+<div class="flex flex-col md:flex-row border-b border-outline-variant">
+<div class="flex-1 p-md flex gap-4">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-2xl">design_services</span>
+</div>
+<div>
+<h3 class="font-headline-lg-mobile text-on-surface font-bold mb-2">1. Design Execution</h3>
+<p class="font-body-lg text-on-surface-variant mb-4">Excellence of Design Execution: Concept, ingenuity, creativity, technical knowledge and engineering merit.</p>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant text-[11px] rounded font-bold uppercase tracking-wide border border-outline-variant">ABET Outcome 1</span>
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant text-[11px] rounded font-bold uppercase tracking-wide border border-outline-variant">ABET Outcome 2</span>
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant text-[11px] rounded font-bold uppercase tracking-wide border border-outline-variant">ABET Outcome 3</span>
+</div>
+</div>
+</div>
+<div class="p-md bg-surface-container-low flex flex-col items-center justify-center min-w-[180px] border-t md:border-t-0 md:border-l border-outline-variant">
+<span class="font-label-lg font-bold text-on-surface mb-3 uppercase tracking-widest text-xs">Judge's Score</span>
+<div class="w-24 h-16 bg-[#d1e1f5] border-[3px] border-[#2e3d59] rounded-lg flex items-center justify-center text-display-lg text-[#2e3d59] font-bold shadow-inner" id="score-display-1">--</div>
+<p class="text-xs font-bold text-secondary mt-3">Maximum: 10</p>
+</div>
+</div>
+<div class="p-4 bg-surface-container-lowest">
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-4 font-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary placeholder-on-surface-variant transition-colors custom-scrollbar resize-y" placeholder="Optional comments on Design Execution..." rows="3"></textarea>
+</div>
+</div>
+<!-- Section 2 -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant overflow-hidden">
+<div class="flex flex-col md:flex-row border-b border-outline-variant">
+<div class="flex-1 p-md flex gap-4">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-2xl">business_center</span>
+</div>
+<div>
+<h3 class="font-headline-lg-mobile text-on-surface font-bold mb-2">2. Professionalism</h3>
+<p class="font-body-lg text-on-surface-variant mb-4">Professionalism, appearance, attitude and deportment:</p>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant text-[11px] rounded font-bold uppercase tracking-wide border border-outline-variant">ABET Outcome 4</span>
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant text-[11px] rounded font-bold uppercase tracking-wide border border-outline-variant">ABET Outcome 5</span>
+</div>
+</div>
+</div>
+<div class="p-md bg-surface-container-low flex flex-col items-center justify-center min-w-[180px] border-t md:border-t-0 md:border-l border-outline-variant">
+<span class="font-label-lg font-bold text-on-surface mb-3 uppercase tracking-widest text-xs">Judge's Score</span>
+<div class="w-24 h-16 bg-[#d1e1f5] border-[3px] border-[#2e3d59] rounded-lg flex items-center justify-center text-display-lg text-[#2e3d59] font-bold shadow-inner">--</div>
+<p class="text-xs font-bold text-secondary mt-3">Maximum: 10</p>
+</div>
+</div>
+<div class="p-4 bg-surface-container-lowest">
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-4 font-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary placeholder-on-surface-variant transition-colors custom-scrollbar resize-y" placeholder="Optional comments on Professionalism..." rows="3"></textarea>
+</div>
+</div>
+<!-- Section 3 -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant overflow-hidden">
+<div class="flex flex-col md:flex-row border-b border-outline-variant">
+<div class="flex-1 p-md flex gap-4">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-2xl">co_present</span>
+</div>
+<div>
+<h3 class="font-headline-lg-mobile text-on-surface font-bold mb-2">3. Presentation Quality</h3>
+<p class="font-body-lg text-on-surface-variant mb-4">Clarity and understandability of oral and visual presentation.</p>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant text-[11px] rounded font-bold uppercase tracking-wide border border-outline-variant">ABET Outcome 4</span>
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant text-[11px] rounded font-bold uppercase tracking-wide border border-outline-variant">ABET Outcome 5</span>
+</div>
+</div>
+</div>
+<div class="p-md bg-surface-container-low flex flex-col items-center justify-center min-w-[180px] border-t md:border-t-0 md:border-l border-outline-variant">
+<span class="font-label-lg font-bold text-on-surface mb-3 uppercase tracking-widest text-xs">Judge's Score</span>
+<div class="w-24 h-16 bg-[#d1e1f5] border-[3px] border-[#2e3d59] rounded-lg flex items-center justify-center text-display-lg text-[#2e3d59] font-bold shadow-inner">--</div>
+<p class="text-xs font-bold text-secondary mt-3">Maximum: 10</p>
+</div>
+</div>
+<div class="p-4 bg-surface-container-lowest">
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-4 font-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary placeholder-on-surface-variant transition-colors custom-scrollbar resize-y" placeholder="Optional comments on Presentation Quality..." rows="3"></textarea>
+</div>
+</div>
+<!-- Section 4 -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant overflow-hidden">
+<div class="flex flex-col md:flex-row border-b border-outline-variant">
+<div class="flex-1 p-md flex gap-4">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-2xl">groups</span>
+</div>
+<div>
+<h3 class="font-headline-lg-mobile text-on-surface font-bold mb-2">4. Teamwork</h3>
+<p class="font-body-lg text-on-surface-variant mb-4">Ability to work/present as a team. (Note: If team was an individual, rate how individual was able to explore breadth and depth of topic)</p>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant text-[11px] rounded font-bold uppercase tracking-wide border border-outline-variant">ABET Outcome 2</span>
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant text-[11px] rounded font-bold uppercase tracking-wide border border-outline-variant">ABET Outcome 5</span>
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant text-[11px] rounded font-bold uppercase tracking-wide border border-outline-variant">ABET Outcome 7</span>
+</div>
+</div>
+</div>
+<div class="p-md bg-surface-container-low flex flex-col items-center justify-center min-w-[180px] border-t md:border-t-0 md:border-l border-outline-variant">
+<span class="font-label-lg font-bold text-on-surface mb-3 uppercase tracking-widest text-xs">Judge's Score</span>
+<div class="w-24 h-16 bg-[#d1e1f5] border-[3px] border-[#2e3d59] rounded-lg flex items-center justify-center text-display-lg text-[#2e3d59] font-bold shadow-inner">--</div>
+<p class="text-xs font-bold text-secondary mt-3">Maximum: 10</p>
+</div>
+</div>
+<div class="p-4 bg-surface-container-lowest">
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-4 font-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary placeholder-on-surface-variant transition-colors custom-scrollbar resize-y" placeholder="Optional comments on Teamwork..." rows="3"></textarea>
+</div>
+</div>
+<!-- Section 5 -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant overflow-hidden">
+<div class="flex flex-col md:flex-row border-b border-outline-variant">
+<div class="flex-1 p-md flex gap-4">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-2xl">public</span>
+</div>
+<div>
+<h3 class="font-headline-lg-mobile text-on-surface font-bold mb-2">5. Project Impact</h3>
+<p class="font-body-lg text-on-surface-variant mb-4">Impact of project in global, economic, environmental and societal context.</p>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant text-[11px] rounded font-bold uppercase tracking-wide border border-outline-variant">ABET Outcome 2</span>
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant text-[11px] rounded font-bold uppercase tracking-wide border border-outline-variant">ABET Outcome 4</span>
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant text-[11px] rounded font-bold uppercase tracking-wide border border-outline-variant">ABET Outcome 5</span>
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant text-[11px] rounded font-bold uppercase tracking-wide border border-outline-variant">ABET Outcome 6</span>
+</div>
+</div>
+</div>
+<div class="p-md bg-surface-container-low flex flex-col items-center justify-center min-w-[180px] border-t md:border-t-0 md:border-l border-outline-variant">
+<span class="font-label-lg font-bold text-on-surface mb-3 uppercase tracking-widest text-xs">Judge's Score</span>
+<div class="w-24 h-16 bg-[#d1e1f5] border-[3px] border-[#2e3d59] rounded-lg flex items-center justify-center text-display-lg text-[#2e3d59] font-bold shadow-inner">--</div>
+<p class="text-xs font-bold text-secondary mt-3">Maximum: 10</p>
+</div>
+</div>
+<div class="p-4 bg-surface-container-lowest">
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-4 font-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary placeholder-on-surface-variant transition-colors custom-scrollbar resize-y" placeholder="Optional comments on Project Impact..." rows="3"></textarea>
+</div>
+</div>
+</form>
+<div class="bg-surface-container-low rounded-xl p-6 border border-outline-variant mb-lg shadow-sm mt-12">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-4">Note - ABET Engineering Criteria Program Educational Outcomes</h3>
+<ul class="space-y-3 font-body-md text-body-md text-on-surface-variant">
+<li class="flex gap-2">
+<span class="font-bold shrink-0">1.</span>
+<span class="">an ability to identify, formulate, and solve complex engineering problems by applying principles of engineering, science, and mathematics.</span>
+</li>
+<li class="flex gap-2">
+<span class="font-bold shrink-0">2.</span>
+<span class="">an ability to apply engineering design to produce solutions that meet specified needs with consideration of public health, safety, and welfare, as well as global, cultural, social, environmental, and economic factors.</span>
+</li>
+<li class="flex gap-2">
+<span class="font-bold shrink-0">3.</span>
+<span class="">an ability to communicate effectively with a range of audiences.</span>
+</li>
+<li class="flex gap-2">
+<span class="font-bold shrink-0">4.</span>
+<span class="">an ability to recognize ethical and professional responsibilities in engineering situations and make informed judgments, which must consider the impact of engineering solutions in global, economic, environmental, and societal contexts.</span>
+</li>
+<li class="flex gap-2">
+<span class="font-bold shrink-0">5.</span>
+<span class="">an ability to function effectively on a team whose members together provide leadership, create a collaborative and inclusive environment, establish goals, plan tasks, and meet objectives.</span>
+</li>
+<li class="flex gap-2">
+<span class="font-bold shrink-0">6.</span>
+<span class="">an ability to develop and conduct appropriate experimentation, analyze and interpret data, and use engineering judgment to draw conclusions.</span>
+</li>
+<li class="flex gap-2">
+<span class="font-bold shrink-0">7.</span>
+<span class="">an ability to acquire and apply new knowledge as needed, using appropriate learning strategies.</span>
+</li>
+</ul>
+</div><div class="h-8"></div> <!-- Spacer -->
+</div>
+<!-- Sticky Footer for Scoring Summary -->
+<div class="fixed bottom-0 md:sticky md:bottom-0 w-full bg-surface-container-lowest border-t border-outline-variant shadow-[0px_-4px_20px_rgba(0,0,0,0.08)] p-4 md:p-6 z-40">
+<div class="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="flex items-center gap-4">
+<span class="font-title-lg text-title-lg text-on-surface">YOUR SCORE</span>
+<div class="bg-surface-container text-on-surface font-display-lg text-display-lg px-4 py-2 rounded-lg border border-outline-variant min-w-[120px] text-center">
+<span class="" id="total-score">0</span><span class="text-secondary text-title-lg">/50</span>
+</div>
+</div>
+<button class="w-full md:w-auto bg-primary text-on-primary font-title-lg text-title-lg px-8 py-4 rounded-lg flex items-center justify-center gap-2 hover:bg-primary-fixed-dim transition-colors shadow-md min-h-[48px] opacity-50 cursor-not-allowed" disabled="" id="submit-btn" onclick="showModal()" type="button">
+<span class="material-symbols-outlined">send</span>
+                    SUBMIT EVALUATION
+                </button>
+</div>
+</div>
+</main>
+<!-- Confirmation Modal -->
+<div class="fixed inset-0 z-50 hidden bg-on-background/50 backdrop-blur-sm flex items-center justify-center p-4" id="confirmationModal">
+<div class="bg-surface-container-lowest rounded-xl shadow-[0px_8px_30px_rgba(0,0,0,0.12)] max-w-md w-full border border-outline-variant overflow-hidden transform scale-95 opacity-0 transition-all duration-200" id="modalContent">
+<div class="p-6 border-b border-outline-variant bg-surface">
+<h2 class="font-headline-lg text-headline-lg-mobile text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">task_alt</span>
+                    Confirm Submission
+                </h2>
+</div>
+<div class="p-6">
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-6">You are about to submit your final evaluation for <strong>Team #42: Autonomous Drone Delivery System</strong>.</p>
+<div class="bg-surface-container p-4 rounded-lg flex justify-between items-center mb-6">
+<span class="font-title-lg text-title-lg text-on-surface">Final Score</span>
+<span class="font-display-lg text-headline-lg text-primary" id="modal-final-score">0 / 50</span>
+</div>
+<p class="font-body-md text-body-md text-secondary italic">This action cannot be undone once submitted.</p>
+</div>
+<div class="p-6 bg-surface flex justify-end gap-3 border-t border-outline-variant">
+<button class="px-6 py-2 rounded-lg font-label-lg text-label-lg text-on-surface border border-outline-variant hover:bg-surface-container-high transition-colors" onclick="hideModal()">
+                    Cancel
+                </button>
+<button class="px-6 py-2 rounded-lg font-label-lg text-label-lg bg-primary text-on-primary hover:bg-primary-fixed-dim transition-colors shadow-sm" onclick="submitFinal()">
+                    Confirm Submit
+                </button>
+</div>
+</div>
+</div>
+<script>
+        const scores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+        let totalScore = 0;
+
+        function setScore(section, score, btn) {
+            // Update data model
+            scores[section] = score;
+            
+            // Visual update for buttons in this section
+            const buttons = btn.parentElement.querySelectorAll('.score-btn');
+            buttons.forEach(b => {
+                b.classList.remove('active');
+            });
+            btn.classList.add('active');
+            
+            // Update section display
+            document.getElementById(`score-display-${section}`).innerText = `${score} / 10`;
+            document.getElementById(`score-display-${section}`).classList.add('text-primary', 'font-bold');
+            
+            updateTotal();
+        }
+
+        function updateTotal() {
+            totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
+            
+            const totalEl = document.getElementById('total-score');
+            totalEl.innerText = totalScore;
+            
+            // Subtle animation on update
+            totalEl.parentElement.classList.remove('scale-105', 'border-primary');
+            void totalEl.parentElement.offsetWidth; // trigger reflow
+            totalEl.parentElement.classList.add('scale-105', 'border-primary', 'transition-transform');
+            setTimeout(() => {
+                totalEl.parentElement.classList.remove('scale-105', 'border-primary');
+            }, 300);
+
+            // Check if all sections are scored to enable submit
+            const allScored = Object.values(scores).every(s => s > 0);
+            const submitBtn = document.getElementById('submit-btn');
+            
+            if (allScored) {
+                submitBtn.removeAttribute('disabled');
+                submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                submitBtn.classList.add('hover:-translate-y-1', 'hover:shadow-lg'); // Add premium hover effect
+            } else {
+                submitBtn.setAttribute('disabled', 'true');
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                submitBtn.classList.remove('hover:-translate-y-1', 'hover:shadow-lg');
+            }
+        }
+
+        function showModal() {
+            const modal = document.getElementById('confirmationModal');
+            const content = document.getElementById('modalContent');
+            
+            document.getElementById('modal-final-score').innerText = `${totalScore} / 50`;
+            
+            modal.classList.remove('hidden');
+            // Small delay to allow display:block to apply before animating opacity/transform
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function hideModal() {
+            const modal = document.getElementById('confirmationModal');
+            const content = document.getElementById('modalContent');
+            
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200); // match duration
+        }
+        
+        function submitFinal() {
+            // Mock submit action
+            const content = document.getElementById('modalContent');
+            content.innerHTML = `
+                <div class="p-8 flex flex-col items-center text-center">
+                    <span class="material-symbols-outlined text-6xl text-tertiary mb-4 animate-bounce" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                    <h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Submitted Successfully</h2>
+                    <p class="font-body-lg text-body-lg text-on-surface-variant mb-6">Returning to dashboard...</p>
+                </div>
+            `;
+            setTimeout(() => {
+                hideModal();
+                // Reset or redirect in real app
+                location.reload(); 
+            }, 2000);
+        }
+    </script>
+
+
+</body></html>

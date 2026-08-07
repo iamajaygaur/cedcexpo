@@ -1,0 +1,340 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Admin Judging Assignments</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#5c470e",
+                        "tertiary-fixed-dim": "#84d3db",
+                        "inverse-surface": "#2e3132",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#002022",
+                        "on-primary-fixed": "#251a00",
+                        "on-surface": "#191c1d",
+                        "on-primary-fixed-variant": "#58440a",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#004f54",
+                        "surface-container-low": "#f3f4f5",
+                        "secondary-fixed-dim": "#c6c6c6",
+                        "background": "#f8f9fa",
+                        "inverse-on-surface": "#f0f1f2",
+                        "surface-dim": "#d9dadb",
+                        "on-surface-variant": "#4c4639",
+                        "primary-fixed": "#ffdf97",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#e1c37e",
+                        "tertiary-fixed": "#a0f0f7",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#006970",
+                        "on-background": "#191c1d",
+                        "surface-tint": "#725c21",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-bright": "#f8f9fa",
+                        "on-tertiary-container": "#005358",
+                        "outline-variant": "#cfc5b5",
+                        "secondary-fixed": "#e2e2e2",
+                        "tertiary-container": "#78c7ce",
+                        "primary-container": "#d4b773",
+                        "secondary": "#5e5e5e",
+                        "secondary-container": "#e2e2e2",
+                        "outline": "#7e7668",
+                        "primary": "#725c21",
+                        "surface-variant": "#e1e3e4",
+                        "on-secondary-fixed-variant": "#474747",
+                        "on-secondary-fixed": "#1b1b1b",
+                        "on-secondary-container": "#646464",
+                        "primary-fixed-dim": "#e1c37e",
+                        "surface": "#f8f9fa",
+                        "on-error": "#ffffff",
+                        "surface-container": "#edeeef",
+                        "surface-container-high": "#e7e8e9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "sm": "12px",
+                        "xl": "48px",
+                        "md": "24px",
+                        "xs": "4px",
+                        "lg": "32px",
+                        "gutter": "24px",
+                        "container-margin": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-lg": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-lg text-body-lg flex h-screen overflow-hidden antialiased">
+<!-- SideNavBar from JSON -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-on-tertiary-fixed text-primary-fixed shadow-xl flex flex-col py-base z-50 transition-all duration-300 ease-in-out hidden md:flex"><div class="px-md py-md mb-md flex items-center gap-sm"><div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center shrink-0"><img class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwnAjSKLs0s1sXESv9Z3ipwdcOF0HV3tVuTSLBddiFPglecjK_0jYShmcXzgDYzouyFuYOVMONrEPBJ-7-rJBtAnig0wniwA-Ugci_xWDLDKSH48gIqK0MevH8Q5iSyBfhz5tBKHB2eo5S3_a2EUG6zIxMk8hVhUF361xSZLfmdI6RlBSY7E65A5S5DqThSiFKySPWHBj32tpoXX_z3KcfENFqqgjATZK6lF2nud6GOKk3ig5nWlJR9Pfv679vtqRB" alt="CEDC Logo"></div><div><h1 class="text-primary-fixed font-title-lg text-title-lg font-bold tracking-tight">Admin Panel</h1><p class="text-primary-fixed-dim font-label-lg text-label-lg opacity-70">Management Console</p></div></div><div class="px-md mb-md"><button class="w-full bg-primary text-on-primary font-label-lg text-label-lg py-sm px-md rounded-lg flex items-center justify-center gap-sm min-h-[48px] hover:bg-surface-tint transition-colors shadow-level-1"><span class="material-symbols-outlined">add</span>New Event</button></div><nav class="flex-1 overflow-y-auto font-body-md text-body-md flex flex-col gap-xs px-xs"><a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#"><span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">dashboard</span>Dashboard</a><a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#"><span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">event</span>Events</a><a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#"><span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">groups</span>Teams</a><a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#"><span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">gavel</span>Judges</a><a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#"><span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">category</span>Groups</a><a class="bg-primary-fixed text-on-primary-fixed rounded-lg mx-2 my-1 px-sm py-sm flex items-center gap-sm group" href="#"><span class="material-symbols-outlined">assignment_turned_in</span>Assignments</a><a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#"><span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">sensors</span>Live Monitor</a><a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#"><span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">analytics</span>Evaluations</a><a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#"><span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">emoji_events</span>Results</a><a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#"><span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">description</span>Reports</a><a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#"><span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">settings</span>Settings</a></nav><div class="mt-auto px-xs pt-md border-t border-on-tertiary-fixed-variant font-body-md text-body-md flex flex-col gap-xs"><a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#"><span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">help</span>Help</a><a class="text-on-tertiary mx-2 my-1 px-sm py-sm flex items-center gap-sm hover:bg-on-tertiary-fixed-variant rounded-lg transition-colors group" href="#"><span class="material-symbols-outlined opacity-70 group-hover:opacity-100 transition-opacity">logout</span>Logout</a></div></aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-[280px] h-full overflow-y-auto bg-surface-container-lowest relative">
+<!-- Subtle Ambient Background Pattern -->
+<div class="absolute inset-0 pointer-events-none opacity-5 z-0" style="background-image: radial-gradient(#191c1d 1px, transparent 1px); background-size: 24px 24px;"></div>
+<div class="max-w-7xl mx-auto px-lg py-lg relative z-10 space-y-md">
+<!-- Page Header -->
+<header class="flex flex-col md:flex-row md:items-end justify-between gap-md mb-lg">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Judging Assignments</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-1">Manage and verify evaluation coverage for all participating teams.</p>
+</div>
+<div class="flex items-center gap-sm">
+<button class="px-4 h-[40px] rounded-lg border border-outline-variant text-on-surface font-label-lg text-label-lg flex items-center gap-2 hover:bg-surface-container transition-colors bg-surface">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                        Filter Views
+                    </button>
+<button class="px-4 h-[40px] rounded-lg bg-surface-container-highest text-on-surface font-label-lg text-label-lg flex items-center gap-2 hover:bg-surface-dim transition-colors">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                        Export
+                    </button>
+</div>
+</header>
+<!-- KPI Summary Grid (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md mb-lg">
+<div class="bg-surface rounded-xl p-md shadow-sm border border-outline-variant flex flex-col justify-between">
+<div class="flex items-center gap-2 text-on-surface-variant mb-4">
+<span class="material-symbols-outlined text-[20px]">groups</span>
+<span class="font-label-lg text-label-lg uppercase">Total Teams</span>
+</div>
+<div class="font-display-lg text-display-lg text-on-surface">42</div>
+</div>
+<div class="bg-primary-container rounded-xl p-md shadow-sm border border-primary-fixed-dim flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary blur-3xl opacity-20 -mr-10 -mt-10 rounded-full"></div>
+<div class="flex items-center gap-2 text-on-primary-container mb-4 relative z-10">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+<span class="font-label-lg text-label-lg uppercase">Fully Assigned (2/2)</span>
+</div>
+<div class="font-display-lg text-display-lg text-on-primary-container relative z-10">38</div>
+<div class="w-full bg-surface-container h-1 mt-4 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[90%]"></div>
+</div>
+</div>
+<div class="bg-error-container rounded-xl p-md shadow-sm border border-[#ffdad6] flex flex-col justify-between">
+<div class="flex items-center gap-2 text-on-error-container mb-4">
+<span class="material-symbols-outlined text-[20px]">warning</span>
+<span class="font-label-lg text-label-lg uppercase">Needs Assignment</span>
+</div>
+<div class="font-display-lg text-display-lg text-on-error-container">4</div>
+<div class="font-label-lg text-label-lg text-on-error-container mt-2 opacity-80">Teams requiring immediate action</div>
+</div>
+</div>
+<!-- Toolbar / Search -->
+<div class="flex flex-col sm:flex-row justify-between items-center gap-md bg-surface p-sm rounded-t-xl border border-outline-variant border-b-0">
+<div class="relative w-full sm:w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 h-[40px] bg-surface-container-lowest border border-outline-variant rounded-lg font-body-md text-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-shadow" placeholder="Search teams, departments, or judges..." type="text">
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-lg text-label-lg text-on-surface-variant uppercase mr-2">Sort by:</span>
+<select class="h-[40px] bg-surface-container-lowest border border-outline-variant rounded-lg font-body-md text-body-md px-3 outline-none focus:border-primary">
+<option>Status (Attention First)</option>
+<option>Team ID (A-Z)</option>
+<option>Department</option>
+</select>
+</div>
+</div>
+<!-- Main Data Table -->
+<div class="bg-surface rounded-b-xl border border-outline-variant shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="p-sm font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider pl-md w-[20%]">Team Details</th>
+<th class="p-sm font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider w-[20%]">Department</th>
+<th class="p-sm font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider w-[25%]">Evaluation #1</th>
+<th class="p-sm font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider w-[25%]">Evaluation #2</th>
+<th class="p-sm font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider text-right pr-md w-[10%]">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant bg-surface">
+<!-- Row 1: Needs Assignment -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="p-sm pl-md">
+<div class="font-title-lg text-title-lg text-on-surface">Team 02</div>
+<div class="font-body-md text-body-md text-on-surface-variant">Project Aether</div>
+</td>
+<td class="p-sm">
+<span class="inline-flex items-center px-2 py-1 rounded-md bg-surface-container-high text-on-surface-variant font-label-lg text-label-lg">Mechanical Eng.</span>
+</td>
+<td class="p-sm">
+<div class="flex items-center gap-2 p-2 rounded-lg bg-surface-container border border-outline-variant/50">
+<div class="w-8 h-8 rounded-full bg-primary-fixed-dim flex items-center justify-center text-on-primary-fixed font-bold text-sm">JS</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface">Dr. John Smith</span>
+<span class="font-body-md text-[11px] text-on-surface-variant flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-error inline-block"></span> Red Group</span>
+</div>
+</div>
+</td>
+<td class="p-sm">
+<div class="flex items-center gap-2 p-2 rounded-lg bg-error-container/30 border border-error border-dashed">
+<span class="material-symbols-outlined text-error">warning</span>
+<span class="font-label-lg text-label-lg text-on-error-container">Needs Assignment</span>
+</div>
+</td>
+<td class="p-sm text-right pr-md">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-lg text-label-lg bg-surface-container-highest text-on-surface-variant border border-outline-variant">
+                                        1/2 Assigned
+                                    </span>
+</td>
+</tr>
+<!-- Row 2: Fully Assigned -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="p-sm pl-md">
+<div class="font-title-lg text-title-lg text-on-surface">Team 14</div>
+<div class="font-body-md text-body-md text-on-surface-variant">BioSense Interface</div>
+</td>
+<td class="p-sm">
+<span class="inline-flex items-center px-2 py-1 rounded-md bg-surface-container-high text-on-surface-variant font-label-lg text-label-lg">Bioengineering</span>
+</td>
+<td class="p-sm">
+<div class="flex items-center gap-2 p-2 rounded-lg bg-surface-container border border-outline-variant/50">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-bold text-sm">AL</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface">Prof. A. Lin</span>
+<span class="font-body-md text-[11px] text-on-surface-variant flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-tertiary inline-block"></span> Blue Group</span>
+</div>
+</div>
+</td>
+<td class="p-sm">
+<div class="flex items-center gap-2 p-2 rounded-lg bg-surface-container border border-outline-variant/50">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-sm">MR</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface">Dr. M. Rivera</span>
+<span class="font-body-md text-[11px] text-on-surface-variant flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary inline-block"></span> Gold Group</span>
+</div>
+</div>
+</td>
+<td class="p-sm text-right pr-md">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-lg text-label-lg bg-primary-container text-on-primary-container">
+                                        Fully Assigned
+                                    </span>
+</td>
+</tr>
+<!-- Row 3: Fully Assigned -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="p-sm pl-md">
+<div class="font-title-lg text-title-lg text-on-surface">Team 08</div>
+<div class="font-body-md text-body-md text-on-surface-variant">Urban Canopy AI</div>
+</td>
+<td class="p-sm">
+<span class="inline-flex items-center px-2 py-1 rounded-md bg-surface-container-high text-on-surface-variant font-label-lg text-label-lg">Computer Science</span>
+</td>
+<td class="p-sm">
+<div class="flex items-center gap-2 p-2 rounded-lg bg-surface-container border border-outline-variant/50">
+<div class="w-8 h-8 rounded-full bg-tertiary-container flex items-center justify-center text-on-tertiary-container font-bold text-sm">DK</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface">D. Kim (Industry)</span>
+<span class="font-body-md text-[11px] text-on-surface-variant flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-secondary inline-block"></span> Gray Group</span>
+</div>
+</div>
+</td>
+<td class="p-sm">
+<div class="flex items-center gap-2 p-2 rounded-lg bg-surface-container border border-outline-variant/50">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed font-bold text-sm">ET</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface">Dr. E. Torres</span>
+<span class="font-body-md text-[11px] text-on-surface-variant flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary inline-block"></span> Gold Group</span>
+</div>
+</div>
+</td>
+<td class="p-sm text-right pr-md">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-lg text-label-lg bg-primary-container text-on-primary-container">
+                                        Fully Assigned
+                                    </span>
+</td>
+</tr>
+<!-- Row 4: Empty / Needs 2 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="p-sm pl-md">
+<div class="font-title-lg text-title-lg text-on-surface">Team 21</div>
+<div class="font-body-md text-body-md text-on-surface-variant">Smart Grid Controller</div>
+</td>
+<td class="p-sm">
+<span class="inline-flex items-center px-2 py-1 rounded-md bg-surface-container-high text-on-surface-variant font-label-lg text-label-lg">Electrical Eng.</span>
+</td>
+<td class="p-sm">
+<div class="flex items-center gap-2 p-2 rounded-lg bg-error-container/30 border border-error border-dashed cursor-pointer hover:bg-error-container/50 transition-colors">
+<span class="material-symbols-outlined text-error">add_circle</span>
+<span class="font-label-lg text-label-lg text-on-error-container">Assign Judge</span>
+</div>
+</td>
+<td class="p-sm">
+<div class="flex items-center gap-2 p-2 rounded-lg bg-error-container/30 border border-error border-dashed cursor-pointer hover:bg-error-container/50 transition-colors">
+<span class="material-symbols-outlined text-error">add_circle</span>
+<span class="font-label-lg text-label-lg text-on-error-container">Assign Judge</span>
+</div>
+</td>
+<td class="p-sm text-right pr-md">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-lg text-label-lg bg-error-container text-on-error-container">
+                                        0/2 Assigned
+                                    </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="p-sm border-t border-outline-variant bg-surface flex items-center justify-between">
+<span class="font-body-md text-body-md text-on-surface-variant">Showing 1 to 4 of 42 entries</span>
+<div class="flex gap-1">
+<button class="w-8 h-8 flex items-center justify-center rounded text-on-surface-variant hover:bg-surface-container disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-primary text-on-primary font-label-lg text-label-lg">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded text-on-surface hover:bg-surface-container font-label-lg text-label-lg">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded text-on-surface hover:bg-surface-container font-label-lg text-label-lg">3</button>
+<span class="w-8 h-8 flex items-center justify-center text-on-surface-variant">...</span>
+<button class="w-8 h-8 flex items-center justify-center rounded text-on-surface-variant hover:bg-surface-container">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+
+</body></html>

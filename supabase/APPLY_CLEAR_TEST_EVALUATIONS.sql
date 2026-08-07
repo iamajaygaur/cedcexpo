@@ -1,0 +1,16 @@
+-- Optional: clear ALL evaluations for testing (whole event).
+-- Replace the event name, or use event id directly.
+--
+-- Prefer the Assignments page "Clear scores" button for one team at a time.
+
+-- DELETE FROM public.evaluation_scores
+-- WHERE evaluation_id IN (
+--   SELECT e.id FROM public.evaluations e
+--   INNER JOIN public.events ev ON ev.id = e.event_id
+--   WHERE ev.name = 'YOUR EVENT NAME'
+-- );
+--
+-- DELETE FROM public.evaluations e
+-- USING public.events ev
+-- WHERE e.event_id = ev.id
+--   AND ev.name = 'YOUR EVENT NAME';
