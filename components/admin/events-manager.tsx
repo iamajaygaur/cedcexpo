@@ -480,7 +480,7 @@ export function EventsManager({
     >
       <PageHeader
         title="Events Management"
-        description="Create and manage Capstone Design Expo events across semesters."
+        description="Create and manage CEDC Expo events across semesters."
         breadcrumbs={[{ label: "Events" }]}
         actions={
           <>
@@ -519,7 +519,7 @@ export function EventsManager({
           <div className="px-4 py-14 text-center">
             <p className="text-sm font-medium text-foreground">No events yet</p>
             <p className="mt-1 text-sm text-muted-foreground">
-              Click Create Expo Event to set up your first Capstone Design Expo.
+              Click Create Expo Event to set up your first CEDC Expo.
             </p>
             <Button
               type="button"

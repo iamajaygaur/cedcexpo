@@ -26,7 +26,7 @@ export function PrivacyPolicyContent({
           { label: "Privacy Policy" },
         ]}
         title="Privacy Policy"
-        description="How the Capstone Design Expo judging system handles account and evaluation data."
+        description="How CEDC Expo handles account and evaluation data."
       />
 
       <section className="space-y-4 rounded-md border border-border bg-card p-5 text-sm text-muted-foreground">

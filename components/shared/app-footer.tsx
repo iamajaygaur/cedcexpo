@@ -26,7 +26,7 @@ export function AppFooter({
         className,
       )}
     >
-      <p className="text-sm font-bold text-primary">Capstone Design Expo</p>
+      <p className="text-sm font-bold text-primary">CEDC Expo</p>
       <nav
         className="mt-2 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground"
         aria-label="Footer"
@@ -54,7 +54,7 @@ export function AppFooter({
           ·
         </span>
         <a
-          href={supportMailto(supportEmail, "CEDC Capstone Design Expo Support")}
+          href={supportMailto(supportEmail, "CEDC Expo Support")}
           className="hover:text-foreground hover:underline"
         >
           {supportEmail?.trim() || "engineering@ucdenver.edu"}

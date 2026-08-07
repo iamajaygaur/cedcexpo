@@ -26,13 +26,13 @@ export function TermsOfServiceContent({
           { label: "Terms of Service" },
         ]}
         title="Terms of Service"
-        description="Rules for using the Capstone Design Expo judging system."
+        description="Rules for using CEDC Expo (Capstone Design Expo judging)."
       />
 
       <section className="space-y-4 rounded-md border border-border bg-card p-5 text-sm text-muted-foreground">
         <p>
           By signing in and using this application, you agree to use it only
-          for authorized Capstone Design Expo judging and administration at CU
+          for authorized CEDC Expo judging and administration at CU
           Denver CEDC.
         </p>
         <h2 className="text-base font-semibold text-foreground">

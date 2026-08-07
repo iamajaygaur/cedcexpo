@@ -31,7 +31,7 @@ export function HelpSupportContent({
       <PageHeader
         breadcrumbs={[{ label: "Help / Contact Support" }]}
         title="Help / Contact Support"
-        description="Guides for using the Capstone Design Expo judging system, plus ways to reach CEDC support."
+        description="Guides for using CEDC Expo, plus ways to reach CEDC support."
       />
 
       <section className="rounded-md border border-border bg-card p-5">
@@ -77,7 +77,7 @@ export function HelpSupportContent({
         </p>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <Button asChild size="lg" className="gap-2">
-            <a href={supportMailto(email, "CEDC Capstone Design Expo Support")}>
+            <a href={supportMailto(email, "CEDC Expo Support")}>
               <Mail className="size-4" aria-hidden />
               Email {email}
             </a>

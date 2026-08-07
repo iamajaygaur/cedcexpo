@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export function GET() {
   return NextResponse.json({
     ok: true,
-    service: "cedc-design-expo",
+    service: "cedc-expo",
     phase: 2,
   });
 }

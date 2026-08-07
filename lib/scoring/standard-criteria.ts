@@ -1,5 +1,5 @@
 /**
- * Fixed CEDC Capstone Design Expo rubric.
+ * Fixed CEDC Expo (Capstone Design Expo) rubric.
  * Admins do not edit criteria — judges always see this set.
  */
 

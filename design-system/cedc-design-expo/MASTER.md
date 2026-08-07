@@ -6,7 +6,7 @@
 
 ---
 
-**Project:** CEDC Design Expo
+**Project:** CEDC Expo
 **Generated:** 2026-07-31 13:53:15
 **Category:** Event Management
 **Design Dials:** Variance 8/10 (Bold / Asymmetric) | Motion 7/10 (Standard) | Density 7/10 (Standard)

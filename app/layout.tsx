@@ -13,12 +13,12 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "CEDC Capstone Design Expo",
-    template: "%s | CEDC Design Expo",
+    default: "CEDC Expo",
+    template: "%s | CEDC Expo",
   },
   description:
-    "College of Engineering, Design and Computing — Capstone Design Expo Judging System",
-  applicationName: "CEDC Design Expo",
+    "CEDC Expo — Capstone Design Expo judging and evaluation for CU Denver College of Engineering, Design and Computing",
+  applicationName: "CEDC Expo",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",

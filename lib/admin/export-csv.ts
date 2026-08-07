@@ -112,7 +112,7 @@ function judgesCsv(bundle: ResultsBundle) {
 
 function masterCsv(bundle: ResultsBundle) {
   return [
-    `# CEDC Design Expo — Master Report`,
+    `# CEDC Expo — Master Report`,
     `# Event: ${bundle.event.name}`,
     `# Generated: ${new Date().toISOString()}`,
     `# Submitted evaluations: ${bundle.submittedEvaluationCount}`,

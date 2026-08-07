@@ -34,10 +34,10 @@ export default function AdminError({
         className="space-y-3"
       >
         <h2 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
-          Admin Panel Error
+          Admin Error
         </h2>
         <p className="mx-auto max-w-md text-sm leading-relaxed text-muted-foreground">
-          Something went wrong in the admin panel. This has been logged.
+          Something went wrong in CEDC Expo. This has been logged.
           Try again or return to the dashboard.
         </p>
         {error.digest && (

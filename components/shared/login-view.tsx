@@ -119,10 +119,10 @@ export function LoginView({
           <div className="relative z-10 mt-10 space-y-5 lg:mt-0">
             <div className="space-y-1.5">
               <h1 className="text-[2rem] font-extrabold leading-tight tracking-tight text-white sm:text-[2.25rem]">
-                Capstone Design Expo
+                CEDC Expo
               </h1>
               <p className="text-base font-semibold text-[#d4b773] sm:text-lg">
-                Judging &amp; Evaluation System
+                Capstone Design Expo Judging
               </p>
             </div>
 

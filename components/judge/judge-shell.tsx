@@ -81,10 +81,10 @@ export function JudgeShell({
           </div>
           <div className="min-w-0">
             <p className="truncate text-[14px] font-bold tracking-tight text-sidebar-primary">
-              Judge Panel
+              CEDC Expo
             </p>
             <p className="truncate text-[10px] font-semibold uppercase tracking-[0.1em] text-sidebar-foreground/40">
-              Judging Workspace
+              Judge
             </p>
           </div>
         </div>
@@ -175,7 +175,7 @@ export function JudgeShell({
                   id={titleId}
                   className="truncate text-sm font-bold text-sidebar-primary"
                 >
-                  Judge Panel
+                  CEDC Expo
                 </p>
                 {userName ? (
                   <p className="truncate text-[11px] text-sidebar-foreground/50">

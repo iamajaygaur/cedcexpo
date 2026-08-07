@@ -44,7 +44,7 @@ export function QrPanel({
     <div className="space-y-6 rounded-md border border-border bg-card p-6 print:border-0 print:shadow-none">
       <div className="text-center print:block">
         <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          CEDC Capstone Design Expo
+          CEDC Expo
         </p>
         <h2 className="mt-1 text-2xl font-bold">Team {teamNumber}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{projectTitle}</p>

@@ -14,7 +14,7 @@ export default function DocsLayout({
           <AppLogo href="/" className="h-9 w-9" />
           <div className="min-w-0">
             <p className="truncate text-sm font-bold text-foreground">
-              Capstone Design Expo
+              CEDC Expo
             </p>
             <Link
               href="/login"

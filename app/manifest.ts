@@ -8,10 +8,10 @@ import type { MetadataRoute } from "next";
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "CEDC Capstone Design Expo Judging",
+    name: "CEDC Expo",
     short_name: "CEDC Expo",
     description:
-      "University of Colorado Denver — College of Engineering, Design and Computing Capstone Design Expo judging PWA",
+      "CU Denver CEDC Expo — Capstone Design Expo judging and evaluation",
     start_url: "/",
     display: "standalone",
     background_color: "#f8f9fa",
