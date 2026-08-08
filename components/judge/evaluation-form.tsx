@@ -172,29 +172,28 @@ export function EvaluationForm({
     [criteria],
   );
 
-  // Hide sticky chrome when the mobile virtual keyboard covers the viewport.
+  // Hide sticky chrome when the virtual keyboard is open. Only listen to
+  // resize (not scroll) and avoid layout jumps so iOS doesn't enter a
+  // scroll-correction loop while a score field is focused.
   useEffect(() => {
     const vv = window.visualViewport;
     if (!vv) return;
 
+    let timer = 0;
     const update = () => {
-      const covered = window.innerHeight - vv.height;
-      setKeyboardOpen(covered > 120);
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        const covered = window.innerHeight - vv.height;
+        setKeyboardOpen(covered > 150);
+      }, 80);
     };
 
     vv.addEventListener("resize", update);
-    vv.addEventListener("scroll", update);
     update();
     return () => {
+      window.clearTimeout(timer);
       vv.removeEventListener("resize", update);
-      vv.removeEventListener("scroll", update);
     };
-  }, []);
-
-  const scrollFieldIntoView = useCallback((el: HTMLElement) => {
-    window.setTimeout(() => {
-      el.scrollIntoView({ block: "center", behavior: "smooth" });
-    }, 280);
   }, []);
 
   // Only sum scores for the current rubric criteria (ignore stale local drafts).
@@ -465,14 +464,7 @@ export function EvaluationForm({
   const members = project.members ?? [];
 
   return (
-    <div
-      className={cn(
-        "space-y-4 md:space-y-5",
-        keyboardOpen
-          ? "pb-4"
-          : "pb-[calc(7.5rem+env(safe-area-inset-bottom))] md:pb-28",
-      )}
-    >
+    <div className="space-y-4 pb-[calc(7.5rem+env(safe-area-inset-bottom))] md:space-y-5 md:pb-28">
       {offline ? (
         <div
           role="alert"
@@ -624,7 +616,6 @@ export function EvaluationForm({
                           placeholder="--"
                           aria-describedby={`score-max-mobile-${criterion.id}`}
                           suppressHydrationWarning
-                          onFocus={(e) => scrollFieldIntoView(e.currentTarget)}
                           onChange={(e) => {
                             const raw = e.target.value.replace(/[^\d]/g, "");
                             if (raw === "") {
@@ -748,7 +739,6 @@ export function EvaluationForm({
                     autoCorrect="on"
                     enterKeyHint="done"
                     placeholder={`Optional comments on ${criterion.name}...`}
-                    onFocus={(e) => scrollFieldIntoView(e.currentTarget)}
                     onChange={(e) =>
                       setCriterionComment(criterion.id, e.target.value)
                     }
