@@ -13,7 +13,7 @@ import {
   parseLoginUsername,
   toLoginUsername,
 } from "@/lib/auth/username";
-import { checkLoginRateLimit } from "@/lib/rate-limit";
+import { checkLoginRateLimit, checkLoginUsernameRateLimit } from "@/lib/rate-limit";
 import {
   getSupabaseAnonKey,
   getSupabaseUrl,
@@ -84,7 +84,15 @@ export async function POST(request: NextRequest) {
   if (!parsed.success) {
     return redirectToLogin(
       request,
-      parsed.error.issues[0]?.message ?? "Invalid credentials.",
+      parsed.error.issues[0]?.message ?? "Invalid login details.",
+    );
+  }
+
+  const userRate = checkLoginUsernameRateLimit(parsed.data.username);
+  if (!userRate.allowed) {
+    return redirectToLogin(
+      request,
+      "Too many sign-in attempts for this account. Please wait a minute and try again.",
     );
   }
 

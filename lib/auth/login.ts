@@ -10,7 +10,7 @@ import {
   parseLoginUsername,
   toLoginUsername,
 } from "@/lib/auth/username";
-import { checkLoginRateLimit } from "@/lib/rate-limit";
+import { checkLoginRateLimit, checkLoginUsernameRateLimit } from "@/lib/rate-limit";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import { loginSchema } from "@/lib/validation/auth";
@@ -161,6 +161,15 @@ export async function attemptLogin(
     return {
       ok: false,
       message: parsed.error.issues[0]?.message ?? "Invalid credentials.",
+    };
+  }
+
+  const userRate = checkLoginUsernameRateLimit(parsed.data.username);
+  if (!userRate.allowed) {
+    return {
+      ok: false,
+      message:
+        "Too many sign-in attempts for this account. Please wait a minute and try again.",
     };
   }
 

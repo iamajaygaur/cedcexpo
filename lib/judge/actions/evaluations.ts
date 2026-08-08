@@ -85,8 +85,9 @@ export async function saveEvaluationDraftAction(
 ): Promise<ActionResult & { evaluationId?: string }> {
   try {
     const headerList = await headers();
+    const { supabase, judgeId } = await requireJudgeClient();
     const rate = checkEvaluationMutationRateLimit(
-      clientKeyFromHeaders(headerList),
+      judgeId || clientKeyFromHeaders(headerList),
     );
     if (!rate.allowed) {
       return actionFail("Too many save attempts. Please wait a moment.");
@@ -115,8 +116,6 @@ export async function saveEvaluationDraftAction(
     ) {
       return actionFail("Evaluation cannot be modified.");
     }
-
-    const { supabase, judgeId } = await requireJudgeClient();
 
     await ensureStandardCriteria(supabase, parsed.data.event_id);
 
@@ -183,8 +182,9 @@ export async function submitEvaluationAction(
 ): Promise<ActionResult> {
   try {
     const headerList = await headers();
+    const { supabase, judgeId } = await requireJudgeClient();
     const rate = checkEvaluationMutationRateLimit(
-      clientKeyFromHeaders(headerList),
+      judgeId || clientKeyFromHeaders(headerList),
     );
     if (!rate.allowed) {
       return actionFail("Too many submit attempts. Please wait a moment.");
@@ -210,8 +210,6 @@ export async function submitEvaluationAction(
     if (access.project.evaluation?.status === "submitted") {
       return actionFail("Evaluation already submitted.");
     }
-
-    const { supabase, judgeId } = await requireJudgeClient();
 
     await ensureStandardCriteria(supabase, parsed.data.event_id);
 
