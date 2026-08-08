@@ -11,6 +11,8 @@ function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
         className,
       )}
       {...props}
+      /* Chrome iOS autofill injects __gcruniqueid before hydrate */
+      suppressHydrationWarning
     />
   );
 }

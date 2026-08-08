@@ -163,10 +163,39 @@ export function EvaluationForm({
   const dirtyRef = useRef(false);
   const savingRef = useRef(false);
   const restoredLocalRef = useRef(false);
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
+  const [expandedDescriptions, setExpandedDescriptions] = useState<
+    Record<string, boolean>
+  >({});
   const criteriaIds = useMemo(
     () => criteria.map((c) => c.id).join("|"),
     [criteria],
   );
+
+  // Hide sticky chrome when the mobile virtual keyboard covers the viewport.
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+
+    const update = () => {
+      const covered = window.innerHeight - vv.height;
+      setKeyboardOpen(covered > 120);
+    };
+
+    vv.addEventListener("resize", update);
+    vv.addEventListener("scroll", update);
+    update();
+    return () => {
+      vv.removeEventListener("resize", update);
+      vv.removeEventListener("scroll", update);
+    };
+  }, []);
+
+  const scrollFieldIntoView = useCallback((el: HTMLElement) => {
+    window.setTimeout(() => {
+      el.scrollIntoView({ block: "center", behavior: "smooth" });
+    }, 280);
+  }, []);
 
   // Only sum scores for the current rubric criteria (ignore stale local drafts).
   const totalScore = useMemo(
@@ -436,11 +465,18 @@ export function EvaluationForm({
   const members = project.members ?? [];
 
   return (
-    <div className="space-y-5 pb-[calc(7.5rem+env(safe-area-inset-bottom))] md:pb-28">
+    <div
+      className={cn(
+        "space-y-4 md:space-y-5",
+        keyboardOpen
+          ? "pb-4"
+          : "pb-[calc(7.5rem+env(safe-area-inset-bottom))] md:pb-28",
+      )}
+    >
       {offline ? (
         <div
           role="alert"
-          className="rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-950"
+          className="rounded-md border border-amber-300 bg-amber-50 px-3 py-2.5 text-sm text-amber-950 sm:px-4 sm:py-3"
         >
           You&apos;re offline. Scores are kept on this device and will sync when
           you reconnect.
@@ -448,21 +484,22 @@ export function EvaluationForm({
       ) : null}
 
       {/* Project header */}
-      <header className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-        <div className="min-w-0 space-y-2">
-          <div className="flex flex-wrap gap-2">
-            <span className="rounded-md bg-primary-container/40 px-2.5 py-1 text-xs font-semibold text-on-primary-container">
+      <header className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between lg:gap-4">
+        <div className="min-w-0 space-y-1.5 sm:space-y-2">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
+            <span className="rounded-md bg-primary-container/40 px-2 py-0.5 text-[11px] font-semibold text-on-primary-container sm:px-2.5 sm:py-1 sm:text-xs">
               Team #{team.team_number}
             </span>
-            <span className="rounded-md bg-primary-container/40 px-2.5 py-1 text-xs font-semibold text-on-primary-container">
+            <span className="rounded-md bg-primary-container/40 px-2 py-0.5 text-[11px] font-semibold text-on-primary-container sm:px-2.5 sm:py-1 sm:text-xs">
               {team.booth_location?.trim()
-                ? team.booth_location.startsWith("Table") || team.booth_location.startsWith("Booth")
+                ? team.booth_location.startsWith("Table") ||
+                  team.booth_location.startsWith("Booth")
                   ? team.booth_location.replace(/^Booth\s*/i, "Table ")
                   : `Table ${team.booth_location}`
                 : "Table TBD"}
             </span>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+          <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl lg:text-3xl">
             {team.project_title}
           </h1>
           {deptLabel ? (
@@ -475,7 +512,34 @@ export function EvaluationForm({
           )}
         </div>
 
-        <aside className="w-full shrink-0 rounded-md border border-border bg-card p-4 lg:w-64">
+        {/* Collapsed on mobile so scoring stays above the fold */}
+        <details className="w-full shrink-0 rounded-md border border-border bg-card lg:hidden">
+          <summary className="cursor-pointer list-none px-3 py-2.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground marker:content-none [&::-webkit-details-marker]:hidden">
+            <span className="flex items-center justify-between gap-2">
+              Team Members
+              <span className="text-[10px] font-medium normal-case tracking-normal text-muted-foreground/80">
+                {members.length > 0
+                  ? `${members.length} · tap to view`
+                  : "None listed"}
+              </span>
+            </span>
+          </summary>
+          <div className="border-t border-border px-3 pb-3 pt-2">
+            {members.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No members listed</p>
+            ) : (
+              <ul className="space-y-1.5">
+                {members.map((m) => (
+                  <li key={m.id} className="text-sm font-medium text-foreground">
+                    {m.student_name}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </details>
+
+        <aside className="hidden w-64 shrink-0 rounded-md border border-border bg-card p-4 lg:block">
           <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
             Team Members
           </p>
@@ -493,16 +557,16 @@ export function EvaluationForm({
         </aside>
       </header>
 
-      {/* Instructions */}
-      <div className="flex gap-3 rounded-md border border-border bg-muted/60 px-4 py-3 text-sm text-muted-foreground">
-        <Info className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
+      {/* Instructions — compact on phone */}
+      <div className="flex gap-2.5 rounded-md border border-border bg-muted/60 px-3 py-2.5 text-xs text-muted-foreground sm:gap-3 sm:px-4 sm:py-3 sm:text-sm">
+        <Info
+          className="mt-0.5 size-3.5 shrink-0 text-primary sm:size-4"
+          aria-hidden
+        />
         <p>
-          <span className="font-semibold text-foreground">
-            Evaluation Instructions:{" "}
-          </span>
-          Rate each criterion from 1 (Poor) to {maxPerCriterion} (Excellent).
-          The maximum total score is {maxTotal}. Optional comments can be
-          provided for detailed feedback.
+          <span className="font-semibold text-foreground">Instructions: </span>
+          Score 1–{maxPerCriterion} per criterion (max {maxTotal} total).
+          Comments are optional.
         </p>
       </div>
 
@@ -511,55 +575,132 @@ export function EvaluationForm({
           No evaluation criteria configured for this event yet.
         </p>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {criteria.map((criterion, index) => {
             const row = scores[criterion.id] ?? { score: null, comment: "" };
             const max = Number(criterion.max_score);
             const Icon = criterionIcon(criterion.name, index);
             const hasScore = row.score !== null;
+            const descExpanded = Boolean(expandedDescriptions[criterion.id]);
+            const description = criterion.description?.trim() ?? "";
+            const longDescription = description.length > 110;
 
             return (
               <section
                 key={criterion.id}
-                className="rounded-md border border-border bg-card p-5 shadow-sm"
+                className="rounded-md border border-border bg-card p-3 shadow-sm sm:p-5"
               >
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                  <div className="min-w-0 flex-1 space-y-2">
-                    <div className="flex items-start gap-3">
-                      <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                        <Icon className="size-5" aria-hidden />
-                      </span>
-                      <div className="min-w-0">
-                        <h2 className="text-base font-semibold text-foreground sm:text-lg">
-                          {index + 1}. {criterion.name}
-                        </h2>
-                        {criterion.description ? (
-                          <p className="mt-1 text-sm text-muted-foreground">
-                            {criterion.description}
-                          </p>
-                        ) : null}
+                {/* Title row + inline score on mobile */}
+                <div className="flex items-start gap-2.5 sm:gap-3">
+                  <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary sm:mt-0 sm:size-10">
+                    <Icon className="size-4 sm:size-5" aria-hidden />
+                  </span>
+
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-start justify-between gap-2">
+                      <h2 className="min-w-0 flex-1 text-[15px] font-semibold leading-snug text-foreground sm:text-lg">
+                        {index + 1}. {criterion.name}
+                      </h2>
+
+                      {/* Compact score control — phone only */}
+                      <div className="flex shrink-0 flex-col items-end sm:hidden">
+                        <label
+                          className="sr-only"
+                          htmlFor={`score-mobile-${criterion.id}`}
+                        >
+                          Score for {criterion.name}
+                        </label>
+                        <input
+                          id={`score-mobile-${criterion.id}`}
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          autoComplete="off"
+                          autoCorrect="off"
+                          spellCheck={false}
+                          enterKeyHint="done"
+                          disabled={readOnly}
+                          value={hasScore ? String(row.score) : ""}
+                          placeholder="--"
+                          aria-describedby={`score-max-mobile-${criterion.id}`}
+                          suppressHydrationWarning
+                          onFocus={(e) => scrollFieldIntoView(e.currentTarget)}
+                          onChange={(e) => {
+                            const raw = e.target.value.replace(/[^\d]/g, "");
+                            if (raw === "") {
+                              setScoreValue(criterion.id, null);
+                              return;
+                            }
+                            const n = Number(raw);
+                            if (!Number.isFinite(n)) return;
+                            setScoreValue(
+                              criterion.id,
+                              Math.min(max, Math.max(0, Math.round(n))),
+                            );
+                          }}
+                          className="h-11 w-14 rounded-md border border-dashed border-primary/35 bg-sky-50/80 text-center text-lg font-bold tabular-nums text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring/40 disabled:opacity-60"
+                        />
+                        <span
+                          id={`score-max-mobile-${criterion.id}`}
+                          className="mt-0.5 text-[10px] tabular-nums text-muted-foreground"
+                        >
+                          / {max}
+                        </span>
                       </div>
                     </div>
 
+                    {description ? (
+                      <div className="mt-1">
+                        <p
+                          className={cn(
+                            "text-xs leading-relaxed text-muted-foreground sm:text-sm",
+                            !descExpanded &&
+                              longDescription &&
+                              "line-clamp-2 sm:line-clamp-none",
+                          )}
+                        >
+                          {description}
+                        </p>
+                        {longDescription ? (
+                          <button
+                            type="button"
+                            className="mt-0.5 text-[11px] font-medium text-primary sm:hidden"
+                            onClick={() =>
+                              setExpandedDescriptions((prev) => ({
+                                ...prev,
+                                [criterion.id]: !prev[criterion.id],
+                              }))
+                            }
+                          >
+                            {descExpanded ? "Show less" : "Show more"}
+                          </button>
+                        ) : null}
+                      </div>
+                    ) : null}
+
                     {criterion.criterion_abet_outcomes.length > 0 ? (
-                      <div className="flex flex-wrap gap-1.5 pl-0 sm:pl-13">
+                      <div className="mt-1.5 flex flex-wrap gap-1 sm:mt-2 sm:gap-1.5">
                         {criterion.criterion_abet_outcomes.map((o) => (
                           <span
                             key={o.id}
-                            className="rounded-md bg-muted px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground"
+                            className="rounded bg-muted px-1.5 py-px text-[9px] font-semibold uppercase tracking-wide text-muted-foreground sm:rounded-md sm:px-2 sm:py-0.5 sm:text-[10px]"
                           >
-                            ABET Outcome {o.outcome_code}
+                            ABET {o.outcome_code}
                           </span>
                         ))}
                       </div>
                     ) : null}
                   </div>
 
-                  <div className="flex w-full shrink-0 flex-col items-center rounded-md bg-muted/50 px-4 py-3 sm:w-36">
+                  {/* Desktop / tablet score panel */}
+                  <div className="hidden w-36 shrink-0 flex-col items-center rounded-md bg-muted/50 px-4 py-3 sm:flex">
                     <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                       Judge&apos;s Score
                     </p>
-                    <label className="sr-only" htmlFor={`score-${criterion.id}`}>
+                    <label
+                      className="sr-only"
+                      htmlFor={`score-${criterion.id}`}
+                    >
                       Score for {criterion.name}
                     </label>
                     <input
@@ -569,12 +710,12 @@ export function EvaluationForm({
                       min={0}
                       max={max}
                       step={1}
+                      autoComplete="off"
                       disabled={readOnly}
                       value={hasScore ? String(row.score) : ""}
                       placeholder="--"
+                      suppressHydrationWarning
                       onWheel={(e) => {
-                        // Prevent scroll-wheel from changing the score while
-                        // the user is scrolling the page.
                         e.currentTarget.blur();
                       }}
                       onChange={(e) => {
@@ -590,9 +731,7 @@ export function EvaluationForm({
                           Math.min(max, Math.max(0, Math.round(n))),
                         );
                       }}
-                      className={cn(
-                        "mt-2 h-14 w-full rounded-md border border-dashed border-primary/30 bg-sky-50/80 text-center text-2xl font-bold tabular-nums text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring/40 disabled:opacity-60",
-                      )}
+                      className="mt-2 h-14 w-full rounded-md border border-dashed border-primary/30 bg-sky-50/80 text-center text-2xl font-bold tabular-nums text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring/40 disabled:opacity-60"
                     />
                     <p className="mt-1.5 text-xs text-muted-foreground">
                       Maximum: {max}
@@ -600,16 +739,20 @@ export function EvaluationForm({
                   </div>
                 </div>
 
-                <div className="mt-4">
+                <div className="mt-2.5 sm:mt-4">
                   <Textarea
                     value={row.comment}
                     disabled={readOnly}
                     rows={2}
+                    autoComplete="off"
+                    autoCorrect="on"
+                    enterKeyHint="done"
                     placeholder={`Optional comments on ${criterion.name}...`}
+                    onFocus={(e) => scrollFieldIntoView(e.currentTarget)}
                     onChange={(e) =>
                       setCriterionComment(criterion.id, e.target.value)
                     }
-                    className="min-h-16 resize-y bg-background"
+                    className="min-h-12 resize-y bg-background text-base sm:min-h-16 sm:text-sm"
                   />
                 </div>
               </section>
@@ -618,8 +761,31 @@ export function EvaluationForm({
         </div>
       )}
 
-      {/* ABET reference */}
-      <section className="rounded-md border border-border bg-muted/50 px-5 py-4">
+      {/* ABET reference — collapsed by default on phones */}
+      <details className="rounded-md border border-border bg-muted/50 sm:hidden">
+        <summary className="cursor-pointer list-none px-4 py-3 text-sm font-bold text-foreground marker:content-none [&::-webkit-details-marker]:hidden">
+          <span className="flex items-center justify-between gap-2">
+            ABET Outcomes Reference
+            <span className="text-[11px] font-medium text-muted-foreground">
+              Tap to expand
+            </span>
+          </span>
+        </summary>
+        <div className="border-t border-border px-4 pb-4 pt-3">
+          <ol className="space-y-2 text-sm text-muted-foreground">
+            {abetNoteItems.map((item) => (
+              <li key={item.code} className="flex gap-2">
+                <span className="font-semibold text-foreground">
+                  {item.code}.
+                </span>
+                <span>{item.label}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </details>
+
+      <section className="hidden rounded-md border border-border bg-muted/50 px-5 py-4 sm:block">
         <h2 className="text-sm font-bold text-foreground">
           Note — ABET Engineering Criteria Program Educational Outcomes
         </h2>
@@ -633,8 +799,16 @@ export function EvaluationForm({
         </ol>
       </section>
 
-      {/* Sticky score + submit */}
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_20px_rgba(0,0,0,0.06)] backdrop-blur md:left-[min(260px,30vw)] md:z-40">
+      {/* Sticky score + submit — hide while the virtual keyboard is open */}
+      <div
+        className={cn(
+          "fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_20px_rgba(0,0,0,0.06)] backdrop-blur transition-transform duration-200 md:left-[min(260px,30vw)] md:z-40 md:translate-y-0 md:pointer-events-auto",
+          keyboardOpen
+            ? "pointer-events-none translate-y-full md:translate-y-0"
+            : "translate-y-0",
+        )}
+        aria-hidden={keyboardOpen || undefined}
+      >
         <div className="mx-auto flex max-w-5xl flex-col gap-2.5 px-4 py-3 sm:flex-row sm:items-center sm:justify-between md:px-8">
           <div className="flex min-w-0 flex-wrap items-center gap-2 sm:gap-3">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">

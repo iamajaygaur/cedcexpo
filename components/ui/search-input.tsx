@@ -28,6 +28,8 @@ function SearchInput({
           "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
         )}
         {...props}
+        /* Chrome iOS autofill injects __gcruniqueid before hydrate */
+        suppressHydrationWarning
       />
     </div>
   );

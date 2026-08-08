@@ -114,17 +114,19 @@ export function AppTopBar({
           </button>
         ) : null}
 
-        {/* Search */}
+        {/* Search — Chrome iOS autofill injects __gcruniqueid before hydrate */}
         <form
           onSubmit={handleSearch}
           className="min-w-0 max-w-xl flex-1"
           role="search"
+          suppressHydrationWarning
         >
           <SearchInput
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={searchPlaceholder}
             aria-label="Search"
+            suppressHydrationWarning
           />
         </form>
 
