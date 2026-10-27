@@ -4,6 +4,7 @@ import {
   useEffect,
   useMemo,
   useTransition,
+  type CSSProperties,
 } from "react";
 import { useRouter } from "next/navigation";
 import { motion, useReducedMotion } from "motion/react";
@@ -324,7 +325,7 @@ export function AdminDashboard({ snapshot }: AdminDashboardProps) {
           featured
           footer={
             <div
-              className="progress-track mt-4"
+              className="mt-3 h-2.5 overflow-hidden rounded-full bg-muted/80"
               role="progressbar"
               aria-valuenow={overall.submitted}
               aria-valuemin={0}
@@ -332,11 +333,9 @@ export function AdminDashboard({ snapshot }: AdminDashboardProps) {
               aria-label="Overall evaluation progress"
             >
               <motion.div
-                className="progress-fill-gold"
+                className="h-full rounded-full bg-gradient-to-r from-primary to-primary/70"
                 initial={{ width: 0 }}
-                animate={{
-                  width: `${Math.max(overall.percent > 0 ? 2 : 0, Math.min(100, overall.percent))}%`,
-                }}
+                animate={{ width: `${Math.min(100, overall.percent)}%` }}
                 transition={{
                   duration: 0.8,
                   ease: [0.16, 1, 0.3, 1] as const,
@@ -498,82 +497,80 @@ export function AdminDashboard({ snapshot }: AdminDashboardProps) {
                     whileHover={
                       reducedMotion
                         ? undefined
-                        : { y: -4, transition: { duration: 0.2 } }
+                        : { y: -3, transition: { duration: 0.2 } }
                     }
-                    className="dash-metric flex flex-col overflow-hidden transition-shadow hover:shadow-md"
+                    className="dash-group-card flex flex-col gap-3 p-4 transition-shadow hover:shadow-md sm:p-5"
+                    style={
+                      {
+                        "--group-tint": token.hex,
+                      } as CSSProperties
+                    }
                   >
-                    <div
-                      className="h-1.5 w-full shrink-0"
-                      style={{ background: token.hex }}
-                      aria-hidden
-                    />
-
-                    <div className="flex items-start justify-between gap-2 px-4 py-3">
-                      <div className="min-w-0 space-y-1.5">
-                        <div className="flex min-w-0 flex-wrap items-center gap-2">
-                          <h3 className="truncate text-base font-bold tracking-tight text-foreground">
-                            {g.group.name}
-                          </h3>
+                    <div className="flex items-start gap-3">
+                      <span className="dash-group-card__icon shrink-0" aria-hidden>
+                        <Users className="size-5" strokeWidth={2} />
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground sm:text-[11px]">
+                            {g.group.name} group
+                          </p>
                           <GroupBadge
                             colorKey={g.group.color_key}
                             name={token.label}
                             size="sm"
                           />
                         </div>
-                        <p className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                          <Users className="size-3 shrink-0" aria-hidden />
-                          {g.judgeCount} Judge
-                          {g.judgeCount === 1 ? "" : "s"}
-                          <span className="text-border" aria-hidden>
+                        <p className="mt-0.5 text-3xl font-bold tabular-nums tracking-tight text-foreground sm:text-4xl">
+                          {g.percent}
+                          <span className="text-lg font-semibold text-muted-foreground sm:text-xl">
+                            %
+                          </span>
+                        </p>
+                        <p className="mt-0.5 text-[11px] leading-snug text-muted-foreground sm:text-xs">
+                          {g.judgeCount} judge{g.judgeCount === 1 ? "" : "s"}
+                          <span className="mx-1 text-border" aria-hidden>
                             ·
                           </span>
-                          <Layers className="size-3 shrink-0" aria-hidden />
-                          {g.teamCount} team
-                          {g.teamCount === 1 ? "" : "s"}
+                          {g.teamCount} team{g.teamCount === 1 ? "" : "s"}
+                          <span className="mx-1 text-border" aria-hidden>
+                            ·
+                          </span>
+                          {done ? "Complete" : "In progress"}
+                          {g.draft > 0
+                            ? ` · ${g.draft} draft${g.draft === 1 ? "" : "s"}`
+                            : ""}
                         </p>
                       </div>
-                      <span className="inline-flex shrink-0 items-center rounded-md border border-border/70 bg-muted/40 px-2 py-0.5 text-[11px] font-bold tabular-nums">
-                        <span className={token.textClass}>{g.percent}%</span>
-                      </span>
                     </div>
 
-                    <div className="flex flex-1 flex-col px-4 py-3">
-                      <div className="mb-1.5 flex items-center justify-between text-[11px] font-medium text-muted-foreground">
-                        <span>{done ? "Complete" : "In progress"}</span>
-                        {g.draft > 0 ? (
-                          <span className="tabular-nums text-amber-700">
-                            {g.draft} draft{g.draft === 1 ? "" : "s"}
-                          </span>
-                        ) : null}
-                      </div>
-                      <div
-                        className="h-2.5 overflow-hidden rounded-full bg-muted"
-                        role="progressbar"
-                        aria-valuenow={g.submitted}
-                        aria-valuemin={0}
-                        aria-valuemax={Math.max(1, g.expected)}
-                        aria-label={`${g.group.name} progress`}
-                      >
-                        <motion.div
-                          className={cn("h-full rounded-full", token.barClass)}
-                          initial={reducedMotion ? false : { width: 0 }}
-                          animate={{
-                            width: `${Math.min(100, g.percent)}%`,
-                          }}
-                          transition={
-                            reducedMotion
-                              ? { duration: 0 }
-                              : {
-                                  duration: 0.7,
-                                  ease: [0.16, 1, 0.3, 1] as const,
-                                  delay: 0.12 + i * 0.05,
-                                }
-                          }
-                        />
-                      </div>
+                    <div
+                      className="dash-group-card__bar-track"
+                      role="progressbar"
+                      aria-valuenow={g.submitted}
+                      aria-valuemin={0}
+                      aria-valuemax={Math.max(1, g.expected)}
+                      aria-label={`${g.group.name} progress`}
+                    >
+                      <motion.div
+                        className="dash-group-card__bar-fill"
+                        initial={reducedMotion ? false : { width: 0 }}
+                        animate={{
+                          width: `${Math.min(100, g.percent)}%`,
+                        }}
+                        transition={
+                          reducedMotion
+                            ? { duration: 0 }
+                            : {
+                                duration: 0.7,
+                                ease: [0.16, 1, 0.3, 1] as const,
+                                delay: 0.12 + i * 0.05,
+                              }
+                        }
+                      />
                     </div>
 
-                    <div className="flex items-center justify-between gap-2 border-t border-border bg-muted/20 px-4 py-2.5 text-xs text-muted-foreground">
+                    <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
                       <span>
                         <span className="font-semibold tabular-nums text-foreground">
                           {g.submitted}
@@ -631,9 +628,7 @@ function MetricCard({
 }) {
   const tones = {
     gold: {
-      iconWrap: featured
-        ? "dash-icon--cream"
-        : "bg-[color-mix(in_srgb,var(--cu-gold)_28%,white)] text-primary",
+      iconWrap: "bg-[color-mix(in_srgb,var(--cu-gold)_28%,white)] text-primary",
       value: "text-foreground",
     },
     teal: {
@@ -659,9 +654,7 @@ function MetricCard({
       whileHover={{ y: -2, transition: { duration: 0.2 } }}
       className={cn(
         "flex h-full min-w-0 flex-col gap-2 px-3 py-3 transition-shadow hover:shadow-md sm:flex-row sm:items-start sm:gap-3 sm:px-4 sm:py-3.5",
-        featured
-          ? "dash-metric--cream p-4 sm:p-5"
-          : "dash-metric",
+        featured ? "dash-panel--featured rounded-xl p-4 sm:p-5" : "dash-metric",
       )}
     >
       <span

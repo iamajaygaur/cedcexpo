@@ -226,53 +226,17 @@
       0 8px 20px rgba(25, 28, 29, 0.028);
   }
   .dash-panel--featured {
-    border-color: color-mix(in srgb, var(--cu-gold) 32%, var(--border));
+    border-color: color-mix(in srgb, var(--cu-gold) 40%, var(--border));
     background:
       linear-gradient(
-        160deg,
-        #faf6ef 0%,
-        #f7f1e6 42%,
-        #ffffff 100%
+        165deg,
+        color-mix(in srgb, var(--primary-container) 14%, white) 0%,
+        var(--card) 52%
       );
     box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.85) inset,
-      0 2px 4px rgba(114, 92, 33, 0.04),
-      0 14px 32px rgba(114, 92, 33, 0.07);
-  }
-  /* Soft cream metric surface (matches overall-progress reference) */
-  .dash-metric--cream {
-    background: #faf8f4;
-    border: 1px solid color-mix(in srgb, var(--cu-gold) 28%, var(--border));
-    border-radius: 1.1rem;
-    box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.9) inset,
-      0 2px 6px rgba(114, 92, 33, 0.04),
-      0 12px 28px rgba(25, 28, 29, 0.045);
-  }
-  .dash-icon--cream {
-    background: #efe6d6;
-    color: #63512d;
-  }
-  /* Gold metallic progress fill — dark → light shading */
-  .progress-track {
-    height: 0.5rem;
-    overflow: hidden;
-    border-radius: 9999px;
-    background: color-mix(in srgb, var(--cu-gold) 14%, #ece7df);
-  }
-  .progress-fill-gold {
-    height: 100%;
-    border-radius: 9999px;
-    background: linear-gradient(
-      90deg,
-      #5d4b26 0%,
-      #8a7340 42%,
-      #c4a56a 78%,
-      #dfc48a 100%
-    );
-    box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.35) inset,
-      0 0 0 1px rgba(93, 75, 38, 0.12);
+      0 1px 0 rgba(255, 255, 255, 0.7) inset,
+      0 1px 2px rgba(25, 28, 29, 0.04),
+      0 10px 28px rgba(114, 92, 33, 0.05);
   }
   .dash-metric {
     background: var(--card);
@@ -282,6 +246,51 @@
       0 1px 0 rgba(255, 255, 255, 0.65) inset,
       0 1px 2px rgba(25, 28, 29, 0.03),
       0 6px 16px rgba(25, 28, 29, 0.025);
+  }
+  /* Soft featured shading (like Overall Progress), tinted per group via --group-tint */
+  .dash-group-card {
+    --group-tint: var(--cu-gold);
+    background:
+      linear-gradient(
+        165deg,
+        color-mix(in srgb, var(--group-tint) 16%, white) 0%,
+        color-mix(in srgb, var(--primary-container) 8%, white) 42%,
+        var(--card) 78%
+      );
+    border: 1px solid color-mix(in srgb, var(--group-tint) 32%, var(--border));
+    border-radius: var(--radius-xl);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.75) inset,
+      0 1px 2px rgba(25, 28, 29, 0.035),
+      0 10px 28px color-mix(in srgb, var(--group-tint) 10%, transparent);
+  }
+  .dash-group-card__icon {
+    display: flex;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.85rem;
+    background: color-mix(in srgb, var(--group-tint) 22%, white);
+    color: color-mix(in srgb, var(--group-tint) 72%, #1a1a1a);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.55) inset;
+  }
+  .dash-group-card__bar-track {
+    height: 0.55rem;
+    overflow: hidden;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--muted) 70%, white);
+  }
+  .dash-group-card__bar-fill {
+    height: 100%;
+    border-radius: 9999px;
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--group-tint) 82%, #1a1a1a) 0%,
+      var(--group-tint) 55%,
+      color-mix(in srgb, var(--group-tint) 70%, white) 100%
+    );
+    box-shadow: 0 1px 2px color-mix(in srgb, var(--group-tint) 35%, transparent);
   }
   .dash-section-label {
     font-size: 0.6875rem;

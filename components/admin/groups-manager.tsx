@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, useReducedMotion } from "motion/react";
@@ -203,37 +203,41 @@ export function GroupsManager({
                     ? undefined
                     : { y: -4, transition: { duration: 0.2 } }
                 }
-                className="dash-metric flex flex-col overflow-hidden transition-shadow hover:shadow-md"
+                className="dash-group-card flex flex-col transition-shadow hover:shadow-md"
+                style={
+                  {
+                    "--group-tint": token.hex,
+                  } as CSSProperties
+                }
               >
-                <div
-                  className="h-1.5 w-full shrink-0"
-                  style={{ background: token.hex }}
-                  aria-hidden
-                />
-
-                <div className="flex items-start justify-between gap-2 px-4 py-3">
-                  <div className="min-w-0 space-y-1.5">
-                    <div className="flex min-w-0 flex-wrap items-center gap-2">
-                      <h2 className="truncate text-base font-bold tracking-tight text-foreground">
-                        {group.name}
-                      </h2>
-                      <GroupBadge
-                        colorKey={group.color_key}
-                        name={token.label}
-                        size="sm"
-                      />
+                <div className="flex items-start justify-between gap-2 px-4 pt-4 pb-3">
+                  <div className="flex min-w-0 items-start gap-3">
+                    <span className="dash-group-card__icon shrink-0" aria-hidden>
+                      <Users className="size-5" strokeWidth={2} />
+                    </span>
+                    <div className="min-w-0 space-y-1">
+                      <div className="flex min-w-0 flex-wrap items-center gap-2">
+                        <h2 className="truncate text-base font-bold tracking-tight text-foreground">
+                          {group.name}
+                        </h2>
+                        <GroupBadge
+                          colorKey={group.color_key}
+                          name={token.label}
+                          size="sm"
+                        />
+                      </div>
+                      <p className="text-xs font-medium text-muted-foreground">
+                        Panel #{panelNumber}
+                      </p>
                     </div>
-                    <p className="text-xs font-medium text-muted-foreground">
-                      Panel #{panelNumber}
-                    </p>
                   </div>
-                  <span className="inline-flex shrink-0 items-center gap-1 rounded-md border border-border/70 bg-muted/40 px-2 py-0.5 text-[11px] font-semibold text-foreground">
+                  <span className="inline-flex shrink-0 items-center gap-1 rounded-md border border-border/50 bg-white/55 px-2 py-0.5 text-[11px] font-semibold text-foreground backdrop-blur-sm">
                     <Users className="size-3" aria-hidden />
                     {judgeLabel}
                   </span>
                 </div>
 
-                <div className="flex flex-1 flex-col px-4 py-3">
+                <div className="flex flex-1 flex-col px-4 pb-4">
                   {group.members.length === 0 ? (
                     <div className="mb-2 flex flex-1 flex-col items-center justify-center gap-2 dash-empty px-3 py-7">
                       <Users
