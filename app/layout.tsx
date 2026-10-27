@@ -1,20 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Manrope } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 
 import { EphemeralSessionGuard } from "@/components/shared/ephemeral-session-guard";
 import { ServiceWorkerRegister } from "@/components/shared/service-worker-register";
 import "./globals.css";
 
-/** Commercial product UI — geometric, high legibility at small sizes. */
-const manrope = Manrope({
-  variable: "--font-manrope",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-/** Brand / page titles — soft optical serif, premium without newspaper tone. */
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+/** Single commercial sans — clean product UI + titles without quirky display serifs. */
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
   display: "swap",
 });
@@ -61,7 +54,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${manrope.variable} ${fraunces.variable} min-h-svh`}
+      className={`${dmSans.variable} min-h-svh`}
       suppressHydrationWarning
     >
       <body className="flex min-h-svh max-w-[100dvw] flex-col overflow-x-clip">
