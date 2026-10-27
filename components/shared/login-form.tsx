@@ -73,7 +73,7 @@ export function LoginForm({
           passwordRef.current.type = "password";
         }
         // Defer busy UI so the browser can post the form first.
-        queue Promise.resolve().then(() => setSubmitting(true));
+        window.setTimeout(() => setSubmitting(true), 0);
       }}
     >
       <div className="space-y-2">
