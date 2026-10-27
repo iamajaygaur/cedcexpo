@@ -203,7 +203,7 @@ export function ReportsView({
               Filter
             </Button>
             {filterOpen ? (
-              <div className="absolute right-0 z-20 mt-2 w-72 rounded-md border border-border bg-card p-4 shadow-sm">
+              <div className="absolute right-0 z-20 mt-2 w-72 dash-panel p-4 shadow-sm">
                 <div className="space-y-3">
                   <div>
                     <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -401,7 +401,7 @@ export function ReportsView({
         </article>
       </section>
 
-      <section className="rounded-md border border-border bg-card p-5">
+      <section className="dash-form-panel">
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h2 className="text-lg font-semibold text-foreground">

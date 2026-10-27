@@ -56,12 +56,12 @@ export default async function ArchiveIndexPage() {
       />
 
       {list.length === 0 ? (
-        <p className="rounded-md border border-dashed border-border px-4 py-10 text-center text-sm text-muted-foreground">
+        <p className="dash-empty text-sm text-muted-foreground">
           No completed events yet. When you mark an event Completed, it appears
           here with downloadable results.
         </p>
       ) : (
-        <div className="overflow-hidden rounded-md border border-border bg-card">
+        <div className="dash-table-shell">
           <table className="w-full text-left text-sm">
             <thead className="bg-muted/60 text-xs uppercase tracking-wider text-muted-foreground">
               <tr>

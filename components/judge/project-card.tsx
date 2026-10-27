@@ -65,25 +65,30 @@ export function ProjectCard({ project, previewJudgeId }: ProjectCardProps) {
   return (
     <motion.article
       whileHover={{ y: -3, transition: { duration: 0.2 } }}
-      className="flex h-full flex-col rounded-xl border border-border bg-card p-5 shadow-sm transition-shadow hover:shadow-md"
+      className="dash-metric flex h-full flex-col p-5 transition-shadow hover:shadow-md"
     >
       <div className="mb-3 flex items-center justify-between gap-3">
-        <p className="text-[11px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
+        <p className="dash-section-label">
           Team {project.team.team_number}
         </p>
-        <span className="rounded-lg bg-muted px-2.5 py-1 text-[11px] font-semibold text-muted-foreground">
+        <span className="rounded-md bg-muted/80 px-2.5 py-1 text-[11px] font-semibold text-muted-foreground">
           {booth.startsWith("Table") || booth.startsWith("Booth")
             ? booth.replace(/^Booth\s*/i, "Table ")
             : `Table ${booth}`}
         </span>
       </div>
 
-      <h3 className="mb-3 text-xl font-bold leading-snug tracking-tight text-foreground">
+      <h3 className="mb-3 text-lg font-bold leading-snug tracking-tight text-foreground sm:text-xl">
         {project.team.project_title}
       </h3>
 
-      <div className={cn("mb-6 flex items-center gap-2 text-sm font-medium", meta.textClass)}>
-        <span className={cn("size-2.5 rounded-full", meta.dotClass)} aria-hidden />
+      <div
+        className={cn(
+          "mb-6 inline-flex w-fit items-center gap-2 rounded-full bg-muted/60 px-2.5 py-1 text-xs font-semibold sm:text-sm",
+          meta.textClass,
+        )}
+      >
+        <span className={cn("size-2 rounded-full", meta.dotClass)} aria-hidden />
         {meta.label}
       </div>
 

@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "design-dashboards": {
+      "source": "dastoyan/skills",
+      "sourceType": "github",
+      "skillPath": "design-dashboards/SKILL.md",
+      "computedHash": "6f676c72823290e14098798fa3533c733d69dc799708c6dd9fe25bd98fc25d64"
+    },
     "motion": {
       "source": "oakoss/agent-skills",
       "sourceType": "github",

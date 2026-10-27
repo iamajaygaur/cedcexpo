@@ -207,7 +207,7 @@ function JudgeEditorForm({
 
       <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="space-y-6">
-          <section className="rounded-md border border-border bg-card p-5 shadow-sm">
+          <section className="dash-form-panel">
             <div className="mb-4 flex items-center gap-2">
               <IdCard className="size-4 text-muted-foreground" aria-hidden />
               <h2 className="text-sm font-bold tracking-wide text-foreground uppercase">
@@ -298,7 +298,7 @@ function JudgeEditorForm({
             </div>
           </section>
 
-          <section className="rounded-md border border-border bg-card p-5 shadow-sm">
+          <section className="dash-form-panel">
             <div className="mb-4 flex items-center gap-2">
               <StickyNote className="size-4 text-muted-foreground" aria-hidden />
               <h2 className="text-sm font-bold tracking-wide text-foreground uppercase">
@@ -319,7 +319,7 @@ function JudgeEditorForm({
           </section>
         </div>
 
-        <section className="rounded-md border border-border bg-card p-5 shadow-sm">
+        <section className="dash-form-panel">
           <div className="mb-4 flex items-start justify-between gap-3">
             <div>
               <div className="flex items-center gap-2">
@@ -525,7 +525,7 @@ export function JudgesManager({
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-        className="overflow-hidden rounded-xl border border-border bg-card shadow-sm"
+        className="dash-table-shell"
       >
         <div className="flex flex-col gap-3 border-b border-border p-4 md:flex-row md:items-center">
           <div className="min-w-0 flex-1">

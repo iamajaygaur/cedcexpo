@@ -20,7 +20,7 @@ export function SettingsForm({ event }: SettingsFormProps) {
   const [status, setStatus] = useState(event.status);
 
   return (
-    <section className="h-full rounded-md border border-border bg-card p-5">
+    <section className="h-full dash-form-panel">
       <h2 className="mb-4 text-lg font-semibold">Current event</h2>
       <AdminActionForm
         action={upsertEventAction}

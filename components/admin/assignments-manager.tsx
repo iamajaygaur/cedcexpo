@@ -173,7 +173,7 @@ export function AssignmentsManager({
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
       className="space-y-4"
     >
-      <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+      <div className="dash-table-shell">
         <div className="flex flex-col gap-3 border-b border-border p-4 lg:flex-row lg:items-center">
           <div className="min-w-0 flex-1">
             <SearchInput

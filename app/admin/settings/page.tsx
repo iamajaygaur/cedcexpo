@@ -44,7 +44,7 @@ export default async function SettingsPage({ searchParams }: PageProps) {
         <OpsEventEmpty lockedEvent={lockedEvent} hasAnyEvent />
       ) : null}
 
-      <section className="rounded-md border border-border bg-card p-5">
+      <section className="dash-form-panel">
         <h2 className="mb-2 text-lg font-semibold">Judging rubric</h2>
         <p className="text-sm text-muted-foreground">
           The judge evaluation form always uses the fixed CEDC rubric (5
@@ -60,7 +60,7 @@ export default async function SettingsPage({ searchParams }: PageProps) {
         </ul>
       </section>
 
-      <section className="rounded-md border border-border bg-card p-5">
+      <section className="dash-form-panel">
         <h2 className="mb-2 text-lg font-semibold">App & PWA</h2>
         <dl className="space-y-2 text-sm">
           <div className="flex flex-wrap gap-2">
@@ -81,7 +81,7 @@ export default async function SettingsPage({ searchParams }: PageProps) {
         </dl>
       </section>
 
-      <section className="rounded-md border border-border bg-card p-5">
+      <section className="dash-form-panel">
         <h2 className="mb-2 text-lg font-semibold">Security reminders</h2>
         <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
           <li>Never put the service-role key in client code or the example env file.</li>

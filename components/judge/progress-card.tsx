@@ -12,34 +12,39 @@ type ProgressCardProps = {
 export function ProgressCard({ completed, total, className }: ProgressCardProps) {
   const remaining = Math.max(0, total - completed);
   const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+  const done = total > 0 && remaining === 0;
 
   return (
     <motion.section
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className={cn(
-        "rounded-xl border border-border bg-card p-5 shadow-sm md:p-6",
-        className,
-      )}
+      className={cn("dash-panel--featured p-5 md:p-6", className)}
     >
-      <p className="mb-3 text-[11px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
-        Your Progress
-      </p>
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-          <span className="text-primary">{completed}</span>
-          <span className="text-muted-foreground"> / {total}</span>
-          <span className="ml-2 text-base font-semibold text-foreground md:text-lg">
-            Projects Evaluated
-          </span>
-        </p>
-        <span className="rounded-lg bg-primary-container px-3 py-1 text-xs font-bold text-on-primary-container">
-          {remaining} Remaining
+      <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="dash-section-label mb-1">Your progress</p>
+          <p className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+            <span className="text-primary tabular-nums">{completed}</span>
+            <span className="text-muted-foreground"> / {total}</span>
+          </p>
+          <p className="mt-0.5 text-sm font-medium text-muted-foreground">
+            Projects evaluated · {pct}% complete
+          </p>
+        </div>
+        <span
+          className={cn(
+            "rounded-lg px-3 py-1.5 text-xs font-bold",
+            done
+              ? "bg-tertiary/15 text-tertiary"
+              : "bg-primary-container text-on-primary-container",
+          )}
+        >
+          {done ? "All done" : `${remaining} remaining`}
         </span>
       </div>
       <div
-        className="h-3 overflow-hidden rounded-full bg-muted"
+        className="h-3 overflow-hidden rounded-full bg-muted/80"
         role="progressbar"
         aria-valuenow={completed}
         aria-valuemin={0}

@@ -34,7 +34,7 @@ export function HelpSupportContent({
         description="Guides for using CEDC Expo, plus ways to reach CEDC support."
       />
 
-      <section className="rounded-md border border-border bg-card p-5">
+      <section className="dash-form-panel">
         <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold">
           <MessageCircleQuestion className="size-5 text-primary" aria-hidden />
           Quick help
@@ -65,7 +65,7 @@ export function HelpSupportContent({
 
       <section
         id="contact"
-        className="scroll-mt-24 rounded-md border border-border bg-card p-5"
+        className="scroll-mt-24 dash-form-panel"
       >
         <h2 className="mb-2 flex items-center gap-2 text-lg font-semibold">
           <Mail className="size-5 text-primary" aria-hidden />
@@ -88,7 +88,7 @@ export function HelpSupportContent({
         </div>
       </section>
 
-      <section className="rounded-md border border-border bg-card p-5">
+      <section className="dash-form-panel">
         <h2 className="mb-3 text-lg font-semibold">Policies</h2>
         <p className="mb-3 text-sm text-muted-foreground">
           Review how we handle data and the terms for using this judging app.

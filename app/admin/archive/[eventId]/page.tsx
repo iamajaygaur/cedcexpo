@@ -78,7 +78,7 @@ export default async function ArchiveDetailPage({ params }: PageProps) {
         />
       </section>
 
-      <section className="rounded-md border border-border bg-card p-5">
+      <section className="dash-form-panel">
         <h2 className="mb-3 text-lg font-semibold">Downloads</h2>
         <p className="mb-4 text-sm text-muted-foreground">
           Files regenerate from saved scores — nothing is deleted when an event
@@ -105,7 +105,7 @@ export default async function ArchiveDetailPage({ params }: PageProps) {
 
       <section>
         <h2 className="mb-3 text-lg font-semibold">Rankings snapshot</h2>
-        <div className="overflow-hidden rounded-md border border-border bg-card">
+        <div className="dash-table-shell">
           <table className="w-full text-left text-sm">
             <thead className="bg-muted/60 text-xs uppercase tracking-wider text-muted-foreground">
               <tr>
@@ -180,7 +180,7 @@ export default async function ArchiveDetailPage({ params }: PageProps) {
 
 function Kpi({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-border bg-card p-4">
+    <div className="dash-panel p-4">
       <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
         {label}
       </p>

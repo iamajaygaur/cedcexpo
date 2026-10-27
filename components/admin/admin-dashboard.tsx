@@ -15,7 +15,6 @@ import {
   GitFork,
   Layers,
   Pause,
-  Radio,
   RefreshCw,
   TrendingUp,
   UserCheck,
@@ -310,43 +309,21 @@ export function AdminDashboard({ snapshot }: AdminDashboardProps) {
         </div>
       </motion.div>
 
-      {/* ── KPI Row — Metric Cards ────────────────────────────── */}
+      {/* ── KPI hierarchy: Progress hero + supporting metrics ── */}
       <motion.section
         variants={containerVariants}
-        className="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-3 xl:grid-cols-6"
+        className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1.85fr)]"
       >
         <MetricCard
-          label="Total Teams"
-          value={overall.teamCount}
-          icon={Users}
-          tone="gold"
-        />
-        <MetricCard
-          label="Req. Evals"
-          value={overall.expected}
-          icon={ClipboardList}
-          tone="muted"
-        />
-        <MetricCard
-          label="Completed"
-          value={overall.submitted}
-          icon={UserCheck}
-          tone="teal"
-        />
-        <MetricCard
-          label="Remaining"
-          value={overall.pending}
-          icon={UserX}
-          tone="muted"
-        />
-        <MetricCard
-          label="Progress"
+          label="Overall Progress"
           value={progressText}
+          hint={`${overall.submitted} of ${overall.expected} required evals`}
           icon={TrendingUp}
           tone="gold"
+          featured
           footer={
             <div
-              className="mt-2 h-2 overflow-hidden rounded-full bg-muted"
+              className="mt-3 h-2.5 overflow-hidden rounded-full bg-muted/80"
               role="progressbar"
               aria-valuenow={overall.submitted}
               aria-valuemin={0}
@@ -357,69 +334,118 @@ export function AdminDashboard({ snapshot }: AdminDashboardProps) {
                 className="h-full rounded-full bg-gradient-to-r from-primary to-primary/70"
                 initial={{ width: 0 }}
                 animate={{ width: `${Math.min(100, overall.percent)}%` }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const, delay: 0.3 }}
+                transition={{
+                  duration: 0.8,
+                  ease: [0.16, 1, 0.3, 1] as const,
+                  delay: 0.3,
+                }}
               />
             </div>
           }
         />
-        <MetricCard
-          label="Active Judges"
-          value={overall.judgeCount}
-          icon={Gavel}
-          tone="muted"
-        />
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
+          <MetricCard
+            label="Teams"
+            value={overall.teamCount}
+            hint="In this event"
+            icon={Users}
+            tone="gold"
+          />
+          <MetricCard
+            label="Required"
+            value={overall.expected}
+            hint="Eval target"
+            icon={ClipboardList}
+            tone="muted"
+          />
+          <MetricCard
+            label="Completed"
+            value={overall.submitted}
+            hint="Submitted"
+            icon={UserCheck}
+            tone="teal"
+          />
+          <MetricCard
+            label="Remaining"
+            value={overall.pending}
+            hint="Still open"
+            icon={UserX}
+            tone={overall.pending > 0 ? "alert" : "muted"}
+          />
+          <MetricCard
+            label="Judges"
+            value={overall.judgeCount}
+            hint="Active"
+            icon={Gavel}
+            tone="muted"
+          />
+          <MetricCard
+            label="Clusters"
+            value={activeClusters}
+            hint="Groups live"
+            icon={Layers}
+            tone="muted"
+          />
+        </div>
       </motion.section>
 
       {/* ── Two-column Section ────────────────────────────────── */}
-      <section className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)]">
+      <section className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.55fr)]">
         {/* ── Team Evaluation Status ─────────────────────────── */}
         <motion.article
           variants={itemVariants}
-          className="min-w-0 rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-6"
+          className="dash-panel min-w-0 p-4 sm:p-6"
         >
-          <div className="mb-5 flex items-center justify-between gap-2">
-            <h2 className="text-base font-bold text-foreground">
-              Team Evaluation Status
-            </h2>
+          <div className="mb-4 flex items-center justify-between gap-2">
+            <div>
+              <p className="dash-section-label mb-1">Overview</p>
+              <h2 className="text-base font-bold text-foreground">
+                Team Evaluation Status
+              </h2>
+            </div>
             <RefreshCw
               className="size-4 text-muted-foreground"
               aria-hidden
             />
           </div>
 
-          <div className="mb-6 flex justify-center">
-            <TeamStatusDonut
-              complete={status.complete}
-              partial={status.partial}
-              none={status.none}
-              total={status.total}
-              completePct={status.completePct}
-              partialPct={status.partialPct}
-              nonePct={status.nonePct}
-            />
-          </div>
+          <TeamStatusBreakdown
+            complete={status.complete}
+            partial={status.partial}
+            none={status.none}
+            total={status.total}
+            completePct={status.completePct}
+            partialPct={status.partialPct}
+            nonePct={status.nonePct}
+          />
 
-          <ul className="space-y-4">
+          <ul className="mt-5 space-y-2.5">
             <StatusRow
               dotClassName="bg-tertiary"
               title="Complete"
-              subtitle={`${status.req}/${status.req} Evaluations`}
+              subtitle={`${status.req}/${status.req} evaluations`}
               count={status.complete}
+              pct={status.completePct}
               countClassName="text-tertiary"
+              barClassName="bg-tertiary"
             />
             <StatusRow
               dotClassName="bg-status-partial"
               title="Partial"
-              subtitle={`${Math.max(1, Math.floor(status.req / 2))}/${status.req} Evaluations`}
+              subtitle={`In progress · ${status.req} expected`}
               count={status.partial}
+              pct={status.partialPct}
               countClassName="text-status-partial"
+              barClassName="bg-status-partial"
             />
             <StatusRow
               dotClassName="bg-destructive/50"
               title="Not Evaluated"
-              subtitle={`0/${status.req} Evaluations`}
+              subtitle={`0/${status.req} evaluations`}
               count={status.none}
+              pct={status.nonePct}
               countClassName="text-destructive"
+              barClassName="bg-destructive/50"
             />
           </ul>
         </motion.article>
@@ -427,20 +453,23 @@ export function AdminDashboard({ snapshot }: AdminDashboardProps) {
         {/* ── Live Group Progress ─────────────────────────────── */}
         <motion.article
           variants={itemVariants}
-          className="min-w-0 rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-6"
+          className="dash-panel min-w-0 p-4 sm:p-6"
         >
-          <div className="mb-5 flex flex-wrap items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <h2 className="text-base font-bold text-foreground">
-                Live Group Progress
-              </h2>
-              <GitFork
-                className="size-4 text-muted-foreground"
-                aria-hidden
-              />
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <p className="dash-section-label mb-1">Live</p>
+              <div className="flex items-center gap-2">
+                <h2 className="text-base font-bold text-foreground">
+                  Group Progress
+                </h2>
+                <GitFork
+                  className="size-4 text-muted-foreground"
+                  aria-hidden
+                />
+              </div>
             </div>
-            <span className="text-xs font-medium text-muted-foreground">
-              {activeClusters} Active Cluster{activeClusters === 1 ? "" : "s"}
+            <span className="rounded-md bg-muted/70 px-2.5 py-1 text-xs font-medium text-muted-foreground">
+              {activeClusters} active cluster{activeClusters === 1 ? "" : "s"}
             </span>
           </div>
 
@@ -468,7 +497,7 @@ export function AdminDashboard({ snapshot }: AdminDashboardProps) {
                         ? undefined
                         : { y: -4, transition: { duration: 0.2 } }
                     }
-                    className="flex flex-col overflow-hidden rounded-md border border-border bg-card shadow-sm transition-shadow hover:shadow-md"
+                    className="dash-metric flex flex-col overflow-hidden transition-shadow hover:shadow-md"
                   >
                     <div
                       className={cn("h-1 w-full shrink-0", token.barClass)}
@@ -588,34 +617,35 @@ export function AdminDashboard({ snapshot }: AdminDashboardProps) {
 function MetricCard({
   label,
   value,
+  hint,
   icon: Icon,
   tone = "gold",
+  featured = false,
   footer,
 }: {
   label: string;
   value: string | number;
+  hint?: string;
   icon: LucideIcon;
   tone?: "gold" | "teal" | "alert" | "muted";
+  featured?: boolean;
   footer?: React.ReactNode;
 }) {
   const tones = {
     gold: {
-      card: "border-border bg-card",
       iconWrap: "bg-[color-mix(in_srgb,var(--cu-gold)_28%,white)] text-primary",
       value: "text-foreground",
     },
     teal: {
-      card: "border-border bg-card",
       iconWrap: "bg-[color-mix(in_srgb,var(--tertiary)_18%,white)] text-tertiary",
       value: "text-foreground",
     },
     alert: {
-      card: "border-destructive/25 bg-[color-mix(in_srgb,var(--destructive)_6%,white)]",
-      iconWrap: "bg-[color-mix(in_srgb,var(--destructive)_14%,white)] text-destructive",
+      iconWrap:
+        "bg-[color-mix(in_srgb,var(--destructive)_14%,white)] text-destructive",
       value: "text-destructive",
     },
     muted: {
-      card: "border-border bg-card",
       iconWrap: "bg-muted text-muted-foreground",
       value: "text-foreground",
     },
@@ -628,40 +658,50 @@ function MetricCard({
       variants={itemVariants}
       whileHover={{ y: -2, transition: { duration: 0.2 } }}
       className={cn(
-        "flex h-full min-w-0 flex-col gap-2 rounded-xl border px-3 py-3 shadow-sm transition-shadow hover:shadow-md sm:flex-row sm:items-center sm:gap-3 sm:px-4 sm:py-3.5",
-        t.card,
+        "flex h-full min-w-0 flex-col gap-2 px-3 py-3 transition-shadow hover:shadow-md sm:flex-row sm:items-start sm:gap-3 sm:px-4 sm:py-3.5",
+        featured ? "dash-panel--featured rounded-xl p-4 sm:p-5" : "dash-metric",
       )}
     >
       <span
         className={cn(
-          "flex size-9 shrink-0 items-center justify-center rounded-xl sm:size-11",
+          "flex shrink-0 items-center justify-center rounded-xl",
+          featured ? "size-11 sm:size-12" : "size-9 sm:size-10",
           t.iconWrap,
         )}
         aria-hidden
       >
-        <Icon className="size-4 sm:size-5" strokeWidth={2} />
+        <Icon
+          className={featured ? "size-5 sm:size-6" : "size-4 sm:size-5"}
+          strokeWidth={2}
+        />
       </span>
-      <div className="min-w-0">
+      <div className="min-w-0 flex-1">
         <p className="text-[10px] font-semibold uppercase leading-tight tracking-wider text-muted-foreground sm:text-[11px]">
           {label}
         </p>
         <p
           className={cn(
-            "mt-0.5 text-xl font-bold tabular-nums tracking-tight sm:text-2xl",
+            "mt-0.5 font-bold tabular-nums tracking-tight",
+            featured ? "text-3xl sm:text-4xl" : "text-xl sm:text-2xl",
             t.value,
           )}
         >
           {value}
         </p>
+        {hint ? (
+          <p className="mt-0.5 text-[11px] leading-snug text-muted-foreground">
+            {hint}
+          </p>
+        ) : null}
         {footer}
       </div>
     </motion.div>
   );
 }
 
-/* ── TeamStatusDonut ────────────────────────────────────────── */
+/* ── TeamStatusBreakdown (bars > donuts for comparison) ─────── */
 
-function TeamStatusDonut({
+function TeamStatusBreakdown({
   complete,
   partial,
   none,
@@ -678,74 +718,60 @@ function TeamStatusDonut({
   partialPct: number;
   nonePct: number;
 }) {
-  const slices =
-    total <= 0
-      ? []
-      : (
-          [
-            {
-              key: "complete",
-              value: complete,
-              pct: completePct,
-              color: "var(--tertiary)",
-            },
-            {
-              key: "partial",
-              value: partial,
-              pct: partialPct,
-              color: "var(--status-partial)",
-            },
-            {
-              key: "none",
-              value: none,
-              pct: nonePct,
-              color: "color-mix(in srgb, var(--destructive) 45%, white)",
-            },
-          ] as const
-        ).filter((s) => s.value > 0);
-
-  let cumulative = 0;
-  const arcs = slices.map((s) => {
-    const start = cumulative;
-    cumulative += s.pct / 100;
-    return { ...s, start, end: cumulative };
-  });
-
-  const gradient =
-    arcs.length === 0
-      ? "conic-gradient(var(--muted) 0deg 360deg)"
-      : `conic-gradient(${arcs
-          .map(
-            (a) =>
-              `${a.color} ${(a.start * 360).toFixed(2)}deg ${(a.end * 360).toFixed(2)}deg`,
-          )
-          .join(", ")})`;
-
   const completeShare = total > 0 ? Math.round(completePct) : 0;
 
   return (
-    <motion.div
-      className="relative mx-auto aspect-square w-[min(100%,11.5rem)] shrink-0 rounded-full sm:w-44 md:w-48"
-      style={{ background: gradient }}
-      initial={{ scale: 0.85, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+    <div
+      className="space-y-3"
       role="img"
       aria-label={`Complete ${complete}, partial ${partial}, not evaluated ${none}`}
     >
-      {/* Wider hole + compact type so center copy never spills onto the ring on phones */}
-      <div className="absolute inset-[20%] flex flex-col items-center justify-center gap-0.5 rounded-full bg-card px-2 text-center shadow-inner sm:inset-[22%] sm:gap-1 sm:px-3">
-        <span className="text-[1.75rem] font-bold leading-none tabular-nums tracking-tight text-foreground sm:text-3xl">
-          {total}
-        </span>
-        <span className="text-[9px] font-semibold uppercase leading-none tracking-wider text-muted-foreground sm:text-[11px]">
-          Teams
-        </span>
-        <span className="text-[10px] leading-none tabular-nums text-tertiary sm:text-xs">
+      <div className="flex items-end justify-between gap-3">
+        <div>
+          <p className="text-3xl font-bold tabular-nums tracking-tight text-foreground">
+            {total}
+          </p>
+          <p className="text-xs font-medium text-muted-foreground">
+            teams assigned
+          </p>
+        </div>
+        <p className="text-sm font-semibold tabular-nums text-tertiary">
           {completeShare}% complete
-        </span>
+        </p>
       </div>
-    </motion.div>
+      <div className="flex h-3.5 overflow-hidden rounded-full bg-muted">
+        {total > 0 ? (
+          <>
+            <motion.div
+              className="h-full bg-tertiary"
+              initial={{ width: 0 }}
+              animate={{ width: `${completePct}%` }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            />
+            <motion.div
+              className="h-full bg-status-partial"
+              initial={{ width: 0 }}
+              animate={{ width: `${partialPct}%` }}
+              transition={{
+                duration: 0.7,
+                ease: [0.16, 1, 0.3, 1],
+                delay: 0.05,
+              }}
+            />
+            <motion.div
+              className="h-full bg-destructive/45"
+              initial={{ width: 0 }}
+              animate={{ width: `${nonePct}%` }}
+              transition={{
+                duration: 0.7,
+                ease: [0.16, 1, 0.3, 1],
+                delay: 0.1,
+              }}
+            />
+          </>
+        ) : null}
+      </div>
+    </div>
   );
 }
 
@@ -756,34 +782,48 @@ function StatusRow({
   title,
   subtitle,
   count,
+  pct,
   countClassName,
+  barClassName,
 }: {
   dotClassName: string;
   title: string;
   subtitle: string;
   count: number;
+  pct?: number;
   countClassName?: string;
+  barClassName?: string;
 }) {
   return (
-    <li className="flex items-center justify-between gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-muted/50">
-      <div className="flex min-w-0 items-center gap-2.5">
-        <span
-          className={cn("size-3 shrink-0 rounded-full", dotClassName)}
-          aria-hidden
-        />
-        <div className="min-w-0">
-          <p className="text-sm font-semibold">{title}</p>
-          <p className="text-xs text-muted-foreground">{subtitle}</p>
+    <li className="rounded-lg px-2 py-2 transition-colors hover:bg-muted/40">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-2.5">
+          <span
+            className={cn("size-2.5 shrink-0 rounded-full", dotClassName)}
+            aria-hidden
+          />
+          <div className="min-w-0">
+            <p className="text-sm font-semibold">{title}</p>
+            <p className="text-xs text-muted-foreground">{subtitle}</p>
+          </div>
         </div>
+        <p
+          className={cn(
+            "text-xl font-bold tabular-nums sm:text-2xl",
+            countClassName,
+          )}
+        >
+          {count}
+        </p>
       </div>
-      <p
-        className={cn(
-          "text-2xl font-bold tabular-nums",
-          countClassName,
-        )}
-      >
-        {count}
-      </p>
+      {typeof pct === "number" && barClassName ? (
+        <div className="mt-2 ml-[18px] h-1 overflow-hidden rounded-full bg-muted">
+          <div
+            className={cn("h-full rounded-full", barClassName)}
+            style={{ width: `${Math.min(100, Math.max(0, pct))}%` }}
+          />
+        </div>
+      ) : null}
     </li>
   );
 }

@@ -21,7 +21,7 @@ export function AdminPasswordForm() {
     confirmTouched && newPassword !== confirmPassword;
 
   return (
-    <section className="h-full rounded-md border border-border bg-card p-5">
+    <section className="h-full dash-form-panel">
       <div className="mb-4 flex items-center gap-2">
         <KeyRound className="size-4 text-muted-foreground" aria-hidden />
         <h2 className="text-lg font-semibold">Change your password</h2>

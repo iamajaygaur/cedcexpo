@@ -75,7 +75,7 @@ export function LoginView({
         initial={{ opacity: 0, scale: 0.95, y: 16 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] as const }}
-        className="relative z-10 flex w-full max-w-[1020px] flex-col overflow-hidden rounded-2xl border border-border/80 bg-card/85 shadow-[0_24px_64px_rgba(25,28,29,0.16)] backdrop-blur-xl lg:min-h-[580px] lg:flex-row"
+        className="relative z-10 flex w-full max-w-[1020px] flex-col overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--cu-gold)_35%,var(--border))] bg-card/90 shadow-[0_28px_72px_rgba(25,28,29,0.18)] backdrop-blur-xl lg:min-h-[580px] lg:flex-row"
       >
         {/* ── Left Brand & Campus Panel (45% Width) ──────── */}
         <section className="relative flex min-h-[340px] flex-col justify-between overflow-hidden bg-[#1a1c1e] px-8 py-10 sm:px-10 lg:min-h-0 lg:w-[45%] lg:px-11 lg:py-12">
@@ -156,11 +156,16 @@ export function LoginView({
         <section className="flex flex-1 flex-col justify-center bg-card px-8 py-10 sm:px-10 lg:px-12 lg:py-12">
           <div className="mx-auto w-full max-w-md space-y-6">
             <div className="space-y-1.5">
+              <p className="dash-section-label">Secure access</p>
               <h2 className="text-[1.875rem] font-extrabold tracking-tight text-foreground">
                 Log In
               </h2>
-              <p className="text-xs leading-relaxed text-muted-foreground">
-                Select your role and enter your credentials to log in.
+              <div
+                className="h-1 w-12 rounded-full bg-gradient-to-r from-primary to-primary/40"
+                aria-hidden
+              />
+              <p className="pt-1 text-xs leading-relaxed text-muted-foreground">
+                Select your role and enter your credentials to continue.
               </p>
             </div>
 

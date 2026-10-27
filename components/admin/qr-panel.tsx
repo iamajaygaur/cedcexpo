@@ -41,7 +41,7 @@ export function QrPanel({
   }
 
   return (
-    <div className="space-y-6 rounded-md border border-border bg-card p-6 print:border-0 print:shadow-none">
+    <div className="space-y-6 dash-panel p-6 print:border-0 print:shadow-none">
       <div className="text-center print:block">
         <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           CEDC Expo

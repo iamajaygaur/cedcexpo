@@ -25,14 +25,14 @@ export function CriteriaManager({ eventId, criteria }: CriteriaManagerProps) {
     <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
       <div className="space-y-3">
         {criteria.length === 0 ? (
-          <p className="rounded-md border border-dashed border-border bg-muted/40 px-4 py-10 text-center text-sm text-muted-foreground">
+          <p className="dash-empty text-sm text-muted-foreground">
             No evaluation criteria yet. Add rubric items for this event.
           </p>
         ) : (
           criteria.map((c) => (
             <details
               key={c.id}
-              className="rounded-md border border-border bg-card"
+              className="dash-panel"
             >
               <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3">
                 <div>
@@ -77,7 +77,7 @@ export function CriteriaManager({ eventId, criteria }: CriteriaManagerProps) {
         )}
       </div>
 
-      <div className="h-fit rounded-md border border-border bg-card p-5">
+      <div className="h-fit dash-form-panel">
         <h2 className="mb-4 text-lg font-semibold">Add criterion</h2>
         <AdminActionForm action={upsertCriterionAction}>
           <input type="hidden" name="event_id" value={eventId} />

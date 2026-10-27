@@ -75,6 +75,10 @@ export function HomeHero() {
               Capstone Design Expo Judging
             </span>
           </h1>
+          <div
+            className="mx-auto h-1 w-14 rounded-full bg-gradient-to-r from-primary to-tertiary/70"
+            aria-hidden
+          />
 
           <p className="mx-auto max-w-xl px-1 text-sm leading-relaxed text-muted-foreground sm:text-base md:text-lg">
             A precision evaluation platform for faculty, industry partners, and

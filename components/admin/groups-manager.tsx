@@ -167,7 +167,7 @@ export function GroupsManager({
       />
 
       {groups.length === 0 ? (
-        <p className="rounded-md border border-dashed border-border bg-muted/40 px-4 py-14 text-center text-sm text-muted-foreground">
+        <p className="dash-empty py-14 text-sm text-muted-foreground">
           No judge groups yet. Click Create Judge Group to add your first panel.
         </p>
       ) : (
@@ -203,7 +203,7 @@ export function GroupsManager({
                     ? undefined
                     : { y: -4, transition: { duration: 0.2 } }
                 }
-                className="flex flex-col overflow-hidden rounded-md border border-border bg-card shadow-sm transition-shadow hover:shadow-md"
+                className="dash-metric flex flex-col overflow-hidden transition-shadow hover:shadow-md"
               >
                 <div className={cn("h-1 w-full shrink-0", token.barClass)} />
 

@@ -220,7 +220,7 @@ function EventEditorForm({
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-        className="rounded-xl border border-border bg-card p-5 shadow-sm md:p-8"
+        className="dash-form-panel md:p-8"
       >
           <div className="grid gap-4 border-b border-border pb-6 md:grid-cols-[1fr_180px]">
             <div className="space-y-1.5">
@@ -513,7 +513,7 @@ export function EventsManager({
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-        className="overflow-hidden rounded-xl border border-border bg-card shadow-sm"
+        className="dash-table-shell"
       >
         {events.length === 0 ? (
           <div className="px-4 py-14 text-center">

@@ -145,7 +145,7 @@ export function LiveMonitor({
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="rounded-2xl border border-border bg-card p-5 shadow-sm"
+          className="dash-panel p-5"
         >
           <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
             Overall
@@ -165,7 +165,7 @@ export function LiveMonitor({
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
-          className="rounded-2xl border border-border bg-card p-5 shadow-sm"
+          className="dash-panel p-5"
         >
           <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
             Pipeline
@@ -205,7 +205,7 @@ export function LiveMonitor({
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="rounded-2xl border border-border bg-card p-5 shadow-sm"
+          className="dash-panel p-5"
         >
           <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
             Teams
@@ -245,7 +245,7 @@ export function LiveMonitor({
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-          className="rounded-2xl border border-border bg-card p-5 shadow-sm"
+          className="dash-panel p-5"
         >
           <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
             Snapshot
@@ -645,7 +645,7 @@ function GroupLiveCard({
           ? undefined
           : { y: -4, transition: { duration: 0.2 } }
       }
-      className="flex flex-col overflow-hidden rounded-md border border-border bg-card shadow-sm transition-shadow hover:shadow-md"
+      className="dash-metric flex flex-col overflow-hidden transition-shadow hover:shadow-md"
     >
       <div className={cn("h-1 w-full shrink-0", token.barClass)} />
 
@@ -762,7 +762,7 @@ function GroupLiveCard({
 
 function TeamLiveTable({ rows }: { rows: MonitorTeamRow[] }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+    <div className="dash-panel overflow-hidden">
       <table className="w-full text-left text-sm">
         <thead className="bg-muted/60 text-xs uppercase tracking-wider text-muted-foreground">
           <tr>
@@ -851,7 +851,7 @@ function TeamLiveTable({ rows }: { rows: MonitorTeamRow[] }) {
 
 function JudgeLiveTable({ rows }: { rows: MonitorJudgeRow[] }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+    <div className="dash-panel overflow-hidden">
       <table className="w-full text-left text-sm">
         <thead className="bg-muted/60 text-xs uppercase tracking-wider text-muted-foreground">
           <tr>

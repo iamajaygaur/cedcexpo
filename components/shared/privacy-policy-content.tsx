@@ -29,7 +29,7 @@ export function PrivacyPolicyContent({
         description="How CEDC Expo handles account and evaluation data."
       />
 
-      <section className="space-y-4 rounded-md border border-border bg-card p-5 text-sm text-muted-foreground">
+      <section className="space-y-4 dash-form-panel text-sm text-muted-foreground">
         <p>
           This application is operated by the University of Colorado Denver
           College of Engineering, Design and Computing (CEDC) for Capstone

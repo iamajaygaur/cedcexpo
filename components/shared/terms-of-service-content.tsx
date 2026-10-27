@@ -29,7 +29,7 @@ export function TermsOfServiceContent({
         description="Rules for using CEDC Expo (Capstone Design Expo judging)."
       />
 
-      <section className="space-y-4 rounded-md border border-border bg-card p-5 text-sm text-muted-foreground">
+      <section className="space-y-4 dash-form-panel text-sm text-muted-foreground">
         <p>
           By signing in and using this application, you agree to use it only
           for authorized CEDC Expo judging and administration at CU

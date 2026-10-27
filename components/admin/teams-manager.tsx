@@ -202,7 +202,7 @@ function TeamEditorForm({
 
       <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="space-y-6">
-          <section className="rounded-md border border-border bg-card p-5 shadow-sm">
+          <section className="dash-form-panel">
             <h2 className="mb-4 text-sm font-bold tracking-wide text-foreground uppercase">
               Project Details
             </h2>
@@ -278,7 +278,7 @@ function TeamEditorForm({
             </div>
           </section>
 
-          <section className="rounded-md border border-border bg-card p-5 shadow-sm">
+          <section className="dash-form-panel">
             <h2 className="mb-4 text-sm font-bold tracking-wide text-foreground uppercase">
               Abstract / Description
             </h2>
@@ -300,7 +300,7 @@ function TeamEditorForm({
           </section>
         </div>
 
-        <section className="rounded-md border border-border bg-card p-5 shadow-sm">
+        <section className="dash-form-panel">
           <div className="mb-4 flex items-start justify-between gap-3">
             <div>
               <h2 className="text-sm font-bold tracking-wide text-foreground uppercase">
@@ -526,7 +526,7 @@ export function TeamsManager({
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-        className="overflow-hidden rounded-xl border border-border bg-card shadow-sm"
+        className="dash-table-shell"
       >
         <div className="flex flex-col gap-3 border-b border-border p-4 lg:flex-row lg:items-center">
           <div className="min-w-0 flex-1">

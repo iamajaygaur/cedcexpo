@@ -28,7 +28,7 @@ export default async function JudgeDashboardPage({ searchParams }: PageProps) {
   const previewJudges = isAdmin ? await listJudgesForPreview() : [];
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
+    <div className="mx-auto max-w-5xl space-y-6 md:space-y-8">
       <PageHeader
         breadcrumbs={[{ label: "Dashboard" }]}
         title="Judge Dashboard"
@@ -61,7 +61,7 @@ export default async function JudgeDashboardPage({ searchParams }: PageProps) {
       ) : null}
 
       {workspace.blockReason === "no_judge_profile" ? (
-        <div className="space-y-4 rounded-md border border-dashed border-border bg-muted/40 px-4 py-10 text-center">
+        <div className="dash-empty space-y-4">
           <h2 className="text-lg font-semibold">No judge profile on this login</h2>
           <p className="mx-auto max-w-lg text-sm text-muted-foreground">
             {isAdmin ? (
@@ -91,7 +91,7 @@ export default async function JudgeDashboardPage({ searchParams }: PageProps) {
       ) : null}
 
       {workspace.blockReason === "no_event" ? (
-        <p className="rounded-md border border-dashed border-border px-4 py-10 text-center text-sm text-muted-foreground">
+        <p className="dash-empty text-sm text-muted-foreground">
           No active expo event yet. An admin must create and activate an event
           first.
         </p>
@@ -115,7 +115,7 @@ export default async function JudgeDashboardPage({ searchParams }: PageProps) {
       ) : null}
 
       {workspace.blockReason === "no_group" ? (
-        <div className="space-y-3 rounded-md border border-dashed border-border px-4 py-10 text-center">
+        <div className="dash-empty space-y-3">
           <p className="text-sm text-muted-foreground">
             You are not assigned to a color group for{" "}
             <strong>{workspace.event?.name ?? "this event"}</strong>. Ask an
@@ -140,11 +140,12 @@ export default async function JudgeDashboardPage({ searchParams }: PageProps) {
           />
 
           <section>
-            <h2 className="mb-4 text-xl font-bold tracking-tight">
+            <p className="dash-section-label mb-1">Assignments</p>
+            <h2 className="mb-4 text-xl font-bold tracking-tight text-foreground">
               Your Assigned Projects
             </h2>
             {workspace.blockReason === "no_team_assignments" ? (
-              <div className="space-y-3 rounded-md border border-dashed border-border px-4 py-10 text-center">
+              <div className="dash-empty space-y-3">
                 <p className="text-sm font-medium text-foreground">
                   Group assigned — but no projects yet
                 </p>

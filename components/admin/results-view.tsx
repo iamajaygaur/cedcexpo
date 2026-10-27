@@ -107,7 +107,7 @@ export function ResultsView({
         ). Ties share the same rank — no silent tie-break.
       </p>
 
-      <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+      <div className="dash-table-shell">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead className="bg-muted/60 text-xs uppercase tracking-wider text-muted-foreground">

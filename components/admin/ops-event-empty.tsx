@@ -18,7 +18,7 @@ export function OpsEventEmpty({
   if (lockedEvent) {
     return (
       <div className="space-y-4">
-        <div className="rounded-md border border-border bg-muted/40 px-4 py-3 text-sm text-foreground">
+        <div className="dash-panel px-4 py-3 text-sm text-foreground">
           <p className="font-medium">
             “{lockedEvent.name}” is {lockedEvent.status}.
           </p>
@@ -46,7 +46,7 @@ export function OpsEventEmpty({
   }
 
   return (
-    <div className="rounded-md border border-dashed border-border px-4 py-10 text-center">
+    <div className="dash-empty">
       <p className="text-sm font-medium text-foreground">
         {hasAnyEvent
           ? "No active or draft event"
