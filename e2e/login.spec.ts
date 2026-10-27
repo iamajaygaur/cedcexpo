@@ -8,6 +8,10 @@ test.describe("Login", () => {
   });
 
   test("login visual baseline", async ({ page }) => {
+    test.skip(
+      !!process.env.CI && process.platform === "linux",
+      "Darwin baselines; regenerate on ubuntu with test:e2e:update",
+    );
     await page.goto("/login");
     await page.getByRole("link", { name: /Back to Expo Home/i }).waitFor();
     await expect(page).toHaveScreenshot("login.png", {

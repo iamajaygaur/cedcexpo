@@ -8,6 +8,10 @@ test.describe("Home", () => {
   });
 
   test("home visual baseline", async ({ page }) => {
+    test.skip(
+      !!process.env.CI && process.platform === "linux",
+      "Darwin baselines; regenerate on ubuntu with test:e2e:update",
+    );
     await page.goto("/");
     await page.getByRole("heading", { name: /CEDC Expo/i }).waitFor();
     await expect(page).toHaveScreenshot("home.png", {

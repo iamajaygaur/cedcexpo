@@ -17,6 +17,21 @@ npm run dev
 
 Open [http://localhost:3000/login](http://localhost:3000/login).
 
+## E2E tests
+
+```bash
+npx playwright install chromium   # once
+npm run test:e2e                  # public smoke + screenshots
+```
+
+Authenticated flows need credentials in `.env.local` (see `.env.local.example`):
+
+- `E2E_ADMIN_USERNAME` / `E2E_ADMIN_PASSWORD`
+- `E2E_JUDGE_USERNAME` / `E2E_JUDGE_PASSWORD`
+
+Without them, those specs are skipped. CI runs the same suite; add the matching
+GitHub Actions secrets to enable auth coverage on PRs.
+
 ## Stack
 
 Next.js App Router · TypeScript · Tailwind CSS · shadcn/ui · Supabase (Auth, Postgres, RLS, Realtime) · PWA
