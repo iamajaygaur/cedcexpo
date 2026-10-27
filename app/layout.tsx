@@ -1,18 +1,20 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans, Source_Serif_4 } from "next/font/google";
+import { Fraunces, Manrope } from "next/font/google";
 
 import { EphemeralSessionGuard } from "@/components/shared/ephemeral-session-guard";
 import { ServiceWorkerRegister } from "@/components/shared/service-worker-register";
 import "./globals.css";
 
-const jakarta = Plus_Jakarta_Sans({
-  variable: "--font-jakarta",
+/** Commercial product UI — geometric, high legibility at small sizes. */
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
   display: "swap",
 });
 
-const sourceSerif = Source_Serif_4({
-  variable: "--font-source-serif",
+/** Brand / page titles — soft optical serif, premium without newspaper tone. */
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
   display: "swap",
 });
@@ -59,7 +61,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${jakarta.variable} ${sourceSerif.variable} min-h-svh`}
+      className={`${manrope.variable} ${fraunces.variable} min-h-svh`}
       suppressHydrationWarning
     >
       <body className="flex min-h-svh max-w-[100dvw] flex-col overflow-x-clip">
