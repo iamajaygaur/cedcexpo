@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState, useTransition } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+  useTransition,
+  type CSSProperties,
+} from "react";
 import { useRouter } from "next/navigation";
 import { motion, useReducedMotion } from "motion/react";
 import type { LucideIcon } from "lucide-react";
@@ -636,104 +642,95 @@ function GroupLiveCard({
       whileHover={
         reducedMotion
           ? undefined
-          : { y: -4, transition: { duration: 0.2 } }
+          : { y: -3, transition: { duration: 0.2 } }
       }
-      className="dash-metric flex flex-col overflow-hidden transition-shadow hover:shadow-md"
+      className="dash-group-card flex flex-col gap-3 p-4 transition-shadow hover:shadow-md sm:p-5"
+      style={
+        {
+          "--group-tint": token.hex,
+        } as CSSProperties
+      }
     >
-      <div className={cn("h-1 w-full shrink-0", token.barClass)} />
-
-      <div
-        className={cn(
-          "flex items-start justify-between gap-2 px-4 py-3",
-          token.bgClass,
-        )}
-      >
-        <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <span
-              className={cn("size-2.5 shrink-0 rounded-full", token.dotClass)}
-              aria-hidden
+      <div className="flex items-start gap-3">
+        <span className="dash-group-card__icon shrink-0" aria-hidden>
+          <Users className="size-5" strokeWidth={2} />
+        </span>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground sm:text-[11px]">
+              {progress.group.name} · Panel #{panelNumber}
+            </p>
+            <GroupBadge
+              colorKey={progress.group.color_key}
+              name={token.label}
+              size="sm"
             />
-            <h3 className="truncate text-base font-bold tracking-tight text-foreground">
-              {progress.group.name}
-            </h3>
           </div>
-          <p className="mt-0.5 pl-[18px] text-xs font-medium text-muted-foreground">
-            Panel #{panelNumber}
-            <span className="mx-1.5 text-border" aria-hidden>
+          <p className="mt-0.5 text-3xl font-bold tabular-nums tracking-tight text-foreground sm:text-4xl">
+            {progress.percent}
+            <span className="text-lg font-semibold text-muted-foreground sm:text-xl">
+              %
+            </span>
+          </p>
+          <p className="mt-0.5 text-[11px] leading-snug text-muted-foreground sm:text-xs">
+            {progress.judgeCount} judge
+            {progress.judgeCount === 1 ? "" : "s"}
+            <span className="mx-1 text-border" aria-hidden>
+              ·
+            </span>
+            {progress.teamCount} team
+            {progress.teamCount === 1 ? "" : "s"}
+            <span className="mx-1 text-border" aria-hidden>
               ·
             </span>
             {done ? "Complete" : "Active"}
+            {progress.draft > 0
+              ? ` · ${progress.draft} draft${progress.draft === 1 ? "" : "s"}`
+              : ""}
           </p>
         </div>
-        <span className="inline-flex shrink-0 items-center rounded-md border border-border/60 bg-card/80 px-2 py-0.5 text-[11px] font-bold tabular-nums shadow-sm backdrop-blur-sm">
-          <span className={token.textClass}>{progress.percent}%</span>
-        </span>
       </div>
 
-      <div className="flex flex-1 flex-col px-4 py-3">
-        <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-          <span className="inline-flex items-center gap-1.5">
-            <Users className="size-3.5 shrink-0" aria-hidden />
-            {progress.judgeCount} judge
-            {progress.judgeCount === 1 ? "" : "s"}
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <Layers className="size-3.5 shrink-0" aria-hidden />
-            {progress.teamCount} team
-            {progress.teamCount === 1 ? "" : "s"}
-          </span>
-          {progress.draft > 0 ? (
-            <span className="tabular-nums text-amber-700">
-              {progress.draft} draft{progress.draft === 1 ? "" : "s"}
-            </span>
-          ) : null}
-        </div>
-
-        <div
-          className="h-2.5 overflow-hidden rounded-full bg-muted"
-          role="progressbar"
-          aria-valuenow={progress.submitted}
-          aria-valuemin={0}
-          aria-valuemax={Math.max(1, progress.expected)}
-          aria-label={`${progress.group.name} progress`}
-        >
-          <motion.div
-            className={cn("h-full rounded-full", token.barClass)}
-            initial={reducedMotion ? false : { width: 0 }}
-            animate={{ width: `${Math.min(100, progress.percent)}%` }}
-            transition={
-              reducedMotion
-                ? { duration: 0 }
-                : {
-                    duration: 0.7,
-                    ease: [0.16, 1, 0.3, 1],
-                    delay: 0.1 + index * 0.04,
-                  }
-            }
-          />
-        </div>
-
-        <div className="mt-3 space-y-1.5">
-          <HorizBar
-            label="Submitted"
-            value={progress.submitted}
-            max={Math.max(1, progress.expected)}
-            color={
-              getGroupColorToken(progress.group.color_key).hex ||
-              "var(--cu-gold)"
-            }
-          />
-          <HorizBar
-            label="In progress"
-            value={progress.draft}
-            max={Math.max(1, progress.expected)}
-            color="var(--status-partial)"
-          />
-        </div>
+      <div
+        className="dash-group-card__bar-track"
+        role="progressbar"
+        aria-valuenow={progress.submitted}
+        aria-valuemin={0}
+        aria-valuemax={Math.max(1, progress.expected)}
+        aria-label={`${progress.group.name} progress`}
+      >
+        <motion.div
+          className="dash-group-card__bar-fill"
+          initial={reducedMotion ? false : { width: 0 }}
+          animate={{ width: `${Math.min(100, progress.percent)}%` }}
+          transition={
+            reducedMotion
+              ? { duration: 0 }
+              : {
+                  duration: 0.7,
+                  ease: [0.16, 1, 0.3, 1],
+                  delay: 0.1 + index * 0.04,
+                }
+          }
+        />
       </div>
 
-      <div className="flex items-center justify-between gap-2 border-t border-border bg-muted/20 px-4 py-2.5 text-xs text-muted-foreground">
+      <div className="space-y-1.5">
+        <HorizBar
+          label="Submitted"
+          value={progress.submitted}
+          max={Math.max(1, progress.expected)}
+          color={token.hex}
+        />
+        <HorizBar
+          label="In progress"
+          value={progress.draft}
+          max={Math.max(1, progress.expected)}
+          color="var(--status-partial)"
+        />
+      </div>
+
+      <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
         <span>
           <span className="font-semibold tabular-nums text-foreground">
             {progress.submitted}
