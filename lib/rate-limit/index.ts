@@ -92,6 +92,24 @@ export function checkLoginUsernameRateLimit(username: string): RateLimitResult {
 }
 
 /**
+ * Rate-limit admin forgot-password requests (IP + email).
+ */
+export function checkPasswordResetRateLimit(clientKey: string): RateLimitResult {
+  return checkKeyedRateLimit(`pwd-reset:${clientKey || "unknown"}`, {
+    windowMs: 60_000,
+    maxAttempts: 5,
+  });
+}
+
+export function checkPasswordResetEmailRateLimit(email: string): RateLimitResult {
+  const key = email.trim().toLowerCase() || "unknown";
+  return checkKeyedRateLimit(`pwd-reset-email:${key}`, {
+    windowMs: 15 * 60_000,
+    maxAttempts: 3,
+  });
+}
+
+/**
  * Rate-limit CSV / report exports (admin).
  */
 export function checkExportRateLimit(clientKey: string): RateLimitResult {

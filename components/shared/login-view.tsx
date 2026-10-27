@@ -10,6 +10,7 @@ import { LoginForm } from "@/components/shared/login-form";
 type LoginViewProps = {
   authError: string | null;
   errorMessage?: string | null;
+  noticeMessage?: string | null;
   configured: boolean;
   switchingAccount: boolean;
   year: number;
@@ -18,6 +19,7 @@ type LoginViewProps = {
 export function LoginView({
   authError,
   errorMessage,
+  noticeMessage = null,
   configured,
   switchingAccount,
   year,
@@ -186,6 +188,7 @@ export function LoginView({
             <LoginForm
               authError={authError}
               errorMessage={errorMessage}
+              noticeMessage={noticeMessage}
               configured={configured}
               switchingAccount={switchingAccount}
             />

@@ -17,6 +17,16 @@ npm run dev
 
 Open [http://localhost:3000/login](http://localhost:3000/login).
 
+### Admin forgot password
+
+From the login page, choose **Administrator** → **Forgot Password?**, or open
+`/forgot-password`. Add this Redirect URL in Supabase → Authentication → URL
+Configuration:
+
+- `{NEXT_PUBLIC_APP_URL}/api/auth/callback`
+
+Judge passwords are reset by an admin under Judges Management — not via email.
+
 ## E2E tests
 
 ```bash

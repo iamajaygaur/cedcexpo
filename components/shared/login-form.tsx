@@ -12,12 +12,15 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
+import Link from "next/link";
+
 import { clearClientAuthArtifacts } from "@/lib/auth/clear-client-session";
 import { SUPPORT_EMAIL } from "@/lib/contact";
 
 type LoginFormProps = {
   authError?: string | null;
   errorMessage?: string | null;
+  noticeMessage?: string | null;
   configured?: boolean;
   supportEmail?: string;
   switchingAccount?: boolean;
@@ -26,12 +29,15 @@ type LoginFormProps = {
 export function LoginForm({
   authError,
   errorMessage,
+  noticeMessage = null,
   configured = true,
   supportEmail = SUPPORT_EMAIL,
   switchingAccount = false,
 }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
-  const [activeRole, setActiveRole] = useState<"judge" | "admin">("judge");
+  const [activeRole, setActiveRole] = useState<"judge" | "admin">(
+    noticeMessage ? "admin" : "judge",
+  );
   const passwordRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -222,12 +228,22 @@ export function LoginForm({
           />
           Remember Me
         </label>
-        <a
-          href={`mailto:${supportEmail}?subject=CEDC%20Expo%20Password%20Reset`}
-          className="text-xs font-medium text-primary underline-offset-2 hover:underline"
-        >
-          Forgot Password?
-        </a>
+        {activeRole === "admin" ? (
+          <Link
+            href="/forgot-password"
+            className="text-xs font-medium text-primary underline-offset-2 hover:underline"
+          >
+            Forgot Password?
+          </Link>
+        ) : (
+          <a
+            href={`mailto:${supportEmail}?subject=CEDC%20Expo%20Judge%20Password%20Help`}
+            className="text-xs font-medium text-primary underline-offset-2 hover:underline"
+            title="Ask an administrator to reset your judge password"
+          >
+            Need help signing in?
+          </a>
+        )}
       </div>
 
       {switchingAccount && (
@@ -238,6 +254,17 @@ export function LoginForm({
           className="rounded-xl border border-primary/25 bg-primary/08 px-4 py-3 text-xs text-foreground"
         >
           Previous session cleared. Log in with the account you want to use.
+        </motion.p>
+      )}
+
+      {noticeMessage && (
+        <motion.p
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          role="status"
+          className="rounded-xl border border-tertiary/30 bg-tertiary/10 px-4 py-3 text-xs font-medium text-foreground"
+        >
+          {noticeMessage}
         </motion.p>
       )}
 

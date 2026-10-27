@@ -47,6 +47,9 @@ export async function updateSession(request: NextRequest) {
   const isAdminPath = pathname.startsWith("/admin");
   const isJudgePath = pathname.startsWith("/judge");
   const isLoginPath = pathname === "/login";
+  const isForgotPasswordPath = pathname === "/forgot-password";
+  const isResetPasswordPath = pathname === "/reset-password";
+  const isAuthCallbackPath = pathname.startsWith("/api/auth/callback");
   const isProtected = isAdminPath || isJudgePath;
 
   if (!url || !anonKey) {
@@ -129,6 +132,11 @@ export async function updateSession(request: NextRequest) {
   // (one browser can only hold one Supabase session at a time).
   const isSwitchingAccount =
     request.nextUrl.searchParams.get("switch") === "1";
+
+  // Recovery sessions must reach /reset-password; do not bounce them to dashboards.
+  if (isResetPasswordPath || isForgotPasswordPath || isAuthCallbackPath) {
+    return supabaseResponse;
+  }
 
   if (isLoginPath && user && role && !isSwitchingAccount) {
     if (role === "judge" && judgeActive === false) {

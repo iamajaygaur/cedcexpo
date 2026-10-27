@@ -5,6 +5,7 @@ type LoginPageProps = {
   searchParams: Promise<{
     error?: string;
     msg?: string;
+    notice?: string;
     next?: string;
     switch?: string;
   }>;
@@ -16,6 +17,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const authError =
     params.error ?? (configured ? null : "auth_not_configured");
   const errorMessage = params.msg?.trim() || null;
+  const noticeMessage = params.notice?.trim() || null;
   const switchingAccount = params.switch === "1";
   const year = new Date().getFullYear();
 
@@ -23,6 +25,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
     <LoginView
       authError={authError}
       errorMessage={errorMessage}
+      noticeMessage={noticeMessage}
       configured={configured}
       switchingAccount={switchingAccount}
       year={year}
