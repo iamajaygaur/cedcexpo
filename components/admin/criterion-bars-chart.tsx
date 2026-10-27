@@ -19,7 +19,7 @@ export function CriterionBarsChart({ bars }: CriterionBarsChartProps) {
   return (
     <ul className="mt-2 space-y-4">
       {bars.map((bar) => (
-        <li key={bar.name}>
+        <li key={bar.name} className="group relative">
           <div className="mb-1.5 flex items-baseline justify-between gap-3">
             <span className="truncate text-sm font-medium text-foreground">
               {bar.name}
@@ -31,16 +31,20 @@ export function CriterionBarsChart({ bars }: CriterionBarsChartProps) {
               /{bar.maxScore.toFixed(0)}
             </span>
           </div>
-          <div className="h-2.5 overflow-hidden rounded-full bg-muted">
+          <div className="relative h-2.5 overflow-hidden rounded-full bg-muted">
             <div
-              className="h-full rounded-full transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              className="chart-bar h-full rounded-full"
               style={{
                 width: `${Math.min(100, Math.max(0, bar.percent))}%`,
                 background:
                   "linear-gradient(90deg, var(--cu-gold) 0%, var(--tertiary) 100%)",
+                transformOrigin: "left center",
               }}
-              title={`${bar.percent.toFixed(0)}% of max · n=${bar.sampleCount}`}
+              aria-label={`${bar.name}: ${bar.averageScore.toFixed(1)} of ${bar.maxScore}`}
             />
+            <span className="chart-tooltip left-1/2">
+              {bar.name}: {bar.percent.toFixed(0)}% · n={bar.sampleCount}
+            </span>
           </div>
         </li>
       ))}

@@ -1,5 +1,6 @@
 "use client";
 
+import { motion, useReducedMotion } from "motion/react";
 import type { DeptBreakdownSlice } from "@/lib/admin/report-analytics";
 import { cn } from "@/lib/utils";
 
@@ -24,6 +25,7 @@ export function DeptBreakdownChart({
   slices,
   centerTotal,
 }: DeptBreakdownChartProps) {
+  const reduced = useReducedMotion();
   const withShare = slices.filter((s) => s.evaluatedCount > 0);
   const fallback =
     withShare.length > 0
@@ -75,21 +77,24 @@ export function DeptBreakdownChart({
   return (
     <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
       <div className="mx-auto flex shrink-0 flex-col items-center lg:mx-0">
-        <div
-          className="relative size-40 rounded-full sm:size-44"
+        <motion.div
+          className="relative size-40 rounded-full shadow-sm sm:size-44"
           style={{ background: gradient }}
           role="img"
           aria-label="Department breakdown by evaluated teams"
+          initial={reduced ? false : { scale: 0.92, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="absolute inset-[26%] flex flex-col items-center justify-center rounded-full bg-card">
-            <span className="text-2xl font-bold tabular-nums tracking-tight text-foreground sm:text-3xl">
+          <div className="absolute inset-[26%] flex flex-col items-center justify-center rounded-full bg-card shadow-inner">
+            <span className="font-heading text-2xl font-bold tabular-nums tracking-tight text-foreground sm:text-3xl">
               {centerTotal}
             </span>
             <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
               Evals
             </span>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       <div className="min-w-0 flex-1 overflow-x-auto">
@@ -116,12 +121,12 @@ export function DeptBreakdownChart({
                 return (
                   <tr
                     key={slice.category}
-                    className="border-t border-border/60"
+                    className="group border-t border-border/60"
                   >
                     <td className="py-2.5 pr-2">
                       <span className="flex min-w-0 items-center gap-2">
                         <span
-                          className="size-2.5 shrink-0 rounded-full"
+                          className="size-2.5 shrink-0 rounded-full ring-1 ring-black/5 transition-transform duration-200 group-hover:scale-110"
                           style={{ background: color }}
                           aria-hidden
                         />
@@ -130,14 +135,19 @@ export function DeptBreakdownChart({
                         </span>
                       </span>
                     </td>
-                    <td className="py-2.5 pr-2">
+                    <td className="relative py-2.5 pr-2">
                       <div className="flex min-w-[5.5rem] items-center gap-2">
-                        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
+                        <div className="relative h-1.5 flex-1 overflow-visible rounded-full bg-muted">
+                          <span className="chart-tooltip left-1/2">
+                            {slice.category}: {Math.round(pct)}% · n=
+                            {slice.evaluatedCount}
+                          </span>
                           <div
-                            className="h-full rounded-full transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                            className="chart-bar h-full rounded-full"
                             style={{
                               width: `${Math.min(100, Math.max(0, pct))}%`,
                               background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 55%, white))`,
+                              transformOrigin: "left center",
                             }}
                           />
                         </div>

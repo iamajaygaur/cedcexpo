@@ -68,10 +68,10 @@ export function HomeHero() {
             />
           </div>
 
-          <h1 className="px-1 text-[1.5rem] font-extrabold leading-[1.15] tracking-tight text-on-surface break-words sm:text-4xl sm:leading-[1.05] md:text-5xl lg:text-[3.25rem]">
+          <h1 className="font-heading px-1 text-[1.5rem] font-bold leading-[1.15] tracking-tight text-on-surface break-words sm:text-4xl sm:leading-[1.05] md:text-5xl lg:text-[3.25rem]">
             <span className="text-gradient-gold">CEDC Expo</span>
             <br />
-            <span className="mt-1.5 block text-lg font-extrabold tracking-tight text-foreground sm:text-2xl md:text-3xl">
+            <span className="mt-1.5 block font-sans text-lg font-extrabold tracking-tight text-foreground sm:text-2xl md:text-3xl">
               Capstone Design Expo Judging
             </span>
           </h1>

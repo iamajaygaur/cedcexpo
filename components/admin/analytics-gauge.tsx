@@ -1,5 +1,6 @@
 "use client";
 
+import { motion, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
 
 type AnalyticsGaugeProps = {
@@ -48,6 +49,7 @@ export function AnalyticsGauge({
   accent = "var(--cu-gold)",
   accentEnd = "var(--tertiary)",
 }: AnalyticsGaugeProps) {
+  const reduced = useReducedMotion();
   const pct = Math.max(0, Math.min(100, value));
   const sweep = 288;
   const filled = (pct / 100) * sweep;
@@ -67,16 +69,22 @@ export function AnalyticsGauge({
         `${label}: ${pct.toFixed(1)} percent${detail ? `, ${detail}` : ""}`
       }
     >
-      <div className={cn("relative rounded-full", SIZE_CLASS[size])} style={{ background: fill }}>
+      <motion.div
+        className={cn("relative rounded-full shadow-sm", SIZE_CLASS[size])}
+        style={{ background: fill }}
+        initial={reduced ? false : { scale: 0.92, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+      >
         <div
           className={cn(
-            "absolute flex flex-col items-center justify-center rounded-full bg-card",
+            "absolute flex flex-col items-center justify-center rounded-full bg-card shadow-inner",
             INSET_CLASS[size],
           )}
         >
           <span
             className={cn(
-              "font-bold tabular-nums tracking-tight text-foreground",
+              "font-heading font-bold tabular-nums tracking-tight text-foreground",
               VALUE_CLASS[size],
             )}
           >
@@ -89,7 +97,7 @@ export function AnalyticsGauge({
             {label}
           </span>
         </div>
-      </div>
+      </motion.div>
       {detail ? (
         <p className="mt-3 text-center text-sm text-muted-foreground">{detail}</p>
       ) : null}
