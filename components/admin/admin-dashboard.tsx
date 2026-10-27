@@ -324,7 +324,7 @@ export function AdminDashboard({ snapshot }: AdminDashboardProps) {
           featured
           footer={
             <div
-              className="mt-3 h-2.5 overflow-hidden rounded-full bg-muted/80"
+              className="progress-track mt-4"
               role="progressbar"
               aria-valuenow={overall.submitted}
               aria-valuemin={0}
@@ -332,9 +332,11 @@ export function AdminDashboard({ snapshot }: AdminDashboardProps) {
               aria-label="Overall evaluation progress"
             >
               <motion.div
-                className="h-full rounded-full bg-gradient-to-r from-primary to-primary/70"
+                className="progress-fill-gold"
                 initial={{ width: 0 }}
-                animate={{ width: `${Math.min(100, overall.percent)}%` }}
+                animate={{
+                  width: `${Math.max(overall.percent > 0 ? 2 : 0, Math.min(100, overall.percent))}%`,
+                }}
                 transition={{
                   duration: 0.8,
                   ease: [0.16, 1, 0.3, 1] as const,
@@ -629,7 +631,9 @@ function MetricCard({
 }) {
   const tones = {
     gold: {
-      iconWrap: "bg-[color-mix(in_srgb,var(--cu-gold)_28%,white)] text-primary",
+      iconWrap: featured
+        ? "dash-icon--cream"
+        : "bg-[color-mix(in_srgb,var(--cu-gold)_28%,white)] text-primary",
       value: "text-foreground",
     },
     teal: {
@@ -655,7 +659,9 @@ function MetricCard({
       whileHover={{ y: -2, transition: { duration: 0.2 } }}
       className={cn(
         "flex h-full min-w-0 flex-col gap-2 px-3 py-3 transition-shadow hover:shadow-md sm:flex-row sm:items-start sm:gap-3 sm:px-4 sm:py-3.5",
-        featured ? "dash-panel--featured rounded-xl p-4 sm:p-5" : "dash-metric",
+        featured
+          ? "dash-metric--cream p-4 sm:p-5"
+          : "dash-metric",
       )}
     >
       <span
