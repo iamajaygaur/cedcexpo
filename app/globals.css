@@ -135,12 +135,12 @@
   --sidebar-border: #004f54;
   --sidebar-ring: #d4b773;
 
-  /* ── Color groups — muted institutional (harmonize with CU gold/teal) ── */
-  --group-red: #8f3f38;
-  --group-blue: #35566b;
-  --group-green: #3f6348;
-  --group-yellow: #8a6e28;
-  --group-orange: #9a5528;
+  /* ── Color groups — clear, saturated, easy to tell apart ── */
+  --group-red: #d32f2f;
+  --group-blue: #1e88e5;
+  --group-green: #43a047;
+  --group-yellow: #c4870a;
+  --group-orange: #fb8c00;
 
   --radius: 0.5rem;
 }

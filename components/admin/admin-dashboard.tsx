@@ -501,7 +501,7 @@ export function AdminDashboard({ snapshot }: AdminDashboardProps) {
                     className="dash-metric flex flex-col overflow-hidden transition-shadow hover:shadow-md"
                   >
                     <div
-                      className="h-0.5 w-full shrink-0"
+                      className="h-1.5 w-full shrink-0"
                       style={{ background: token.hex }}
                       aria-hidden
                     />

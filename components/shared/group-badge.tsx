@@ -31,15 +31,15 @@ export function GroupBadge({
         token.textClass,
         token.ringClass,
         size === "sm"
-          ? "rounded-md px-2 py-0.5 text-[10px]"
-          : "rounded-md px-2.5 py-1 text-[11px]",
+          ? "rounded-md px-2 py-0.5 text-[10px] font-bold"
+          : "rounded-md px-2.5 py-1 text-[11px] font-bold",
         className,
       )}
     >
       <span
         className={cn(
-          "shrink-0 rounded-full",
-          size === "sm" ? "size-1.5" : "size-2",
+          "shrink-0 rounded-full ring-2 ring-white/80",
+          size === "sm" ? "size-2" : "size-2.5",
           token.dotClass,
         )}
         aria-hidden
