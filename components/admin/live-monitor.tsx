@@ -33,13 +33,6 @@ type LiveMonitorProps = {
 
 type Tab = "teams" | "judges";
 
-const GROUP_HEX: Record<string, string> = {
-  red: "#c62828",
-  blue: "#1565c0",
-  green: "#2e7d32",
-  yellow: "#f9a825",
-  orange: "#ef6c00",
-};
 
 export function LiveMonitor({
   snapshot,
@@ -726,7 +719,10 @@ function GroupLiveCard({
             label="Submitted"
             value={progress.submitted}
             max={Math.max(1, progress.expected)}
-            color={GROUP_HEX[progress.group.color_key] ?? "var(--cu-gold)"}
+            color={
+              getGroupColorToken(progress.group.color_key).hex ||
+              "var(--cu-gold)"
+            }
           />
           <HorizBar
             label="In progress"

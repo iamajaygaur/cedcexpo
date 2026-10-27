@@ -24,12 +24,13 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { GroupBadge } from "@/components/shared/group-badge";
+import { AppFooter } from "@/components/shared/app-footer";
 import { setEventStatusAction } from "@/lib/admin/actions/events";
 import type { MonitorSnapshot } from "@/lib/admin/monitor-data";
 import { getGroupColorToken } from "@/lib/groups/color-tokens";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
-import { AppFooter } from "@/components/shared/app-footer";
 
 /* ── Variants ─────────────────────────────────────────────────── */
 
@@ -500,29 +501,24 @@ export function AdminDashboard({ snapshot }: AdminDashboardProps) {
                     className="dash-metric flex flex-col overflow-hidden transition-shadow hover:shadow-md"
                   >
                     <div
-                      className={cn("h-1 w-full shrink-0", token.barClass)}
+                      className="h-0.5 w-full shrink-0"
+                      style={{ background: token.hex }}
+                      aria-hidden
                     />
 
-                    <div
-                      className={cn(
-                        "flex items-start justify-between gap-2 px-4 py-3",
-                        token.bgClass,
-                      )}
-                    >
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span
-                            className={cn(
-                              "size-2.5 shrink-0 rounded-full",
-                              token.dotClass,
-                            )}
-                            aria-hidden
-                          />
+                    <div className="flex items-start justify-between gap-2 px-4 py-3">
+                      <div className="min-w-0 space-y-1.5">
+                        <div className="flex min-w-0 flex-wrap items-center gap-2">
                           <h3 className="truncate text-base font-bold tracking-tight text-foreground">
                             {g.group.name}
                           </h3>
+                          <GroupBadge
+                            colorKey={g.group.color_key}
+                            name={token.label}
+                            size="sm"
+                          />
                         </div>
-                        <p className="mt-0.5 flex items-center gap-1.5 pl-[18px] text-xs font-medium text-muted-foreground">
+                        <p className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
                           <Users className="size-3 shrink-0" aria-hidden />
                           {g.judgeCount} Judge
                           {g.judgeCount === 1 ? "" : "s"}
@@ -534,7 +530,7 @@ export function AdminDashboard({ snapshot }: AdminDashboardProps) {
                           {g.teamCount === 1 ? "" : "s"}
                         </p>
                       </div>
-                      <span className="inline-flex shrink-0 items-center rounded-md border border-border/60 bg-card/80 px-2 py-0.5 text-[11px] font-bold tabular-nums shadow-sm backdrop-blur-sm">
+                      <span className="inline-flex shrink-0 items-center rounded-md border border-border/70 bg-muted/40 px-2 py-0.5 text-[11px] font-bold tabular-nums">
                         <span className={token.textClass}>{g.percent}%</span>
                       </span>
                     </div>

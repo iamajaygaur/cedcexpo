@@ -205,32 +205,29 @@ export function GroupsManager({
                 }
                 className="dash-metric flex flex-col overflow-hidden transition-shadow hover:shadow-md"
               >
-                <div className={cn("h-1 w-full shrink-0", token.barClass)} />
-
                 <div
-                  className={cn(
-                    "flex items-start justify-between gap-2 px-4 py-3",
-                    token.bgClass,
-                  )}
-                >
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={cn(
-                          "size-2.5 shrink-0 rounded-full",
-                          token.dotClass,
-                        )}
-                        aria-hidden
-                      />
+                  className="h-0.5 w-full shrink-0"
+                  style={{ background: token.hex }}
+                  aria-hidden
+                />
+
+                <div className="flex items-start justify-between gap-2 px-4 py-3">
+                  <div className="min-w-0 space-y-1.5">
+                    <div className="flex min-w-0 flex-wrap items-center gap-2">
                       <h2 className="truncate text-base font-bold tracking-tight text-foreground">
                         {group.name}
                       </h2>
+                      <GroupBadge
+                        colorKey={group.color_key}
+                        name={token.label}
+                        size="sm"
+                      />
                     </div>
-                    <p className="mt-0.5 pl-[18px] text-xs font-medium text-muted-foreground">
+                    <p className="text-xs font-medium text-muted-foreground">
                       Panel #{panelNumber}
                     </p>
                   </div>
-                  <span className="inline-flex shrink-0 items-center gap-1 rounded-md border border-border/60 bg-card/80 px-2 py-0.5 text-[11px] font-semibold text-foreground shadow-sm backdrop-blur-sm">
+                  <span className="inline-flex shrink-0 items-center gap-1 rounded-md border border-border/70 bg-muted/40 px-2 py-0.5 text-[11px] font-semibold text-foreground">
                     <Users className="size-3" aria-hidden />
                     {judgeLabel}
                   </span>
@@ -382,6 +379,25 @@ export function GroupsManager({
                   </option>
                 ))}
               </Select>
+              {availableColorKeys.length > 0 ? (
+                <ul className="flex flex-wrap gap-2 pt-1" aria-hidden>
+                  {availableColorKeys.map((key) => {
+                    const t = getGroupColorToken(key);
+                    return (
+                      <li
+                        key={key}
+                        className="inline-flex items-center gap-1.5 rounded-md border border-border/70 bg-muted/30 px-2 py-1 text-[10px] font-semibold text-foreground"
+                      >
+                        <span
+                          className="size-2.5 rounded-full"
+                          style={{ background: t.hex }}
+                        />
+                        {t.label}
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : null}
               <p className="text-xs text-muted-foreground">
                 {availableColorKeys.length === 0
                   ? "All colors are in use."

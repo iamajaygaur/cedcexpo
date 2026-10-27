@@ -19,13 +19,13 @@ const STATUS_META: Record<
   },
   in_progress: {
     label: "Draft Saved",
-    dotClass: "bg-group-yellow",
-    textClass: "text-group-yellow",
+    dotClass: "bg-status-partial",
+    textClass: "text-status-partial",
   },
   submitted: {
     label: "Submitted",
-    dotClass: "bg-emerald-600",
-    textClass: "text-emerald-700",
+    dotClass: "bg-tertiary",
+    textClass: "text-tertiary",
   },
 };
 
@@ -84,11 +84,11 @@ export function ProjectCard({ project, previewJudgeId }: ProjectCardProps) {
 
       <div
         className={cn(
-          "mb-6 inline-flex w-fit items-center gap-2 rounded-full bg-muted/60 px-2.5 py-1 text-xs font-semibold sm:text-sm",
+          "mb-6 inline-flex w-fit items-center gap-2 rounded-md border border-border/70 bg-muted/35 px-2.5 py-1 text-xs font-semibold sm:text-sm",
           meta.textClass,
         )}
       >
-        <span className={cn("size-2 rounded-full", meta.dotClass)} aria-hidden />
+        <span className={cn("size-1.5 rounded-full", meta.dotClass)} aria-hidden />
         {meta.label}
       </div>
 

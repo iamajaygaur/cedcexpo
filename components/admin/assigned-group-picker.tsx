@@ -58,14 +58,15 @@ export function AssignedGroupPicker({
                 "inline-flex h-9 items-center gap-2 rounded-md border px-3 text-xs font-semibold transition-colors",
                 token.bgClass,
                 token.textClass,
+                token.ringClass,
                 selected
-                  ? "border-foreground ring-2 ring-ring/40"
-                  : "border-transparent hover:opacity-90",
+                  ? "ring-2 ring-primary/25"
+                  : "hover:bg-muted/50",
                 disabled && "cursor-not-allowed opacity-50",
               )}
             >
               <span
-                className={cn("size-2.5 rounded-full", token.dotClass)}
+                className={cn("size-2 rounded-full", token.dotClass)}
                 aria-hidden
               />
               {group.name}
