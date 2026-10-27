@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { DM_Sans } from "next/font/google";
 
 import { EphemeralSessionGuard } from "@/components/shared/ephemeral-session-guard";
+import { MotionProvider } from "@/components/shared/motion-provider";
 import { ServiceWorkerRegister } from "@/components/shared/service-worker-register";
 import "./globals.css";
 
@@ -66,9 +67,11 @@ export default function RootLayout({
         </a>
         <ServiceWorkerRegister />
         <EphemeralSessionGuard />
-        <div id="main-content" className="flex min-h-svh min-w-0 max-w-full flex-1 flex-col">
-          {children}
-        </div>
+        <MotionProvider>
+          <div id="main-content" className="flex min-h-svh min-w-0 max-w-full flex-1 flex-col">
+            {children}
+          </div>
+        </MotionProvider>
       </body>
     </html>
   );

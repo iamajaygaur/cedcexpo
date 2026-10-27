@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useActionState, useState } from "react";
-import { ArrowLeft, KeyRound } from "lucide-react";
+import { motion } from "motion/react";
+import { ArrowLeft, KeyRound, Loader2 } from "lucide-react";
 
 import type { ActionResult } from "@/lib/admin/action-result";
 import { completeAdminPasswordResetAction } from "@/lib/auth/password-reset";
@@ -85,14 +86,24 @@ export function ResetPasswordForm() {
           </p>
         ) : null}
 
-        <button
+        <motion.button
           type="submit"
           disabled={pending || mismatch || newPassword.length < 8}
+          aria-busy={pending || undefined}
+          whileTap={
+            pending || mismatch || newPassword.length < 8
+              ? undefined
+              : { scale: 0.97 }
+          }
           className="btn-shimmer gold-glow flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-bold text-primary-foreground transition-all duration-200 hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          <KeyRound className="size-4" aria-hidden />
+          {pending ? (
+            <Loader2 className="size-4 animate-spin" aria-hidden />
+          ) : (
+            <KeyRound className="size-4" aria-hidden />
+          )}
           {pending ? "Updating…" : "Update password"}
-        </button>
+        </motion.button>
 
         <Link
           href="/forgot-password"

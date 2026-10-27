@@ -9,6 +9,7 @@ import { AppFeedbackHost } from "@/components/shared/app-feedback";
 import { AppLogo } from "@/components/shared/app-logo";
 import { AppTopBar } from "@/components/shared/app-top-bar";
 import { IdleSessionGuard } from "@/components/shared/idle-session-guard";
+import { NavLink } from "@/components/shared/nav-link";
 import { NavigationProgress } from "@/components/shared/navigation-progress";
 import { OfflineBanner } from "@/components/shared/offline-banner";
 import { PwaInstallHint } from "@/components/shared/pwa-install-hint";
@@ -96,10 +97,11 @@ export function JudgeShell({
           {JUDGE_NAV.map(({ href, label, icon: Icon }) => {
             const active = isActivePath(pathname, href);
             return (
-              <Link
+              <NavLink
                 key={href}
                 href={href}
                 prefetch
+                showSpinner
                 className={cn(
                   "group relative flex min-h-11 items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium transition-colors",
                   active
@@ -118,7 +120,7 @@ export function JudgeShell({
                   aria-hidden
                 />
                 {label}
-              </Link>
+              </NavLink>
             );
           })}
         </nav>
@@ -199,10 +201,11 @@ export function JudgeShell({
               {JUDGE_NAV.map(({ href, label, icon: Icon }) => {
                 const active = isActivePath(pathname, href);
                 return (
-                  <Link
+                  <NavLink
                     key={href}
                     href={href}
                     prefetch
+                    showSpinner
                     onClick={() => setOpen(false)}
                     className={cn(
                       "relative flex min-h-12 touch-manipulation items-center gap-3 rounded-xl px-3 py-2.5 text-[14px] font-medium transition-colors",
@@ -214,18 +217,19 @@ export function JudgeShell({
                   >
                     <Icon className="size-5 shrink-0" aria-hidden />
                     {label}
-                  </Link>
+                  </NavLink>
                 );
               })}
-              <Link
+              <NavLink
                 href="/judge/help"
                 prefetch
+                showSpinner
                 onClick={() => setOpen(false)}
                 className="relative flex min-h-12 touch-manipulation items-center gap-3 rounded-xl px-3 py-2.5 text-[14px] font-medium text-sidebar-foreground/80 transition-colors hover:bg-white/[0.04] hover:text-sidebar-foreground"
               >
                 <LifeBuoy className="size-5 shrink-0" aria-hidden />
                 Help / Contact Support
-              </Link>
+              </NavLink>
             </nav>
             <div className="border-t border-sidebar-border px-3 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
               <SignOutButton variant="sidebar" />

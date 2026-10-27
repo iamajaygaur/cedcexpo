@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useActionState, useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, Mail } from "lucide-react";
+import { motion } from "motion/react";
+import { ArrowLeft, ArrowRight, Loader2, Mail } from "lucide-react";
 
 import type { ActionResult } from "@/lib/admin/action-result";
 import { requestAdminPasswordResetAction } from "@/lib/auth/password-reset";
@@ -103,14 +104,25 @@ export function ForgotPasswordForm({
             </p>
           ) : null}
 
-          <button
+          <motion.button
             type="submit"
             disabled={!configured || pending}
+            aria-busy={pending || undefined}
+            whileTap={!pending && configured ? { scale: 0.97 } : undefined}
             className="btn-shimmer gold-glow flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-bold text-primary-foreground transition-all duration-200 hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {pending ? "Sending…" : "Send reset link"}
-            {!pending && <ArrowRight className="size-4" aria-hidden />}
-          </button>
+            {pending ? (
+              <>
+                <Loader2 className="size-4 animate-spin" aria-hidden />
+                Sending…
+              </>
+            ) : (
+              <>
+                Send reset link
+                <ArrowRight className="size-4" aria-hidden />
+              </>
+            )}
+          </motion.button>
 
           <Link
             href="/login"

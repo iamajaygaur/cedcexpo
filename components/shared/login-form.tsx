@@ -35,6 +35,7 @@ export function LoginForm({
   switchingAccount = false,
 }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [activeRole, setActiveRole] = useState<"judge" | "admin">(
     noticeMessage ? "admin" : "judge",
   );
@@ -67,10 +68,12 @@ export function LoginForm({
       /* Chrome iOS autofill injects __gcruniqueid before hydrate — not our bug */
       suppressHydrationWarning
       onSubmit={() => {
-        // Sync only — do not setState here (React re-render can drop FormData).
+        // Sync only for password type — do not setState before submit (FormData).
         if (passwordRef.current) {
           passwordRef.current.type = "password";
         }
+        // Defer busy UI so the browser can post the form first.
+        queue Promise.resolve().then(() => setSubmitting(true));
       }}
     >
       <div className="space-y-2">
@@ -279,15 +282,33 @@ export function LoginForm({
         </motion.p>
       )}
 
-      <button
+      <motion.button
         type="submit"
         id="login-submit-btn"
-        disabled={!configured}
+        disabled={!configured || submitting}
+        aria-busy={submitting || undefined}
+        whileTap={configured && !submitting ? { scale: 0.97 } : undefined}
         className="btn-shimmer gold-glow flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-bold text-primary-foreground transition-all duration-200 hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {configured ? "Log In to Dashboard" : "Configure env first"}
-        {configured && <ArrowRight className="size-4" aria-hidden />}
-      </button>
+        {submitting ? (
+          <>
+            <motion.span
+              className="size-4 rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 0.7, repeat: Infinity, ease: "linear" }}
+              aria-hidden
+            />
+            Signing in…
+          </>
+        ) : configured ? (
+          <>
+            Log In to Dashboard
+            <ArrowRight className="size-4" aria-hidden />
+          </>
+        ) : (
+          "Configure env first"
+        )}
+      </motion.button>
     </form>
   );
 }

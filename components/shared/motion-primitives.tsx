@@ -1,14 +1,17 @@
 "use client";
 
-import { motion } from "motion/react";
+import { Loader2 } from "lucide-react";
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+} from "motion/react";
 import { cn } from "@/lib/utils";
+
+export const EASE_EXPO = [0.16, 1, 0.3, 1] as const;
 
 /* ── Shared Motion Variants ─────────────────────────────────── */
 
-/**
- * Container variant: staggers children on mount.
- * Use as `variants={staggerContainer}` on a parent `motion.div`.
- */
 export const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
@@ -17,25 +20,17 @@ export const staggerContainer = {
   },
 } as const;
 
-/**
- * Item variant: fade-up entrance.
- * Use as `variants={fadeUpItem}` on child `motion.div` elements.
- */
 export const fadeUpItem = {
   hidden: { opacity: 0, y: 14 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] as const },
+    transition: { duration: 0.4, ease: EASE_EXPO },
   },
 } as const;
 
 /* ── Stagger Container ──────────────────────────────────────── */
 
-/**
- * A motion.div that staggers its children on mount.
- * Wrap any section (KPI grid, card list, etc.) to get cascade animations.
- */
 export function StaggerContainer({
   children,
   className,
@@ -60,10 +55,6 @@ export function StaggerContainer({
 
 /* ── Fade-Up Item ───────────────────────────────────────────── */
 
-/**
- * A motion.div child that fades up into view.
- * Must be inside a StaggerContainer (or a parent with stagger variants).
- */
 export function FadeUpItem({
   children,
   className,
@@ -78,12 +69,56 @@ export function FadeUpItem({
   );
 }
 
+/* ── FadeIn (standalone mount) ──────────────────────────────── */
+
+export function FadeIn({
+  children,
+  className,
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  const reduced = useReducedMotion();
+  return (
+    <motion.div
+      className={className}
+      initial={reduced ? false : { opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, ease: EASE_EXPO, delay }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ── Pressable (click feedback wrapper) ─────────────────────── */
+
+export function Pressable({
+  children,
+  className,
+  disabled,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  disabled?: boolean;
+}) {
+  const reduced = useReducedMotion();
+  return (
+    <motion.div
+      className={cn("inline-flex", className)}
+      whileTap={reduced || disabled ? undefined : { scale: 0.97 }}
+      whileHover={reduced || disabled ? undefined : { y: -1 }}
+      transition={{ duration: 0.15 }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 /* ── Animated Card ──────────────────────────────────────────── */
 
-/**
- * A card wrapper with fade-up entrance + hover lift micro-interaction.
- * Designed for list/grid items (teams, groups, judges, etc.).
- */
 export function AnimatedCard({
   children,
   className,
@@ -93,10 +128,14 @@ export function AnimatedCard({
   className?: string;
   hoverLift?: number;
 }) {
+  const reduced = useReducedMotion();
   return (
     <motion.div
       variants={fadeUpItem}
-      whileHover={{ y: hoverLift, transition: { duration: 0.2 } }}
+      whileHover={
+        reduced ? undefined : { y: hoverLift, transition: { duration: 0.2 } }
+      }
+      whileTap={reduced ? undefined : { scale: 0.995 }}
       className={cn(
         "dash-metric transition-shadow hover:shadow-md",
         className,
@@ -109,9 +148,6 @@ export function AnimatedCard({
 
 /* ── Animated Progress Bar ──────────────────────────────────── */
 
-/**
- * A progress bar that animates its width from 0 on mount.
- */
 export function AnimatedBar({
   percent,
   className,
@@ -136,9 +172,91 @@ export function AnimatedBar({
       animate={{ width: `${Math.min(100, percent)}%` }}
       transition={{
         duration: 0.7,
-        ease: [0.16, 1, 0.3, 1] as const,
+        ease: EASE_EXPO,
         delay,
       }}
     />
+  );
+}
+
+/* ── Loading Spinner ────────────────────────────────────────── */
+
+export function LoadingSpinner({
+  className,
+  label = "Loading",
+}: {
+  className?: string;
+  label?: string;
+}) {
+  return (
+    <span
+      className={cn("inline-flex items-center gap-2 text-sm text-muted-foreground", className)}
+      role="status"
+      aria-live="polite"
+    >
+      <Loader2 className="size-4 animate-spin text-primary" aria-hidden />
+      <span>{label}</span>
+    </span>
+  );
+}
+
+/* ── Inline pending strip (forms) ───────────────────────────── */
+
+export function PendingStatus({
+  show,
+  label = "Working…",
+}: {
+  show: boolean;
+  label?: string;
+}) {
+  return (
+    <AnimatePresence initial={false}>
+      {show ? (
+        <motion.p
+          key="pending"
+          role="status"
+          aria-live="polite"
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.2, ease: EASE_EXPO }}
+          className="overflow-hidden text-xs text-muted-foreground"
+        >
+          <span className="inline-flex items-center gap-2 py-0.5">
+            <Loader2 className="size-3.5 animate-spin text-primary" aria-hidden />
+            {label}
+          </span>
+        </motion.p>
+      ) : null}
+    </AnimatePresence>
+  );
+}
+
+/* ── Full-block busy overlay (dialogs / panels) ─────────────── */
+
+export function BusyOverlay({
+  show,
+  label = "Please wait…",
+}: {
+  show: boolean;
+  label?: string;
+}) {
+  return (
+    <AnimatePresence>
+      {show ? (
+        <motion.div
+          key="busy"
+          className="absolute inset-0 z-20 flex items-center justify-center rounded-[inherit] bg-card/70 backdrop-blur-[2px]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.18 }}
+          aria-busy
+          aria-live="polite"
+        >
+          <LoadingSpinner label={label} />
+        </motion.div>
+      ) : null}
+    </AnimatePresence>
   );
 }

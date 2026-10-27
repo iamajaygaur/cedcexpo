@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useRef, useState } from "react";
 
+import { PendingStatus } from "@/components/shared/motion-primitives";
 import { showAppFeedbackFromResult } from "@/components/shared/app-feedback";
 import type { ActionResult } from "@/lib/admin/action-result";
 import { cn } from "@/lib/utils";
@@ -58,11 +59,22 @@ export function AdminActionForm({
   }, [pending, state, onSuccess, quietSuccess]);
 
   return (
-    <form id={id} action={formAction} className={cn("space-y-3", className)}>
-      {children}
-      {pending ? (
-        <p className="text-xs text-muted-foreground">{pendingLabel}</p>
-      ) : null}
+    <form
+      id={id}
+      action={formAction}
+      className={cn("relative space-y-3", className)}
+      aria-busy={pending || undefined}
+    >
+      <fieldset
+        disabled={pending}
+        className={cn(
+          "min-w-0 space-y-3 border-0 p-0 transition-opacity duration-200",
+          pending && "opacity-70",
+        )}
+      >
+        {children}
+      </fieldset>
+      <PendingStatus show={pending} label={pendingLabel} />
       {formError && !pending ? (
         <p className="text-sm text-destructive" role="alert">
           {formError}

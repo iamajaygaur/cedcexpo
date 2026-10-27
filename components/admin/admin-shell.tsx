@@ -24,6 +24,7 @@ import { AppFeedbackHost } from "@/components/shared/app-feedback";
 import { AppLogo } from "@/components/shared/app-logo";
 import { AppTopBar } from "@/components/shared/app-top-bar";
 import { IdleSessionGuard } from "@/components/shared/idle-session-guard";
+import { NavLink } from "@/components/shared/nav-link";
 import { NavigationProgress } from "@/components/shared/navigation-progress";
 import { OfflineBanner } from "@/components/shared/offline-banner";
 import { SignOutButton } from "@/components/shared/sign-out-button";
@@ -239,9 +240,10 @@ function SidebarNav({
               const active = isActivePath(pathname, href);
               return (
                 <li key={href}>
-                  <Link
+                  <NavLink
                     href={href}
                     prefetch
+                    showSpinner
                     onClick={onNavigate}
                     className={cn(
                       "group relative flex min-h-11 touch-manipulation items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium transition-colors",
@@ -261,7 +263,7 @@ function SidebarNav({
                       aria-hidden
                     />
                     <span className="truncate">{label}</span>
-                  </Link>
+                  </NavLink>
                 </li>
               );
             })}
