@@ -43,7 +43,7 @@ export function PwaInstallHint() {
 
   if (deferred) {
     return (
-      <div className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border bg-card px-3 py-2 text-sm">
+      <div className="flex flex-wrap items-center justify-between gap-2 dash-panel px-3 py-2 text-sm">
         <span>Install CEDC Expo for quicker judging access.</span>
         <div className="flex gap-2">
           <Button
@@ -72,7 +72,7 @@ export function PwaInstallHint() {
 
   if (isIos) {
     return (
-      <div className="rounded-md border border-border bg-card px-3 py-2 text-sm text-muted-foreground">
+      <div className="dash-panel px-3 py-2 text-sm text-muted-foreground">
         On iPhone/iPad: tap Share, then{" "}
         <strong className="text-foreground">Add to Home Screen</strong> for the
         installable PWA.

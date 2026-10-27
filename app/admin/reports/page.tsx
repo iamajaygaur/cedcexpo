@@ -34,7 +34,7 @@ export default async function ReportsPage({ searchParams }: PageProps) {
         <h1 className="mb-6 text-2xl font-bold tracking-tight md:text-3xl">
           Reports & Analytics
         </h1>
-        <p className="rounded-md border border-dashed border-border px-4 py-10 text-center text-sm text-muted-foreground">
+        <p className="dash-empty text-sm text-muted-foreground">
           Create an event to generate reports.
         </p>
       </div>

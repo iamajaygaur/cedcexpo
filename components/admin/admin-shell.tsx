@@ -181,7 +181,7 @@ export function AdminShell({
           onOpenNav={() => setOpen(true)}
           compactAccount
         />
-        <main className="min-w-0 px-3 py-4 sm:px-4 sm:py-6 md:px-8 md:py-8">
+        <main className="min-w-0 bg-[color-mix(in_srgb,var(--surface)_92%,white)] px-3 py-4 sm:px-4 sm:py-6 md:px-8 md:py-8">
           {children}
         </main>
       </div>

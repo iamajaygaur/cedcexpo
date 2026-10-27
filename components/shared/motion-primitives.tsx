@@ -98,7 +98,7 @@ export function AnimatedCard({
       variants={fadeUpItem}
       whileHover={{ y: hoverLift, transition: { duration: 0.2 } }}
       className={cn(
-        "rounded-xl border border-border bg-card shadow-sm transition-shadow hover:shadow-md",
+        "dash-metric transition-shadow hover:shadow-md",
         className,
       )}
     >

@@ -505,7 +505,7 @@ export function EvaluationForm({
         </div>
 
         {/* Collapsed on mobile so scoring stays above the fold */}
-        <details className="w-full shrink-0 rounded-md border border-border bg-card lg:hidden">
+        <details className="w-full shrink-0 dash-panel lg:hidden">
           <summary className="cursor-pointer list-none px-3 py-2.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground marker:content-none [&::-webkit-details-marker]:hidden">
             <span className="flex items-center justify-between gap-2">
               Team Members
@@ -531,7 +531,7 @@ export function EvaluationForm({
           </div>
         </details>
 
-        <aside className="hidden w-64 shrink-0 rounded-md border border-border bg-card p-4 lg:block">
+        <aside className="hidden w-64 shrink-0 dash-panel p-4 lg:block">
           <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
             Team Members
           </p>
@@ -550,7 +550,7 @@ export function EvaluationForm({
       </header>
 
       {/* Instructions — compact on phone */}
-      <div className="flex gap-2.5 rounded-md border border-border bg-muted/60 px-3 py-2.5 text-xs text-muted-foreground sm:gap-3 sm:px-4 sm:py-3 sm:text-sm">
+      <div className="flex gap-2.5 dash-panel bg-muted/40 px-3 py-2.5 text-xs text-muted-foreground sm:gap-3 sm:px-4 sm:py-3 sm:text-sm">
         <Info
           className="mt-0.5 size-3.5 shrink-0 text-primary sm:size-4"
           aria-hidden
@@ -563,7 +563,7 @@ export function EvaluationForm({
       </div>
 
       {criteria.length === 0 ? (
-        <p className="rounded-md border border-dashed border-border px-4 py-8 text-center text-sm text-muted-foreground">
+        <p className="dash-empty py-8 text-sm text-muted-foreground">
           No evaluation criteria configured for this event yet.
         </p>
       ) : (
@@ -580,7 +580,7 @@ export function EvaluationForm({
             return (
               <section
                 key={criterion.id}
-                className="rounded-md border border-border bg-card p-3 shadow-sm sm:p-5"
+                className="dash-metric p-3 sm:p-5"
               >
                 {/* Title row + inline score on mobile */}
                 <div className="flex items-start gap-2.5 sm:gap-3">
@@ -752,7 +752,7 @@ export function EvaluationForm({
       )}
 
       {/* ABET reference — collapsed by default on phones */}
-      <details className="rounded-md border border-border bg-muted/50 sm:hidden">
+      <details className="dash-panel bg-muted/40 sm:hidden">
         <summary className="cursor-pointer list-none px-4 py-3 text-sm font-bold text-foreground marker:content-none [&::-webkit-details-marker]:hidden">
           <span className="flex items-center justify-between gap-2">
             ABET Outcomes Reference
@@ -775,7 +775,7 @@ export function EvaluationForm({
         </div>
       </details>
 
-      <section className="hidden rounded-md border border-border bg-muted/50 px-5 py-4 sm:block">
+      <section className="hidden dash-panel bg-muted/40 px-5 py-4 sm:block">
         <h2 className="text-sm font-bold text-foreground">
           Note — ABET Engineering Criteria Program Educational Outcomes
         </h2>
@@ -792,7 +792,7 @@ export function EvaluationForm({
       {/* Sticky score + submit — hide while the virtual keyboard is open */}
       <div
         className={cn(
-          "fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_20px_rgba(0,0,0,0.06)] backdrop-blur transition-transform duration-200 md:left-[min(260px,30vw)] md:z-40 md:translate-y-0 md:pointer-events-auto",
+          "fixed inset-x-0 bottom-0 z-30 border-t border-[color-mix(in_srgb,var(--cu-gold)_28%,var(--border))] bg-card/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_28px_rgba(25,28,29,0.08)] backdrop-blur transition-transform duration-200 md:left-[min(260px,30vw)] md:z-40 md:translate-y-0 md:pointer-events-auto",
           keyboardOpen
             ? "pointer-events-none translate-y-full md:translate-y-0"
             : "translate-y-0",
@@ -864,7 +864,7 @@ export function EvaluationForm({
           aria-modal="true"
           aria-labelledby="submit-eval-title"
         >
-          <div className="w-full max-w-md rounded-md bg-card p-6 shadow-xl">
+          <div className="w-full max-w-md dash-panel p-6 shadow-xl">
             <h2 id="submit-eval-title" className="text-lg font-semibold">
               Submit evaluation?
             </h2>

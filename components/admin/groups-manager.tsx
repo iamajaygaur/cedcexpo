@@ -238,7 +238,7 @@ export function GroupsManager({
 
                 <div className="flex flex-1 flex-col px-4 py-3">
                   {group.members.length === 0 ? (
-                    <div className="mb-2 flex flex-1 flex-col items-center justify-center gap-2 rounded-md border border-dashed border-border bg-muted/25 px-3 py-7 text-center">
+                    <div className="mb-2 flex flex-1 flex-col items-center justify-center gap-2 dash-empty px-3 py-7">
                       <Users
                         className="size-5 text-muted-foreground/70"
                         aria-hidden
@@ -339,7 +339,7 @@ export function GroupsManager({
           </DialogHeader>
 
           {groups.length > 0 ? (
-            <div className="rounded-md border border-border bg-muted/40 px-3 py-2.5">
+            <div className="dash-panel bg-muted/40 px-3 py-2.5">
               <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 Already created
               </p>
@@ -455,7 +455,7 @@ export function GroupsManager({
                   setManageGroup(null);
                   router.refresh();
                 }}
-                className="space-y-2 rounded-md border border-border p-3"
+                className="space-y-2 dash-metric p-3"
               >
                 <input type="hidden" name="id" value={manageGroup.id} />
                 <input type="hidden" name="event_id" value={eventId} />
@@ -530,7 +530,7 @@ export function GroupsManager({
                     return (
                       <li
                         key={m.id}
-                        className="flex items-center justify-between gap-2 rounded-md border border-border px-3 py-2"
+                        className="flex items-center justify-between gap-2 dash-metric px-3 py-2"
                       >
                         <span className="flex min-w-0 items-center gap-2 text-sm">
                           <span

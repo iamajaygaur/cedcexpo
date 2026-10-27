@@ -37,7 +37,7 @@ export default async function ResultsPage({ searchParams }: PageProps) {
           events={events}
         />
       ) : (
-        <p className="rounded-md border border-dashed border-border px-4 py-10 text-center text-sm text-muted-foreground">
+        <p className="dash-empty text-sm text-muted-foreground">
           Create an event and collect submitted evaluations to see rankings.
         </p>
       )}

@@ -28,11 +28,11 @@ export default async function JudgeProjectsPage() {
       />
 
       {!workspace.judge ? (
-        <p className="rounded-md border border-dashed border-border px-4 py-10 text-center text-sm text-muted-foreground">
+        <p className="dash-empty text-sm text-muted-foreground">
           No judge profile found for this account.
         </p>
       ) : workspace.blockReason === "event_ended" ? (
-        <div className="rounded-md border border-border bg-muted/40 px-4 py-10 text-center">
+        <div className="dash-empty">
           <h2 className="text-lg font-semibold">This expo has ended</h2>
           <p className="mx-auto mt-2 max-w-lg text-sm text-muted-foreground">
             Judging is closed for{" "}
@@ -44,7 +44,7 @@ export default async function JudgeProjectsPage() {
           </Button>
         </div>
       ) : workspace.projects.length === 0 ? (
-        <div className="space-y-3 rounded-md border border-dashed border-border px-4 py-10 text-center text-sm text-muted-foreground">
+        <div className="space-y-3 dash-empty text-sm text-muted-foreground">
           <p>No assigned projects yet.</p>
           <Button asChild variant="outline" size="sm">
             <Link href="/judge/dashboard">Back to dashboard</Link>

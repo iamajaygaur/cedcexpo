@@ -284,7 +284,7 @@ export function ReportsView({
       )}
 
       {tableMissing ? (
-        <p className="rounded-md border border-dashed border-border px-4 py-3 text-sm text-muted-foreground">
+        <p className="dash-empty py-3 text-sm text-muted-foreground">
           Report history needs{" "}
           <code className="text-xs">supabase/APPLY_REPORT_JOBS.sql</code> in
           the Supabase SQL editor. Charts and exports still work below.
@@ -292,7 +292,7 @@ export function ReportsView({
       ) : null}
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <article className="rounded-2xl border border-border bg-card p-5 shadow-sm md:col-span-1">
+        <article className="dash-panel p-5 md:col-span-1">
           <div className="mb-1 flex items-start justify-between gap-2">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
@@ -314,7 +314,7 @@ export function ReportsView({
           />
         </article>
 
-        <article className="rounded-2xl border border-border bg-card p-5 shadow-sm md:col-span-1">
+        <article className="dash-panel p-5 md:col-span-1">
           <div className="mb-1 flex items-start justify-between gap-2">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
@@ -332,7 +332,7 @@ export function ReportsView({
           />
         </article>
 
-        <article className="rounded-2xl border border-border bg-card p-5 shadow-sm md:col-span-2 xl:col-span-2">
+        <article className="dash-panel p-5 md:col-span-2 xl:col-span-2">
           <div className="mb-1 flex items-start justify-between gap-2">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
@@ -348,7 +348,7 @@ export function ReportsView({
       </section>
 
       <section className="grid gap-4 lg:grid-cols-5 lg:gap-5">
-        <article className="relative overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm lg:col-span-3 lg:p-6">
+        <article className="dash-panel relative overflow-hidden p-5 lg:col-span-3 lg:p-6">
           <span
             className="absolute inset-y-4 left-0 w-1 rounded-full bg-cu-gold"
             aria-hidden
@@ -379,7 +379,7 @@ export function ReportsView({
           </div>
         </article>
 
-        <article className="rounded-2xl border border-border bg-card p-5 shadow-sm lg:col-span-2 lg:p-6">
+        <article className="dash-panel p-5 lg:col-span-2 lg:p-6">
           <div className="mb-3 flex items-start justify-between gap-3">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">

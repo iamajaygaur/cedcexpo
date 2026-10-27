@@ -16,7 +16,7 @@ export default async function AdminDashboardPage() {
   if (!event) {
     const latest = events[0] ?? null;
     return (
-      <div className="rounded-md border border-dashed border-border bg-muted/40 px-4 py-10 text-center">
+      <div className="dash-empty">
         {!hasAnyEvent ? (
           <>
             <p className="text-sm text-muted-foreground">
@@ -76,7 +76,7 @@ export default async function AdminDashboardPage() {
   const snapshot = await loadMonitorSnapshot(supabase, event.id);
   if (!snapshot) {
     return (
-      <div className="rounded-md border border-dashed border-border bg-muted/40 px-4 py-10 text-center">
+      <div className="dash-empty">
         <p className="text-sm text-muted-foreground">
           Could not load live data for the active event.
         </p>

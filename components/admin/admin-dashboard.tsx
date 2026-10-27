@@ -474,7 +474,7 @@ export function AdminDashboard({ snapshot }: AdminDashboardProps) {
           </div>
 
           {groups.length === 0 ? (
-            <p className="rounded-xl border border-dashed border-border px-4 py-10 text-center text-sm text-muted-foreground">
+            <p className="dash-empty text-sm text-muted-foreground">
               No color groups yet. Create groups to track live progress.
             </p>
           ) : (

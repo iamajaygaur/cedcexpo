@@ -365,7 +365,7 @@ export function JudgesImportDialog({
             {judges.length > 0 ? (
               <div
                 className={cn(
-                  "flex flex-col overflow-hidden rounded-md border border-border bg-muted/40 text-sm",
+                  "flex flex-col overflow-hidden dash-panel bg-muted/40 text-sm",
                   errors.length === 0 && "lg:col-span-2",
                 )}
               >

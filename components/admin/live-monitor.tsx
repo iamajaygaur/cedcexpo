@@ -326,7 +326,7 @@ export function LiveMonitor({
       <section>
         <h2 className="mb-4 text-lg font-semibold">Group live status</h2>
         {filteredGroups.length === 0 ? (
-          <p className="rounded-2xl border border-dashed border-border px-4 py-8 text-center text-sm text-muted-foreground">
+          <p className="dash-empty text-sm text-muted-foreground">
             No color groups for this event yet.
           </p>
         ) : (

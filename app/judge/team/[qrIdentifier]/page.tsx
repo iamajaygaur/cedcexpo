@@ -15,7 +15,7 @@ export default async function JudgeTeamQrPage({ params }: PageProps) {
 
   if (result.status === "not_found") {
     return (
-      <div className="mx-auto max-w-lg space-y-4 rounded-md border border-border bg-card p-8 text-center">
+      <div className="mx-auto max-w-lg dash-panel space-y-4 p-8 text-center">
         <h1 className="text-xl font-semibold">Team not found</h1>
         <p className="text-sm text-muted-foreground">
           This QR code does not match a team in the system. It may have been
@@ -34,7 +34,7 @@ export default async function JudgeTeamQrPage({ params }: PageProps) {
 
   if (result.status === "no_judge") {
     return (
-      <div className="mx-auto max-w-lg space-y-4 rounded-md border border-border bg-card p-8 text-center">
+      <div className="mx-auto max-w-lg dash-panel space-y-4 p-8 text-center">
         <h1 className="text-xl font-semibold">Judge profile required</h1>
         <p className="text-sm text-muted-foreground">
           You are signed in, but there is no active judge record for this
@@ -52,7 +52,7 @@ export default async function JudgeTeamQrPage({ params }: PageProps) {
 
   if (result.status === "unassigned") {
     return (
-      <div className="mx-auto max-w-lg space-y-4 rounded-md border border-border bg-card p-8 text-center">
+      <div className="mx-auto max-w-lg dash-panel space-y-4 p-8 text-center">
         <h1 className="text-xl font-semibold">Team not assigned</h1>
         <p className="text-sm text-muted-foreground">
           <strong>
@@ -69,7 +69,7 @@ export default async function JudgeTeamQrPage({ params }: PageProps) {
 
   // wrong_group — QR never bypasses authorization
   return (
-    <div className="mx-auto max-w-lg space-y-5 rounded-md border border-border bg-card p-8 text-center">
+    <div className="mx-auto max-w-lg space-y-5 dash-panel p-8 text-center">
       <h1 className="text-xl font-semibold">Wrong judging group</h1>
       <p className="text-sm text-muted-foreground">
         <strong>

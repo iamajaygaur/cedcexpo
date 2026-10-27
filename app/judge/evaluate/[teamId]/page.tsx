@@ -84,7 +84,7 @@ export default async function EvaluateTeamPage({
       );
 
     return (
-      <div className="mx-auto max-w-lg space-y-4 rounded-md border border-border bg-card p-8 text-center">
+      <div className="mx-auto max-w-lg dash-panel space-y-4 p-8 text-center">
         <h1 className="text-xl font-semibold">{title}</h1>
         <p className="text-sm text-muted-foreground">{message}</p>
         <div className="flex flex-wrap justify-center gap-2">
@@ -106,7 +106,7 @@ export default async function EvaluateTeamPage({
       {adminPreview || access.workspace.isAdminPreview ? (
         <div
           role="status"
-          className="mb-4 rounded-md border border-primary/30 bg-primary-container/25 px-4 py-3 text-sm text-on-primary-container"
+          className="mb-4 dash-panel border-primary/30 bg-primary-container/25 px-4 py-3 text-sm text-on-primary-container"
         >
           <strong>Admin preview.</strong> You can review this evaluation form,
           but scores cannot be saved while signed in as admin. Sign in as the
