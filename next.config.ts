@@ -1,5 +1,11 @@
+import { readFileSync } from "node:fs";
 import os from "node:os";
+import { join } from "node:path";
 import type { NextConfig } from "next";
+
+const packageJson = JSON.parse(
+  readFileSync(join(__dirname, "package.json"), "utf8"),
+) as { version: string };
 
 /**
  * Phones on Wi‑Fi hit the Mac via LAN IP (192.168.x.x), not localhost.
@@ -60,6 +66,11 @@ function lanDevOrigins(): string[] {
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: lanDevOrigins(),
+
+  // Surfaced as process.env.NEXT_PUBLIC_APP_VERSION (see lib/app-version.ts).
+  env: {
+    NEXT_PUBLIC_APP_VERSION: packageJson.version,
+  },
 
   // Prevent accidental caching of authenticated responses at the CDN/edge layer.
   async headers() {

@@ -4,7 +4,7 @@ Judging and evaluation PWA for **CU Denver College of Engineering, Design and Co
 
 **Product name:** CEDC Expo  
 **Institution:** University of Colorado Denver · CEDC  
-**Current version:** [1.0.0](./CHANGELOG.md) · see [Releases](#releases)
+**Current version:** [1.0.1](./CHANGELOG.md) · shown in-app as `v1.0.1` · see [Releases](#releases)
 
 ## Quick start
 
@@ -62,15 +62,19 @@ We use **trunk-based development** on `main` with [SemVer](https://semver.org/) 
 
 | Version | Tag | What it marks |
 |---------|-----|----------------|
+| 1.0.1 | `v1.0.1` | In-app version badge (login, sidebars, footers, Settings) |
 | 1.0.0 | `v1.0.0` | Expo-ready: reliability, Groups/Judges boards, click affordances |
 | 0.3.0 | `v0.3.0` | Brand polish, e2e CI, motion feedback |
 | 0.2.0 | `v0.2.0` | Commercial visual redesign |
 | 0.1.0 | `v0.1.0` | Initial judging app |
 
+The UI reads `package.json` → `NEXT_PUBLIC_APP_VERSION` (see `lib/app-version.ts`).  
+**Always bump `package.json` when you tag** so the badge matches the release.
+
 **Ship a new version**
 
 1. Land work on `main` as usual.
-2. Update `CHANGELOG.md` (`Unreleased` → new section) and bump `package.json` `version`.
+2. Move notes from `CHANGELOG.md` `Unreleased` into a new `X.Y.Z` section; bump `package.json` `version`.
 3. Commit, then tag: `git tag -a vX.Y.Z -m "vX.Y.Z"` and `git push origin main --tags`.
 4. Publish a GitHub Release from that tag (`gh release create vX.Y.Z`).
 

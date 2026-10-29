@@ -11,6 +11,13 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 - Nothing queued yet — next work lands here before the next tag.
 
+## [1.0.1] — 2026-10-29
+
+### Added
+
+- In-app version badge (`vX.Y.Z`) on login, sidebars, footers, and Admin → Settings
+- `NEXT_PUBLIC_APP_VERSION` injected from `package.json` so UI always matches the cut
+
 ## [1.0.0] — 2026-10-29
 
 Expo-ready release: reliability for judging day, refreshed Groups/Judges admin,
@@ -94,7 +101,8 @@ Initial product baseline.
 
 - Judge sign-out redirecting to the error page
 
-[Unreleased]: https://github.com/iamajaygaur/cedcexpo/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/iamajaygaur/cedcexpo/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/iamajaygaur/cedcexpo/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/iamajaygaur/cedcexpo/compare/v0.3.0...v1.0.0
 [0.3.0]: https://github.com/iamajaygaur/cedcexpo/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/iamajaygaur/cedcexpo/compare/v0.1.0...v0.2.0

@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 
 import { AppLogo } from "@/components/shared/app-logo";
+import { AppVersion } from "@/components/shared/app-version";
 
 const bentoFeatures = [
   {
@@ -144,6 +145,10 @@ export function HomeHero() {
         <p className="mx-auto max-w-full text-balance break-words">
           © {COPYRIGHT_YEAR} University of Colorado Denver · College of
           Engineering, Design and Computing
+          <span className="mx-1.5" aria-hidden>
+            ·
+          </span>
+          <AppVersion />
         </p>
       </footer>
     </div>

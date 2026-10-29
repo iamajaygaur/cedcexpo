@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowLeft, CheckCircle2, Shield } from "lucide-react";
 
+import { AppVersion } from "@/components/shared/app-version";
 import { LoginForm } from "@/components/shared/login-form";
 
 type LoginViewProps = {
@@ -212,6 +213,8 @@ export function LoginView({
 
               <p className="text-[10px] leading-relaxed text-muted-foreground/60">
                 © {year} University of Colorado Denver | College of Engineering, Design and Computing
+                <span className="mx-1.5" aria-hidden>·</span>
+                <AppVersion />
                 <span className="mx-1.5" aria-hidden>·</span>
                 <Link href="/privacy" className="hover:text-foreground">
                   Privacy Policy

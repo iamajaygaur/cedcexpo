@@ -5,6 +5,7 @@ import { SettingsForm } from "@/components/admin/settings-form";
 import { AppFooter } from "@/components/shared/app-footer";
 import { resolveOperationalEvent } from "@/lib/admin/event-context";
 import { requireAdminClient } from "@/lib/admin/guard";
+import { APP_VERSION_LABEL } from "@/lib/app-version";
 import { getAppOrigin } from "@/lib/utils/app-url";
 
 type PageProps = {
@@ -63,6 +64,12 @@ export default async function SettingsPage({ searchParams }: PageProps) {
       <section className="dash-form-panel">
         <h2 className="mb-2 text-lg font-semibold">App & PWA</h2>
         <dl className="space-y-2 text-sm">
+          <div className="flex flex-wrap gap-2">
+            <dt className="font-medium text-muted-foreground">Version</dt>
+            <dd className="tabular-nums font-semibold text-foreground">
+              {APP_VERSION_LABEL}
+            </dd>
+          </div>
           <div className="flex flex-wrap gap-2">
             <dt className="font-medium text-muted-foreground">App URL</dt>
             <dd className="break-all">{appOrigin}</dd>

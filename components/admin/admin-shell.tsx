@@ -23,6 +23,7 @@ import {
 import { AppFeedbackHost } from "@/components/shared/app-feedback";
 import { AppLogo } from "@/components/shared/app-logo";
 import { AppTopBar } from "@/components/shared/app-top-bar";
+import { AppVersion } from "@/components/shared/app-version";
 import { IdleSessionGuard } from "@/components/shared/idle-session-guard";
 import { NavLink } from "@/components/shared/nav-link";
 import { NavigationProgress } from "@/components/shared/navigation-progress";
@@ -306,6 +307,9 @@ function SidebarFooter({ userName }: { userName?: string }) {
         </div>
       ) : null}
       <SignOutButton variant="sidebar" />
+      <p className="px-3 pt-2">
+        <AppVersion tone="sidebar" />
+      </p>
     </div>
   );
 }

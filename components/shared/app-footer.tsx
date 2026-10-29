@@ -1,7 +1,8 @@
-import { cn } from "@/lib/utils";
 import Link from "next/link";
 
+import { AppVersion } from "@/components/shared/app-version";
 import { supportMailto } from "@/lib/site-links";
+import { cn } from "@/lib/utils";
 
 type AppFooterProps = {
   supportEmail?: string | null;
@@ -26,7 +27,10 @@ export function AppFooter({
         className,
       )}
     >
-      <p className="text-sm font-bold text-primary">CEDC Expo</p>
+      <p className="text-sm font-bold text-primary">
+        CEDC Expo{" "}
+        <AppVersion className="ml-1 font-medium text-muted-foreground/80" />
+      </p>
       <nav
         className="mt-2 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground"
         aria-label="Footer"
