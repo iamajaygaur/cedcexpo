@@ -1,6 +1,7 @@
 import "server-only";
 
 import { createClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { TABLES } from "@/lib/supabase/tables";
 import type {
   Evaluation,
@@ -76,6 +77,10 @@ export type { WorkspaceOptions };
 export async function getJudgeWorkspace(
   options: WorkspaceOptions = {},
 ): Promise<JudgeWorkspace> {
+  if (!isSupabaseConfigured()) {
+    return emptyWorkspace({ blockReason: "not_signed_in" });
+  }
+
   const supabase = await createClient();
 
   const {
@@ -320,6 +325,10 @@ export type PreviewJudgeOption = {
 
 /** Admin helper: list active judges for dashboard preview. */
 export async function listJudgesForPreview(): Promise<PreviewJudgeOption[]> {
+  if (!isSupabaseConfigured()) {
+    return [];
+  }
+
   const supabase = await createClient();
   const { data, error } = await supabase
     .from(TABLES.judges)
