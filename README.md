@@ -3,7 +3,8 @@
 Judging and evaluation PWA for **CU Denver College of Engineering, Design and Computing** Capstone Design Expo events.
 
 **Product name:** CEDC Expo  
-**Institution:** University of Colorado Denver · CEDC
+**Institution:** University of Colorado Denver · CEDC  
+**Current version:** [1.0.0](./CHANGELOG.md) · see [Releases](#releases)
 
 ## Quick start
 
@@ -54,3 +55,23 @@ Next.js App Router · TypeScript · Tailwind CSS · shadcn/ui · Supabase (Auth,
 | Judge | `/judge/dashboard` |
 
 Same `/login` page; role comes from `profiles.role` (never from the client).
+
+## Releases
+
+We use **trunk-based development** on `main` with [SemVer](https://semver.org/) tags — the usual commercial pattern for a product this size (no long-lived release branches).
+
+| Version | Tag | What it marks |
+|---------|-----|----------------|
+| 1.0.0 | `v1.0.0` | Expo-ready: reliability, Groups/Judges boards, click affordances |
+| 0.3.0 | `v0.3.0` | Brand polish, e2e CI, motion feedback |
+| 0.2.0 | `v0.2.0` | Commercial visual redesign |
+| 0.1.0 | `v0.1.0` | Initial judging app |
+
+**Ship a new version**
+
+1. Land work on `main` as usual.
+2. Update `CHANGELOG.md` (`Unreleased` → new section) and bump `package.json` `version`.
+3. Commit, then tag: `git tag -a vX.Y.Z -m "vX.Y.Z"` and `git push origin main --tags`.
+4. Publish a GitHub Release from that tag (`gh release create vX.Y.Z`).
+
+Full notes: [CHANGELOG.md](./CHANGELOG.md).
