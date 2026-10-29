@@ -385,7 +385,7 @@ function TeamEditorForm({
 
           <button
             type="button"
-            className="mt-3 flex w-full items-center justify-center gap-2 dash-empty border-dashed px-3 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted/40"
+            className="ui-interactive-quiet mt-3 flex w-full items-center justify-center gap-2 dash-empty border-dashed px-3 py-3 text-sm font-medium text-muted-foreground"
             onClick={() => setMembers((prev) => [...prev, newRosterMember()])}
           >
             <Plus className="size-4" aria-hidden />

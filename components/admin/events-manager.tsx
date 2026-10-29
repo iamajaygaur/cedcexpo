@@ -371,10 +371,10 @@ function EventEditorForm({
                     type="button"
                     onClick={() => toggleDepartment(code)}
                     className={cn(
-                      "inline-flex h-10 min-w-14 items-center justify-center rounded-md border px-3 text-sm font-semibold transition-colors",
+                      "ui-interactive-quiet inline-flex h-10 min-w-14 items-center justify-center rounded-md border px-3 text-sm font-semibold",
                       selected
-                        ? "border-[#002022] bg-[#002022] text-white"
-                        : "border-border bg-background text-foreground hover:bg-muted",
+                        ? "border-[#002022] bg-[#002022] text-white hover:bg-[#002022]"
+                        : "border-border bg-background text-foreground",
                     )}
                     aria-pressed={selected}
                   >

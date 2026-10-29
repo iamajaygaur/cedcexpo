@@ -101,6 +101,12 @@ export function AdminShell({
 
   useEffect(() => {
     setOpen(false);
+    // Keep nav from jumping to the bottom after route/dialog remounts.
+    document
+      .querySelectorAll<HTMLElement>("[data-app-sidebar] .sidebar-scroll")
+      .forEach((el) => {
+        el.scrollTop = 0;
+      });
   }, [pathname]);
 
   useEffect(() => {
@@ -118,15 +124,17 @@ export function AdminShell({
   }, [open]);
 
   return (
-    /* overflow-x-clip (not hidden) keeps sticky top bar working while
-       stopping sideways rubber-band scroll past the viewport. */
-    <div className="flex w-full max-w-[100dvw] min-h-svh flex-1 overflow-x-clip bg-background">
+    /* Fixed sidebar + padded main: dialogs must not shove chrome sideways. */
+    <div className="relative w-full max-w-[100dvw] min-h-svh flex-1 overflow-x-clip bg-background">
       <IdleSessionGuard />
       <Suspense fallback={null}>
         <NavigationProgress />
       </Suspense>
 
-      <aside className="glass-sidebar sticky top-0 hidden h-dvh w-[min(272px,30vw)] shrink-0 flex-col overflow-hidden md:flex">
+      <aside
+        data-app-sidebar
+        className="glass-sidebar fixed inset-y-0 left-0 z-40 hidden flex-col overflow-hidden md:flex"
+      >
         <SidebarBrand />
         <SidebarNav pathname={pathname} className="sidebar-scroll flex-1" />
         <div className="border-t border-sidebar-border px-3 py-4">
@@ -174,7 +182,7 @@ export function AdminShell({
         </div>
       ) : null}
 
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="flex min-h-svh min-w-0 flex-col md:pl-[var(--app-sidebar-width)]">
         <OfflineBanner />
         <AppTopBar
           userName={userName}
@@ -182,7 +190,7 @@ export function AdminShell({
           onOpenNav={() => setOpen(true)}
           compactAccount
         />
-        <main className="min-w-0 bg-[color-mix(in_srgb,var(--surface)_92%,white)] px-3 py-4 sm:px-4 sm:py-6 md:px-8 md:py-8">
+        <main className="min-w-0 flex-1 bg-[color-mix(in_srgb,var(--surface)_92%,white)] px-3 py-4 sm:px-4 sm:py-6 md:px-8 md:py-8">
           {children}
         </main>
       </div>

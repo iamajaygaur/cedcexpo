@@ -138,7 +138,7 @@ export async function handleAdminCsvExport(
   searchParams: URLSearchParams,
 ): Promise<Response> {
   const headerList = await headers();
-  const rate = checkExportRateLimit(clientKeyFromHeaders(headerList));
+  const rate = await checkExportRateLimit(clientKeyFromHeaders(headerList));
   if (!rate.allowed) {
     return NextResponse.json(
       { error: "Too many export requests. Try again shortly." },

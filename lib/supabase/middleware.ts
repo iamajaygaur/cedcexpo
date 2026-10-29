@@ -45,9 +45,12 @@ export async function updateSession(request: NextRequest) {
   const sessionMode = sessionModeFromRequest(request);
 
   const isAdminPath = pathname.startsWith("/admin");
-  const isJudgePath = pathname.startsWith("/judge");
+  // Exact /judge or /judge/... — do not treat /judge-help as a judge route.
+  const isJudgePath =
+    pathname === "/judge" || pathname.startsWith("/judge/");
   const isLoginPath = pathname === "/login";
   const isForgotPasswordPath = pathname === "/forgot-password";
+  const isJudgeHelpPath = pathname === "/judge-help";
   const isResetPasswordPath = pathname === "/reset-password";
   const isAuthCallbackPath = pathname.startsWith("/api/auth/callback");
   const isProtected = isAdminPath || isJudgePath;
@@ -133,8 +136,13 @@ export async function updateSession(request: NextRequest) {
   const isSwitchingAccount =
     request.nextUrl.searchParams.get("switch") === "1";
 
-  // Recovery sessions must reach /reset-password; do not bounce them to dashboards.
-  if (isResetPasswordPath || isForgotPasswordPath || isAuthCallbackPath) {
+  // Recovery / unlock pages must stay reachable; do not bounce to dashboards.
+  if (
+    isResetPasswordPath ||
+    isForgotPasswordPath ||
+    isJudgeHelpPath ||
+    isAuthCallbackPath
+  ) {
     return supabaseResponse;
   }
 

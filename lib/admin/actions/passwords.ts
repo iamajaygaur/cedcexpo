@@ -106,7 +106,13 @@ export async function setJudgePasswordAction(
       return actionFail(updateError.message);
     }
 
+    const { clearJudgePasswordHelpMarkers } = await import(
+      "@/lib/auth/judge-help"
+    );
+    await clearJudgePasswordHelpMarkers(parsed.data.id);
+
     revalidatePath("/admin/judges");
+    revalidatePath("/admin/dashboard");
     return actionOk("Judge password updated. Share it securely.");
   } catch (e) {
     return actionFail(

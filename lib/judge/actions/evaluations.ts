@@ -86,7 +86,7 @@ export async function saveEvaluationDraftAction(
   try {
     const headerList = await headers();
     const { supabase, judgeId } = await requireJudgeClient();
-    const rate = checkEvaluationMutationRateLimit(
+    const rate = await checkEvaluationMutationRateLimit(
       judgeId || clientKeyFromHeaders(headerList),
     );
     if (!rate.allowed) {
@@ -183,7 +183,7 @@ export async function submitEvaluationAction(
   try {
     const headerList = await headers();
     const { supabase, judgeId } = await requireJudgeClient();
-    const rate = checkEvaluationMutationRateLimit(
+    const rate = await checkEvaluationMutationRateLimit(
       judgeId || clientKeyFromHeaders(headerList),
     );
     if (!rate.allowed) {

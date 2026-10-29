@@ -54,7 +54,9 @@ export async function requestAdminPasswordResetAction(
       );
     }
 
-    const ipRate = checkPasswordResetRateLimit(await clientKeyFromHeaders());
+    const ipRate = await checkPasswordResetRateLimit(
+      await clientKeyFromHeaders(),
+    );
     if (!ipRate.allowed) {
       return actionFail(
         "Too many reset requests. Please wait a minute and try again.",
@@ -71,7 +73,7 @@ export async function requestAdminPasswordResetAction(
     }
 
     const email = parsed.data.email.toLowerCase();
-    const emailRate = checkPasswordResetEmailRateLimit(email);
+    const emailRate = await checkPasswordResetEmailRateLimit(email);
     if (!emailRate.allowed) {
       return actionFail(
         "Too many reset requests for this email. Please wait a few minutes.",

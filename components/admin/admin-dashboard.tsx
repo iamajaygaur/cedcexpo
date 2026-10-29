@@ -494,12 +494,7 @@ export function AdminDashboard({ snapshot }: AdminDashboardProps) {
                   <motion.article
                     key={g.group.id}
                     variants={itemVariants}
-                    whileHover={
-                      reducedMotion
-                        ? undefined
-                        : { y: -3, transition: { duration: 0.2 } }
-                    }
-                    className="dash-group-card flex flex-col gap-3 p-4 transition-shadow hover:shadow-md sm:p-5"
+                    className="dash-group-card flex flex-col gap-3 p-4 sm:p-5"
                     style={
                       {
                         "--group-tint": token.hex,
@@ -651,9 +646,8 @@ function MetricCard({
   return (
     <motion.div
       variants={itemVariants}
-      whileHover={{ y: -2, transition: { duration: 0.2 } }}
       className={cn(
-        "flex h-full min-w-0 flex-col gap-2 px-3 py-3 transition-shadow hover:shadow-md sm:flex-row sm:items-start sm:gap-3 sm:px-4 sm:py-3.5",
+        "flex h-full min-w-0 flex-col gap-2 px-3 py-3 sm:flex-row sm:items-start sm:gap-3 sm:px-4 sm:py-3.5",
         featured ? "dash-panel--featured rounded-xl p-4 sm:p-5" : "dash-metric",
       )}
     >

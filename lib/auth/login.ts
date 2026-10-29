@@ -136,7 +136,7 @@ export async function attemptLogin(
   formData: FormData,
 ): Promise<LoginAttemptResult> {
   const headerList = await headers();
-  const rate = checkLoginRateLimit(clientKeyFromHeaders(headerList));
+  const rate = await checkLoginRateLimit(clientKeyFromHeaders(headerList));
   if (!rate.allowed) {
     return {
       ok: false,
@@ -164,7 +164,7 @@ export async function attemptLogin(
     };
   }
 
-  const userRate = checkLoginUsernameRateLimit(parsed.data.username);
+  const userRate = await checkLoginUsernameRateLimit(parsed.data.username);
   if (!userRate.allowed) {
     return {
       ok: false,

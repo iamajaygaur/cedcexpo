@@ -49,7 +49,7 @@ export function NavLink({
     <Link
       {...props}
       className={cn(
-        "transition-[transform,opacity,background-color,color] duration-150 ease-out active:scale-[0.98]",
+        "cursor-pointer transition-[transform,opacity,background-color,color] duration-150 ease-out active:scale-[0.98]",
         className,
       )}
     >

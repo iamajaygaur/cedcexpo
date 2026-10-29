@@ -39,6 +39,18 @@ export const forgotPasswordSchema = z.object({
 
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
 
+export const judgeHelpRequestSchema = z.object({
+  username: usernameOrEmailSchema,
+  note: z
+    .string()
+    .trim()
+    .max(200, "Keep the note under 200 characters.")
+    .optional()
+    .default(""),
+});
+
+export type JudgeHelpRequestInput = z.infer<typeof judgeHelpRequestSchema>;
+
 const resetPasswordField = z
   .string()
   .min(8, "Password must be at least 8 characters")

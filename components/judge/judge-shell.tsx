@@ -51,6 +51,11 @@ export function JudgeShell({
 
   useEffect(() => {
     setOpen(false);
+    document
+      .querySelectorAll<HTMLElement>("[data-app-sidebar] .sidebar-scroll")
+      .forEach((el) => {
+        el.scrollTop = 0;
+      });
   }, [pathname]);
 
   useEffect(() => {
@@ -68,14 +73,17 @@ export function JudgeShell({
   }, [open]);
 
   return (
-    <div className="flex w-full max-w-[100dvw] min-h-svh flex-1 overflow-x-clip bg-background">
+    <div className="relative w-full max-w-[100dvw] min-h-svh flex-1 overflow-x-clip bg-background">
       <IdleSessionGuard />
       <Suspense fallback={null}>
         <NavigationProgress />
       </Suspense>
 
       {/* ── Desktop sidebar ─────────────────────────────────── */}
-      <aside className="glass-sidebar sticky top-0 hidden h-dvh w-[min(260px,30vw)] shrink-0 flex-col overflow-hidden md:flex">
+      <aside
+        data-app-sidebar
+        className="glass-sidebar fixed inset-y-0 left-0 z-40 hidden flex-col overflow-hidden md:flex"
+      >
         <div className="flex items-center gap-3 border-b border-sidebar-border px-5 py-5">
           <div className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-none bg-white/08">
             <AppLogo href="/judge/dashboard" className="h-9 w-9" />
@@ -239,7 +247,7 @@ export function JudgeShell({
       ) : null}
 
       {/* ── Main content ─────────────────────────────────────── */}
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="flex min-h-svh min-w-0 flex-col md:pl-[var(--app-sidebar-width)]">
         <OfflineBanner />
         <AppTopBar
           userName={userName}
@@ -254,7 +262,7 @@ export function JudgeShell({
           <PwaInstallHint />
         </div>
 
-        <main className="min-w-0 bg-[color-mix(in_srgb,var(--surface)_92%,white)] px-3 py-4 sm:px-4 sm:py-5 md:px-8 md:py-8">
+        <main className="min-w-0 flex-1 bg-[color-mix(in_srgb,var(--surface)_92%,white)] px-3 py-4 sm:px-4 sm:py-5 md:px-8 md:py-8">
           {children}
         </main>
       </div>

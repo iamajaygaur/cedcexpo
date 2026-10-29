@@ -1,15 +1,18 @@
 import Link from "next/link";
 
 import { AdminDashboard } from "@/components/admin/admin-dashboard";
+import { PasswordHelpBanner } from "@/components/admin/password-help-banner";
 import { Button } from "@/components/ui/button";
 import { resolveActiveDashboardEvent } from "@/lib/admin/event-context";
 import { requireAdminClient } from "@/lib/admin/guard";
 import { loadMonitorSnapshot } from "@/lib/admin/monitor-data";
+import { listOpenPasswordHelpRequests } from "@/lib/auth/judge-help";
 import { requireRole } from "@/lib/auth/session";
 
 export default async function AdminDashboardPage() {
   await requireRole("admin");
   const { supabase } = await requireAdminClient();
+  const helpRequests = await listOpenPasswordHelpRequests(supabase);
   const { event, events, hasAnyEvent } =
     await resolveActiveDashboardEvent(supabase);
 
@@ -87,5 +90,10 @@ export default async function AdminDashboardPage() {
     );
   }
 
-  return <AdminDashboard snapshot={snapshot} />;
+  return (
+    <div className="space-y-4">
+      <PasswordHelpBanner requests={helpRequests} />
+      <AdminDashboard snapshot={snapshot} />
+    </div>
+  );
 }

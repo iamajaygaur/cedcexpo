@@ -187,6 +187,8 @@
     overflow-x: clip;
     overscroll-behavior-x: none;
     overscroll-behavior-y: none;
+    /* Reserve scrollbar space so dialogs don't shift the whole chrome */
+    scrollbar-gutter: stable;
   }
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-ring;
@@ -402,17 +404,110 @@
       0 4px 16px rgba(114, 92, 33, 0.2);
   }
 
-  /* Soft lift for interactive cards / list rows */
+  /* Safety net: every actionable control shows a pointer */
+  button:not(:disabled):not([aria-disabled="true"]),
+  [type="button"]:not(:disabled):not([aria-disabled="true"]),
+  [type="submit"]:not(:disabled):not([aria-disabled="true"]),
+  [type="reset"]:not(:disabled):not([aria-disabled="true"]),
+  [role="button"]:not(:disabled):not([aria-disabled="true"]),
+  summary,
+  a[href] {
+    cursor: pointer;
+  }
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
+  /*
+   * Uniform clickability affordances — use on any non-button surface that
+   * opens a detail, navigates, or toggles. Buttons already get cursor/hover
+   * from the Button component.
+   */
+  .ui-interactive {
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition:
+      transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 180ms ease,
+      background-color 180ms ease;
+  }
+  .ui-interactive:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--primary) 35%, var(--border));
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.75) inset,
+      0 8px 22px rgba(25, 28, 29, 0.1);
+  }
+  .ui-interactive:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(25, 28, 29, 0.08);
+  }
+  .ui-interactive:focus-visible {
+    outline: none;
+    border-color: var(--ring);
+    box-shadow:
+      0 0 0 3px color-mix(in srgb, var(--ring) 35%, transparent),
+      0 4px 14px rgba(25, 28, 29, 0.08);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ui-interactive,
+    .ui-interactive:hover,
+    .ui-interactive:active {
+      transition: none;
+      transform: none;
+    }
+  }
+
+  /* Quieter row/chip press (tables, pickers) — no lift, clear hover wash */
+  .ui-interactive-quiet {
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: background-color 150ms ease, border-color 150ms ease,
+      box-shadow 150ms ease, color 150ms ease;
+  }
+  .ui-interactive-quiet:hover {
+    background-color: color-mix(in srgb, var(--muted) 70%, white);
+  }
+  .ui-interactive-quiet:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 35%, transparent);
+  }
+
+  /* Legacy alias — same affordance as .ui-interactive */
   .ui-lift {
-    @apply transition-[transform,box-shadow] duration-200 ease-out;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition:
+      transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 180ms ease,
+      background-color 180ms ease;
   }
   .ui-lift:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(25, 28, 29, 0.12);
+    border-color: color-mix(in srgb, var(--primary) 35%, var(--border));
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.75) inset,
+      0 8px 22px rgba(25, 28, 29, 0.1);
   }
   .ui-lift:active {
     transform: translateY(0);
     box-shadow: 0 2px 8px rgba(25, 28, 29, 0.08);
+  }
+  .ui-lift:focus-visible {
+    outline: none;
+    border-color: var(--ring);
+    box-shadow:
+      0 0 0 3px color-mix(in srgb, var(--ring) 35%, transparent),
+      0 4px 14px rgba(25, 28, 29, 0.08);
   }
 
   /* Gradient text — CU Gold tones for light backgrounds */
@@ -674,12 +769,39 @@
   overflow-y: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  overscroll-behavior: contain;
 }
 .sidebar-scroll::-webkit-scrollbar {
   width: 0 !important;
   height: 0 !important;
   display: none !important;
   background: transparent;
+}
+
+/*
+ * Fixed app chrome (admin/judge sidebars).
+ * Dialogs use react-remove-scroll which injects body padding-right when the
+ * scrollbar disappears — that used to shove sticky sidebars and jump nav scroll.
+ */
+:root {
+  --app-sidebar-width: 17rem; /* 272px */
+}
+
+[data-app-sidebar] {
+  width: var(--app-sidebar-width);
+}
+
+body[data-scroll-locked],
+html body[data-scroll-locked] {
+  margin-right: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Keep fixed sidebar pinned; never inherit remove-scroll padding quirks */
+body[data-scroll-locked] [data-app-sidebar] {
+  margin-right: 0 !important;
+  padding-right: 0 !important;
+  transform: none !important;
 }
 
 /* ─── Reduced Motion ───────────────────────────────────────────────────────── */

@@ -34,10 +34,10 @@ export function AssignedGroupPicker({
           disabled={disabled}
           onClick={() => setValue("")}
           className={cn(
-            "inline-flex h-9 items-center gap-2 rounded-md border px-3 text-xs font-semibold transition-colors",
+            "ui-interactive-quiet inline-flex h-9 items-center gap-2 rounded-md border px-3 text-xs font-semibold",
             value === ""
               ? "border-foreground bg-muted text-foreground"
-              : "border-border bg-background text-muted-foreground hover:bg-muted/60",
+              : "border-border bg-background text-muted-foreground",
             disabled && "cursor-not-allowed opacity-50",
           )}
         >
@@ -55,13 +55,11 @@ export function AssignedGroupPicker({
               disabled={disabled}
               onClick={() => setValue(group.id)}
               className={cn(
-                "inline-flex h-9 items-center gap-2 rounded-md border px-3 text-xs font-semibold transition-colors",
+                "ui-interactive-quiet inline-flex h-9 items-center gap-2 rounded-md border px-3 text-xs font-semibold",
                 token.bgClass,
                 token.textClass,
                 token.ringClass,
-                selected
-                  ? "ring-2 ring-primary/25"
-                  : "hover:bg-muted/50",
+                selected && "ring-2 ring-primary/25",
                 disabled && "cursor-not-allowed opacity-50",
               )}
             >

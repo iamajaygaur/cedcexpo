@@ -7,7 +7,17 @@ import { PageHeader } from "@/components/admin/page-header";
 import { resolveOperationalEvent } from "@/lib/admin/event-context";
 import { requireAdminClient } from "@/lib/admin/guard";
 import { TABLES } from "@/lib/supabase/tables";
-import type { Judge, JudgeGroup, Profile } from "@/types/database";
+import type {
+  Evaluation,
+  Judge,
+  JudgeGroup,
+  Profile,
+} from "@/types/database";
+
+function evalPercent(submitted: number, expected: number) {
+  if (expected <= 0) return 0;
+  return Math.round((submitted / expected) * 100);
+}
 
 type PageProps = {
   searchParams: Promise<{ eventId?: string }>;
@@ -44,33 +54,15 @@ export default async function GroupsPage({ searchParams }: PageProps) {
 
     const { data: assignments, error: assignError } = await supabase
       .from(TABLES.judgingAssignments)
-      .select("group_id")
+      .select("team_id, group_id")
       .eq("event_id", event.id);
     if (assignError) throw new Error(assignError.message);
 
-    const teamCountByGroup = new Map<string, number>();
-    for (const a of assignments ?? []) {
-      teamCountByGroup.set(
-        a.group_id,
-        (teamCountByGroup.get(a.group_id) ?? 0) + 1,
-      );
-    }
-
-    const assignedJudgeIds = new Set((members ?? []).map((m) => m.judge_id));
-
-    groups = ((groupsData ?? []) as JudgeGroup[]).map((g) => ({
-      ...g,
-      teamCount: teamCountByGroup.get(g.id) ?? 0,
-      members: (members ?? [])
-        .filter((m) => m.group_id === g.id)
-        .map((m) => ({
-          id: m.id,
-          judge_id: m.judge_id,
-          is_lead: Boolean((m as { is_lead?: boolean }).is_lead),
-          judges: m.judges as GroupCardData["members"][number]["judges"],
-        }))
-        .sort((a, b) => Number(b.is_lead) - Number(a.is_lead)),
-    }));
+    const { data: evaluations, error: evalError } = await supabase
+      .from(TABLES.evaluations)
+      .select("id, judge_id, team_id, status")
+      .eq("event_id", event.id);
+    if (evalError) throw new Error(evalError.message);
 
     const { data: allJudges, error: judgesError } = await supabase
       .from(TABLES.judges)
@@ -78,6 +70,62 @@ export default async function GroupsPage({ searchParams }: PageProps) {
       .eq("active", true)
       .order("created_at");
     if (judgesError) throw new Error(judgesError.message);
+
+    const activeJudgeIds = new Set((allJudges ?? []).map((j) => j.id));
+
+    const teamsByGroup = new Map<string, string[]>();
+    for (const a of assignments ?? []) {
+      const list = teamsByGroup.get(a.group_id) ?? [];
+      list.push(a.team_id);
+      teamsByGroup.set(a.group_id, list);
+    }
+
+    const evalList = (evaluations ?? []) as Pick<
+      Evaluation,
+      "id" | "judge_id" | "team_id" | "status"
+    >[];
+    const submittedEvals = evalList.filter((e) => e.status === "submitted");
+    const draftEvals = evalList.filter((e) => e.status === "draft");
+
+    const assignedJudgeIds = new Set((members ?? []).map((m) => m.judge_id));
+
+    groups = ((groupsData ?? []) as JudgeGroup[]).map((g) => {
+      const groupMembers = (members ?? [])
+        .filter((m) => m.group_id === g.id)
+        .map((m) => ({
+          id: m.id,
+          judge_id: m.judge_id,
+          is_lead: Boolean((m as { is_lead?: boolean }).is_lead),
+          judges: m.judges as GroupCardData["members"][number]["judges"],
+        }))
+        .sort((a, b) => Number(b.is_lead) - Number(a.is_lead));
+
+      const activeMemberJudgeIds = groupMembers
+        .map((m) => m.judge_id)
+        .filter((id) => activeJudgeIds.has(id));
+      const teamIds = teamsByGroup.get(g.id) ?? [];
+      const expected = activeMemberJudgeIds.length * teamIds.length;
+      const submitted = submittedEvals.filter(
+        (e) =>
+          activeMemberJudgeIds.includes(e.judge_id) &&
+          teamIds.includes(e.team_id),
+      ).length;
+      const draft = draftEvals.filter(
+        (e) =>
+          activeMemberJudgeIds.includes(e.judge_id) &&
+          teamIds.includes(e.team_id),
+      ).length;
+
+      return {
+        ...g,
+        teamCount: teamIds.length,
+        members: groupMembers,
+        expected,
+        submitted,
+        draft,
+        percent: evalPercent(submitted, expected),
+      };
+    });
 
     unassignedJudges = (
       (allJudges ?? []) as Array<

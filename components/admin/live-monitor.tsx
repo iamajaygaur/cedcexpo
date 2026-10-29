@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 
 import { AnalyticsGauge } from "@/components/admin/analytics-gauge";
+import { GroupHorizBar as HorizBar } from "@/components/admin/group-progress-bars";
 import { GroupBadge } from "@/components/shared/group-badge";
 import { SearchInput } from "@/components/ui/search-input";
 import { Select } from "@/components/ui/select";
@@ -578,38 +579,6 @@ function KpiTile({
   );
 }
 
-function HorizBar({
-  label,
-  value,
-  max,
-  color,
-}: {
-  label: string;
-  value: number;
-  max: number;
-  color: string;
-}) {
-  const pct = Math.min(100, (value / Math.max(1, max)) * 100);
-  return (
-    <div>
-      <div className="mb-1 flex justify-between text-xs">
-        <span className="text-muted-foreground">{label}</span>
-        <span className="tabular-nums font-semibold text-foreground">
-          {value}
-        </span>
-      </div>
-      <div className="h-2 overflow-hidden rounded-full bg-muted">
-        <div
-          className="h-full rounded-full transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
-          style={{
-            width: `${pct}%`,
-            background: `linear-gradient(90deg, ${color}, color-mix(in srgb, ${color} 60%, white))`,
-          }}
-        />
-      </div>
-    </div>
-  );
-}
 
 function GroupLiveCard({
   progress,
@@ -639,12 +608,7 @@ function GroupLiveCard({
               ease: [0.16, 1, 0.3, 1],
             }
       }
-      whileHover={
-        reducedMotion
-          ? undefined
-          : { y: -3, transition: { duration: 0.2 } }
-      }
-      className="dash-group-card flex flex-col gap-3 p-4 transition-shadow hover:shadow-md sm:p-5"
+      className="dash-group-card flex flex-col gap-3 p-4 sm:p-5"
       style={
         {
           "--group-tint": token.hex,

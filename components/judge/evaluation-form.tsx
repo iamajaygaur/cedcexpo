@@ -158,6 +158,8 @@ export function EvaluationForm({
   const [saveError, setSaveError] = useState<string | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [offline, setOffline] = useState(false);
+  /** Local draft waiting to reach the server after an offline period. */
+  const [needsSync, setNeedsSync] = useState(false);
   const successRedirectRef = useRef(false);
 
   const dirtyRef = useRef(false);
@@ -262,6 +264,7 @@ export function EvaluationForm({
           if (parsed.comments) setComments(parsed.comments);
           setSaveStatus("unsaved");
           dirtyRef.current = true;
+          setNeedsSync(true);
         }
       }
     } catch {
@@ -326,6 +329,7 @@ export function EvaluationForm({
       );
       savingRef.current = false;
       dirtyRef.current = true;
+      setNeedsSync(true);
       return;
     }
 
@@ -334,12 +338,14 @@ export function EvaluationForm({
 
     if (result.ok) {
       dirtyRef.current = false;
+      setNeedsSync(false);
       setSaveStatus("saved");
       setSaveError(null);
       router.refresh();
     } else {
       setSaveStatus("error");
       setSaveError(result.message ?? "Could not save draft.");
+      setNeedsSync(true);
     }
   }, [
     readOnly,
@@ -354,10 +360,14 @@ export function EvaluationForm({
     const onOnline = () => {
       setOffline(false);
       if (dirtyRef.current && !readOnly) {
+        setNeedsSync(true);
         void saveDraft();
       }
     };
-    const onOffline = () => setOffline(true);
+    const onOffline = () => {
+      setOffline(true);
+      if (dirtyRef.current) setNeedsSync(true);
+    };
     setOffline(typeof navigator !== "undefined" && !navigator.onLine);
     window.addEventListener("online", onOnline);
     window.addEventListener("offline", onOffline);
@@ -473,6 +483,26 @@ export function EvaluationForm({
           You&apos;re offline. Scores are kept on this device and will sync when
           you reconnect.
         </div>
+      ) : needsSync && !readOnly ? (
+        <div
+          role="status"
+          className="flex flex-col gap-2 rounded-md border border-primary/35 bg-primary/8 px-3 py-2.5 text-sm text-foreground sm:flex-row sm:items-center sm:justify-between sm:px-4 sm:py-3"
+        >
+          <p>
+            Connection restored. Tap{" "}
+            <span className="font-semibold">Sync now</span> if scores have not
+            saved yet.
+          </p>
+          <Button
+            type="button"
+            size="sm"
+            className="min-h-10 shrink-0 touch-manipulation"
+            disabled={saveStatus === "saving"}
+            onClick={() => void saveDraft()}
+          >
+            {saveStatus === "saving" ? "Syncing…" : "Sync now"}
+          </Button>
+        </div>
       ) : null}
 
       {/* Project header */}
@@ -506,7 +536,7 @@ export function EvaluationForm({
 
         {/* Collapsed on mobile so scoring stays above the fold */}
         <details className="w-full shrink-0 dash-panel lg:hidden">
-          <summary className="cursor-pointer list-none px-3 py-2.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground marker:content-none [&::-webkit-details-marker]:hidden">
+          <summary className="ui-interactive-quiet list-none rounded-md px-3 py-2.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground marker:content-none [&::-webkit-details-marker]:hidden">
             <span className="flex items-center justify-between gap-2">
               Team Members
               <span className="text-[10px] font-medium normal-case tracking-normal text-muted-foreground/80">
@@ -655,7 +685,7 @@ export function EvaluationForm({
                         {longDescription ? (
                           <button
                             type="button"
-                            className="mt-0.5 text-[11px] font-medium text-primary sm:hidden"
+                            className="mt-0.5 cursor-pointer text-[11px] font-medium text-primary underline-offset-2 hover:underline sm:hidden"
                             onClick={() =>
                               setExpandedDescriptions((prev) => ({
                                 ...prev,
@@ -753,7 +783,7 @@ export function EvaluationForm({
 
       {/* ABET reference — collapsed by default on phones */}
       <details className="dash-panel bg-muted/40 sm:hidden">
-        <summary className="cursor-pointer list-none px-4 py-3 text-sm font-bold text-foreground marker:content-none [&::-webkit-details-marker]:hidden">
+        <summary className="ui-interactive-quiet list-none rounded-md px-4 py-3 text-sm font-bold text-foreground marker:content-none [&::-webkit-details-marker]:hidden">
           <span className="flex items-center justify-between gap-2">
             ABET Outcomes Reference
             <span className="text-[11px] font-medium text-muted-foreground">
@@ -827,9 +857,14 @@ export function EvaluationForm({
                 variant="outline"
                 size="lg"
                 className="min-h-11 flex-1 touch-manipulation sm:flex-none"
+                disabled={saveStatus === "saving"}
                 onClick={() => void saveDraft()}
               >
-                Save draft
+                {saveStatus === "saving"
+                  ? "Syncing…"
+                  : needsSync
+                    ? "Sync now"
+                    : "Save draft"}
               </Button>
               <Button
                 type="button"

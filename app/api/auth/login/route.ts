@@ -60,7 +60,7 @@ function redirectToLogin(request: NextRequest, message: string) {
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
 
-  const rate = checkLoginRateLimit(clientKeyFromRequest(request));
+  const rate = await checkLoginRateLimit(clientKeyFromRequest(request));
   if (!rate.allowed) {
     return redirectToLogin(
       request,
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const userRate = checkLoginUsernameRateLimit(parsed.data.username);
+  const userRate = await checkLoginUsernameRateLimit(parsed.data.username);
   if (!userRate.allowed) {
     return redirectToLogin(
       request,

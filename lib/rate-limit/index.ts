@@ -11,7 +11,7 @@ type Bucket = {
   resetAt: number;
 };
 
-/** In-memory sliding window — good enough for single-node / local; replace with Redis in prod scale-out. */
+/** In-memory fixed window — single-node / local; Upstash used when configured. */
 const buckets = new Map<string, Bucket>();
 
 function readPositiveInt(name: string, fallback: number): number {
@@ -31,6 +31,38 @@ const LOGIN_MAX_ATTEMPTS = readPositiveInt("LOGIN_RATE_LIMIT_MAX", 80);
 const LOGIN_USERNAME_MAX = readPositiveInt("LOGIN_USERNAME_RATE_LIMIT_MAX", 8);
 const EVAL_MUTATION_MAX = readPositiveInt("EVAL_MUTATION_RATE_LIMIT_MAX", 120);
 
+function upstashConfigured(): boolean {
+  return Boolean(
+    process.env.UPSTASH_REDIS_REST_URL?.trim() &&
+      process.env.UPSTASH_REDIS_REST_TOKEN?.trim(),
+  );
+}
+
+async function upstashCommand(
+  args: (string | number)[],
+): Promise<unknown | null> {
+  const url = process.env.UPSTASH_REDIS_REST_URL?.trim();
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN?.trim();
+  if (!url || !token) return null;
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(args),
+      cache: "no-store",
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as { result?: unknown };
+    return data.result ?? null;
+  } catch {
+    return null;
+  }
+}
+
 function pruneExpired(now: number) {
   for (const [key, bucket] of buckets) {
     if (bucket.resetAt <= now) {
@@ -39,7 +71,7 @@ function pruneExpired(now: number) {
   }
 }
 
-function checkKeyedRateLimit(
+function checkMemoryRateLimit(
   key: string,
   opts: { windowMs: number; maxAttempts: number },
 ): RateLimitResult {
@@ -69,10 +101,66 @@ function checkKeyedRateLimit(
 }
 
 /**
+ * Optional Upstash fixed-window limiter. Returns null on any failure so callers
+ * fall back to in-memory — never blocks login/eval when Redis is down.
+ */
+async function checkUpstashRateLimit(
+  key: string,
+  opts: { windowMs: number; maxAttempts: number },
+): Promise<RateLimitResult | null> {
+  if (!upstashConfigured()) return null;
+
+  const redisKey = `cedc:rl:${key}`;
+  const countRaw = await upstashCommand(["INCR", redisKey]);
+  if (typeof countRaw !== "number" || !Number.isFinite(countRaw)) {
+    return null;
+  }
+
+  if (countRaw === 1) {
+    const expireOk = await upstashCommand([
+      "PEXPIRE",
+      redisKey,
+      opts.windowMs,
+    ]);
+    if (expireOk === null) {
+      // Best-effort cleanup if expire failed; still use the count this request.
+      void upstashCommand(["DEL", redisKey]);
+    }
+  }
+
+  if (countRaw > opts.maxAttempts) {
+    const ttlRaw = await upstashCommand(["PTTL", redisKey]);
+    const ttlMs =
+      typeof ttlRaw === "number" && ttlRaw > 0 ? ttlRaw : opts.windowMs;
+    return {
+      allowed: false,
+      remaining: 0,
+      retryAfterSeconds: Math.max(1, Math.ceil(ttlMs / 1000)),
+    };
+  }
+
+  return {
+    allowed: true,
+    remaining: Math.max(0, opts.maxAttempts - countRaw),
+  };
+}
+
+async function checkKeyedRateLimit(
+  key: string,
+  opts: { windowMs: number; maxAttempts: number },
+): Promise<RateLimitResult> {
+  const distributed = await checkUpstashRateLimit(key, opts);
+  if (distributed) return distributed;
+  return checkMemoryRateLimit(key, opts);
+}
+
+/**
  * Rate-limit login attempts by client key (usually IP).
  * Default is venue-friendly (80/min) so shared Wi‑Fi does not lock out judges.
  */
-export function checkLoginRateLimit(clientKey: string): RateLimitResult {
+export async function checkLoginRateLimit(
+  clientKey: string,
+): Promise<RateLimitResult> {
   return checkKeyedRateLimit(`login:${clientKey || "unknown"}`, {
     windowMs: LOGIN_WINDOW_MS,
     maxAttempts: LOGIN_MAX_ATTEMPTS,
@@ -83,7 +171,9 @@ export function checkLoginRateLimit(clientKey: string): RateLimitResult {
  * Tighter per-username limit so password guessing stays constrained even when
  * the shared-venue IP limit is raised for expo day.
  */
-export function checkLoginUsernameRateLimit(username: string): RateLimitResult {
+export async function checkLoginUsernameRateLimit(
+  username: string,
+): Promise<RateLimitResult> {
   const key = username.trim().toLowerCase() || "unknown";
   return checkKeyedRateLimit(`login-user:${key}`, {
     windowMs: LOGIN_WINDOW_MS,
@@ -94,16 +184,40 @@ export function checkLoginUsernameRateLimit(username: string): RateLimitResult {
 /**
  * Rate-limit admin forgot-password requests (IP + email).
  */
-export function checkPasswordResetRateLimit(clientKey: string): RateLimitResult {
+export async function checkPasswordResetRateLimit(
+  clientKey: string,
+): Promise<RateLimitResult> {
   return checkKeyedRateLimit(`pwd-reset:${clientKey || "unknown"}`, {
     windowMs: 60_000,
     maxAttempts: 5,
   });
 }
 
-export function checkPasswordResetEmailRateLimit(email: string): RateLimitResult {
+export async function checkPasswordResetEmailRateLimit(
+  email: string,
+): Promise<RateLimitResult> {
   const key = email.trim().toLowerCase() || "unknown";
   return checkKeyedRateLimit(`pwd-reset-email:${key}`, {
+    windowMs: 15 * 60_000,
+    maxAttempts: 3,
+  });
+}
+
+/** Judge password-help requests (public form). */
+export async function checkJudgeHelpRateLimit(
+  clientKey: string,
+): Promise<RateLimitResult> {
+  return checkKeyedRateLimit(`judge-help:${clientKey || "unknown"}`, {
+    windowMs: 60_000,
+    maxAttempts: 5,
+  });
+}
+
+export async function checkJudgeHelpUsernameRateLimit(
+  username: string,
+): Promise<RateLimitResult> {
+  const key = username.trim().toLowerCase() || "unknown";
+  return checkKeyedRateLimit(`judge-help-user:${key}`, {
     windowMs: 15 * 60_000,
     maxAttempts: 3,
   });
@@ -112,7 +226,9 @@ export function checkPasswordResetEmailRateLimit(email: string): RateLimitResult
 /**
  * Rate-limit CSV / report exports (admin).
  */
-export function checkExportRateLimit(clientKey: string): RateLimitResult {
+export async function checkExportRateLimit(
+  clientKey: string,
+): Promise<RateLimitResult> {
   return checkKeyedRateLimit(`export:${clientKey || "unknown"}`, {
     windowMs: 60_000,
     maxAttempts: 20,
@@ -123,9 +239,9 @@ export function checkExportRateLimit(clientKey: string): RateLimitResult {
  * Rate-limit evaluation draft saves / submits.
  * Prefer a per-judge (or per-user) key so venue Wi‑Fi does not share one bucket.
  */
-export function checkEvaluationMutationRateLimit(
+export async function checkEvaluationMutationRateLimit(
   clientKey: string,
-): RateLimitResult {
+): Promise<RateLimitResult> {
   return checkKeyedRateLimit(`eval-mutation:${clientKey || "unknown"}`, {
     windowMs: 60_000,
     maxAttempts: EVAL_MUTATION_MAX,
@@ -137,7 +253,9 @@ export function checkEvaluationMutationRateLimit(
  * Login POSTs are enforced via checkLoginRateLimit in the server action;
  * middleware applies a lighter IP throttle on /login.
  */
-export function checkRateLimitStub(request: NextRequest): RateLimitResult {
+export async function checkRateLimitStub(
+  request: NextRequest,
+): Promise<RateLimitResult> {
   const path = request.nextUrl.pathname;
   if (path === "/login" && request.method === "POST") {
     const forwarded = request.headers.get("x-forwarded-for");

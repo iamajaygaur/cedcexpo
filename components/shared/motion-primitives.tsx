@@ -122,7 +122,8 @@ export function Pressable({
 export function AnimatedCard({
   children,
   className,
-  hoverLift = -3,
+  /** Set a non-zero lift only for clickable cards (adds pointer + hover affordance). */
+  hoverLift = 0,
 }: {
   children: React.ReactNode;
   className?: string;
@@ -133,11 +134,16 @@ export function AnimatedCard({
     <motion.div
       variants={fadeUpItem}
       whileHover={
-        reduced ? undefined : { y: hoverLift, transition: { duration: 0.2 } }
+        reduced || hoverLift === 0
+          ? undefined
+          : { y: hoverLift, transition: { duration: 0.2 } }
       }
-      whileTap={reduced ? undefined : { scale: 0.995 }}
+      whileTap={
+        reduced || hoverLift === 0 ? undefined : { scale: 0.995 }
+      }
       className={cn(
-        "dash-metric transition-shadow hover:shadow-md",
+        "dash-metric",
+        hoverLift !== 0 && "ui-interactive",
         className,
       )}
     >

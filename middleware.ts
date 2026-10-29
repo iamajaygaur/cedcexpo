@@ -7,7 +7,7 @@ import { checkRateLimitStub } from "@/lib/rate-limit";
  * Session refresh + role gates + login rate-limit hook.
  */
 export async function middleware(request: NextRequest) {
-  const rate = checkRateLimitStub(request);
+  const rate = await checkRateLimitStub(request);
   if (!rate.allowed) {
     return NextResponse.json(
       {

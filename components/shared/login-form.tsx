@@ -34,6 +34,7 @@ export function LoginForm({
   supportEmail = SUPPORT_EMAIL,
   switchingAccount = false,
 }: LoginFormProps) {
+  void supportEmail;
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [activeRole, setActiveRole] = useState<"judge" | "admin">(
@@ -84,10 +85,10 @@ export function LoginForm({
           <button
             type="button"
             onClick={() => setActiveRole("judge")}
-            className={`relative flex items-center justify-center gap-2 rounded-lg py-2.5 text-xs font-bold transition-colors ${
+            className={`relative flex cursor-pointer items-center justify-center gap-2 rounded-lg py-2.5 text-xs font-bold transition-colors ${
               activeRole === "judge"
                 ? "text-foreground"
-                : "text-muted-foreground hover:text-foreground"
+                : "text-muted-foreground hover:bg-black/[0.03] hover:text-foreground"
             }`}
           >
             {activeRole === "judge" && (
@@ -104,10 +105,10 @@ export function LoginForm({
           <button
             type="button"
             onClick={() => setActiveRole("admin")}
-            className={`relative flex items-center justify-center gap-2 rounded-lg py-2.5 text-xs font-bold transition-colors ${
+            className={`relative flex cursor-pointer items-center justify-center gap-2 rounded-lg py-2.5 text-xs font-bold transition-colors ${
               activeRole === "admin"
                 ? "text-foreground"
-                : "text-muted-foreground hover:text-foreground"
+                : "text-muted-foreground hover:bg-black/[0.03] hover:text-foreground"
             }`}
           >
             {activeRole === "admin" && (
@@ -205,7 +206,7 @@ export function LoginForm({
           <button
             type="button"
             tabIndex={-1}
-            className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
+            className="absolute inset-y-0 right-0 flex w-12 cursor-pointer items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:cursor-not-allowed"
             onClick={() => setShowPassword((v) => !v)}
             aria-label={showPassword ? "Hide password" : "Show password"}
             disabled={!configured}
@@ -239,13 +240,13 @@ export function LoginForm({
             Forgot Password?
           </Link>
         ) : (
-          <a
-            href={`mailto:${supportEmail}?subject=CEDC%20Expo%20Judge%20Password%20Help`}
+          <Link
+            href="/judge-help"
             className="text-xs font-medium text-primary underline-offset-2 hover:underline"
-            title="Ask an administrator to reset your judge password"
+            title="Request a password reset from an administrator"
           >
             Need help signing in?
-          </a>
+          </Link>
         )}
       </div>
 

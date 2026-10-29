@@ -65,7 +65,12 @@ type SelectProps = {
   onValueChange?: (value: string) => void;
 };
 
-/** Width/flex sizing belongs on the wrapper so toolbar selects don't force a new line. */
+/**
+ * Width/flex sizing belongs on the wrapper so toolbar selects don't force a new
+ * line or overlap neighbors (e.g. search + status). Include responsive variants
+ * like sm:w-auto / md:min-w-[10rem] — otherwise the wrapper keeps w-full and
+ * sits on top of the search field.
+ */
 function partitionSelectClassName(className?: string) {
   if (!className) {
     return { wrapperClassName: "w-full", triggerClassName: undefined };
@@ -73,17 +78,11 @@ function partitionSelectClassName(className?: string) {
 
   const wrapper: string[] = [];
   const trigger: string[] = [];
+  const wrapperToken =
+    /^((sm|md|lg|xl|2xl):)?((min-|max-)?w-|shrink-0$|shrink$|grow-0$|grow$|flex-1$|flex-none$|flex-auto$)/;
 
   for (const token of className.split(/\s+/).filter(Boolean)) {
-    if (
-      /^(min-|max-)?w-/.test(token) ||
-      token === "shrink-0" ||
-      token === "shrink" ||
-      token === "grow" ||
-      token === "grow-0" ||
-      token === "flex-1" ||
-      token === "flex-none"
-    ) {
+    if (wrapperToken.test(token)) {
       wrapper.push(token);
     } else {
       trigger.push(token);
@@ -164,8 +163,8 @@ function Select({
           id={id}
           aria-label={ariaLabel}
           className={cn(
-            "flex h-10 w-full items-center justify-between gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-xs outline-none transition-[border,box-shadow,background-color]",
-            "hover:bg-muted/40 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50",
+            "flex h-10 w-full cursor-pointer items-center justify-between gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-xs outline-none transition-[border,box-shadow,background-color]",
+            "hover:border-primary/35 hover:bg-muted/40 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50",
             "disabled:cursor-not-allowed disabled:opacity-50",
             "data-[placeholder]:text-muted-foreground",
             "data-[state=open]:border-ring data-[state=open]:ring-3 data-[state=open]:ring-ring/50",
