@@ -622,105 +622,61 @@ export function EvaluationForm({
                 key={criterion.id}
                 className="dash-metric p-3 sm:p-5"
               >
-                {/* Title row + inline score on mobile */}
+                {/* Title row + score — description/ABET sit full-bleed below */}
                 <div className="flex items-start gap-2.5 sm:gap-3">
                   <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary sm:mt-0 sm:size-10">
                     <Icon className="size-4 sm:size-5" aria-hidden />
                   </span>
 
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-start justify-between gap-2">
-                      <h2 className="min-w-0 flex-1 text-[15px] font-semibold leading-snug text-foreground sm:text-lg">
-                        {index + 1}. {criterion.name}
-                      </h2>
+                  <div className="flex min-w-0 flex-1 items-start justify-between gap-2">
+                    <h2 className="min-w-0 flex-1 text-[15px] font-semibold leading-snug text-foreground sm:text-lg">
+                      {index + 1}. {criterion.name}
+                    </h2>
 
-                      {/* Compact score control — phone only */}
-                      <div className="flex shrink-0 flex-col items-end sm:hidden">
-                        <label
-                          className="sr-only"
-                          htmlFor={`score-mobile-${criterion.id}`}
-                        >
-                          Score for {criterion.name}
-                        </label>
-                        <input
-                          id={`score-mobile-${criterion.id}`}
-                          type="text"
-                          inputMode="numeric"
-                          pattern="[0-9]*"
-                          autoComplete="off"
-                          autoCorrect="off"
-                          spellCheck={false}
-                          enterKeyHint="done"
-                          disabled={readOnly}
-                          value={hasScore ? String(row.score) : ""}
-                          placeholder="--"
-                          aria-describedby={`score-max-mobile-${criterion.id}`}
-                          suppressHydrationWarning
-                          onChange={(e) => {
-                            const raw = e.target.value.replace(/[^\d]/g, "");
-                            if (raw === "") {
-                              setScoreValue(criterion.id, null);
-                              return;
-                            }
-                            const n = Number(raw);
-                            if (!Number.isFinite(n)) return;
-                            setScoreValue(
-                              criterion.id,
-                              Math.min(max, Math.max(0, Math.round(n))),
-                            );
-                          }}
-                          className="h-11 w-14 rounded-md border border-dashed border-primary/35 bg-sky-50/80 text-center text-lg font-bold tabular-nums text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring/40 disabled:opacity-60"
-                        />
-                        <span
-                          id={`score-max-mobile-${criterion.id}`}
-                          className="mt-0.5 text-[10px] tabular-nums text-muted-foreground"
-                        >
-                          / {max}
-                        </span>
-                      </div>
+                    {/* Compact score control — phone only */}
+                    <div className="flex shrink-0 flex-col items-end sm:hidden">
+                      <label
+                        className="sr-only"
+                        htmlFor={`score-mobile-${criterion.id}`}
+                      >
+                        Score for {criterion.name}
+                      </label>
+                      <input
+                        id={`score-mobile-${criterion.id}`}
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        autoComplete="off"
+                        autoCorrect="off"
+                        spellCheck={false}
+                        enterKeyHint="done"
+                        disabled={readOnly}
+                        value={hasScore ? String(row.score) : ""}
+                        placeholder="--"
+                        aria-describedby={`score-max-mobile-${criterion.id}`}
+                        suppressHydrationWarning
+                        onChange={(e) => {
+                          const raw = e.target.value.replace(/[^\d]/g, "");
+                          if (raw === "") {
+                            setScoreValue(criterion.id, null);
+                            return;
+                          }
+                          const n = Number(raw);
+                          if (!Number.isFinite(n)) return;
+                          setScoreValue(
+                            criterion.id,
+                            Math.min(max, Math.max(0, Math.round(n))),
+                          );
+                        }}
+                        className="h-11 w-14 rounded-md border border-dashed border-primary/35 bg-sky-50/80 text-center text-lg font-bold tabular-nums text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring/40 disabled:opacity-60"
+                      />
+                      <span
+                        id={`score-max-mobile-${criterion.id}`}
+                        className="mt-0.5 text-[10px] tabular-nums text-muted-foreground"
+                      >
+                        / {max}
+                      </span>
                     </div>
-
-                    {description ? (
-                      <div className="mt-1">
-                        <p
-                          className={cn(
-                            "text-xs leading-relaxed text-muted-foreground sm:text-sm",
-                            !descExpanded &&
-                              longDescription &&
-                              "line-clamp-2 sm:line-clamp-none",
-                          )}
-                        >
-                          {description}
-                        </p>
-                        {longDescription ? (
-                          <button
-                            type="button"
-                            className="mt-0.5 cursor-pointer text-[11px] font-medium text-primary underline-offset-2 hover:underline sm:hidden"
-                            onClick={() =>
-                              setExpandedDescriptions((prev) => ({
-                                ...prev,
-                                [criterion.id]: !prev[criterion.id],
-                              }))
-                            }
-                          >
-                            {descExpanded ? "Show less" : "Show more"}
-                          </button>
-                        ) : null}
-                      </div>
-                    ) : null}
-
-                    {criterion.criterion_abet_outcomes.length > 0 ? (
-                      <div className="mt-1.5 flex flex-wrap gap-1 sm:mt-2 sm:gap-1.5">
-                        {criterion.criterion_abet_outcomes.map((o) => (
-                          <span
-                            key={o.id}
-                            className="rounded bg-muted px-1.5 py-px text-[9px] font-semibold uppercase tracking-wide text-muted-foreground sm:rounded-md sm:px-2 sm:py-0.5 sm:text-[10px]"
-                          >
-                            ABET {o.outcome_code}
-                          </span>
-                        ))}
-                      </div>
-                    ) : null}
                   </div>
 
                   {/* Desktop / tablet score panel */}
@@ -769,6 +725,48 @@ export function EvaluationForm({
                     </p>
                   </div>
                 </div>
+
+                {description ? (
+                  <div className="mt-2">
+                    <p
+                      className={cn(
+                        "text-xs leading-relaxed text-muted-foreground sm:text-sm",
+                        !descExpanded &&
+                          longDescription &&
+                          "line-clamp-2 sm:line-clamp-none",
+                      )}
+                    >
+                      {description}
+                    </p>
+                    {longDescription ? (
+                      <button
+                        type="button"
+                        className="mt-0.5 cursor-pointer text-[11px] font-medium text-primary underline-offset-2 hover:underline sm:hidden"
+                        onClick={() =>
+                          setExpandedDescriptions((prev) => ({
+                            ...prev,
+                            [criterion.id]: !prev[criterion.id],
+                          }))
+                        }
+                      >
+                        {descExpanded ? "Show less" : "Show more"}
+                      </button>
+                    ) : null}
+                  </div>
+                ) : null}
+
+                {criterion.criterion_abet_outcomes.length > 0 ? (
+                  <div className="mt-1.5 flex flex-wrap gap-1 sm:mt-2 sm:gap-1.5">
+                    {criterion.criterion_abet_outcomes.map((o) => (
+                      <span
+                        key={o.id}
+                        className="rounded bg-muted px-1.5 py-px text-[9px] font-semibold uppercase tracking-wide text-muted-foreground sm:rounded-md sm:px-2 sm:py-0.5 sm:text-[10px]"
+                      >
+                        ABET {o.outcome_code}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
 
                 <div className="mt-2.5 sm:mt-4">
                   <Textarea
