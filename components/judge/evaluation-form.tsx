@@ -634,48 +634,50 @@ export function EvaluationForm({
                     </h2>
 
                     {/* Compact score control — phone only */}
-                    <div className="flex shrink-0 flex-col items-end sm:hidden">
+                    <div className="flex shrink-0 items-center sm:hidden">
                       <label
                         className="sr-only"
                         htmlFor={`score-mobile-${criterion.id}`}
                       >
                         Score for {criterion.name}
                       </label>
-                      <input
-                        id={`score-mobile-${criterion.id}`}
-                        type="text"
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        autoComplete="off"
-                        autoCorrect="off"
-                        spellCheck={false}
-                        enterKeyHint="done"
-                        disabled={readOnly}
-                        value={hasScore ? String(row.score) : ""}
-                        placeholder="--"
-                        aria-describedby={`score-max-mobile-${criterion.id}`}
-                        suppressHydrationWarning
-                        onChange={(e) => {
-                          const raw = e.target.value.replace(/[^\d]/g, "");
-                          if (raw === "") {
-                            setScoreValue(criterion.id, null);
-                            return;
-                          }
-                          const n = Number(raw);
-                          if (!Number.isFinite(n)) return;
-                          setScoreValue(
-                            criterion.id,
-                            Math.min(max, Math.max(0, Math.round(n))),
-                          );
-                        }}
-                        className="h-11 w-14 rounded-md border border-dashed border-primary/35 bg-sky-50/80 text-center text-lg font-bold tabular-nums text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring/40 disabled:opacity-60"
-                      />
-                      <span
-                        id={`score-max-mobile-${criterion.id}`}
-                        className="mt-0.5 text-[10px] tabular-nums text-muted-foreground"
-                      >
-                        / {max}
-                      </span>
+                      <div className="flex h-11 items-center gap-0.5 rounded-md border border-dashed border-primary/35 bg-sky-50/80 px-2 focus-within:border-primary focus-within:ring-2 focus-within:ring-ring/40">
+                        <input
+                          id={`score-mobile-${criterion.id}`}
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          autoComplete="off"
+                          autoCorrect="off"
+                          spellCheck={false}
+                          enterKeyHint="done"
+                          disabled={readOnly}
+                          value={hasScore ? String(row.score) : ""}
+                          placeholder="--"
+                          aria-describedby={`score-max-mobile-${criterion.id}`}
+                          suppressHydrationWarning
+                          onChange={(e) => {
+                            const raw = e.target.value.replace(/[^\d]/g, "");
+                            if (raw === "") {
+                              setScoreValue(criterion.id, null);
+                              return;
+                            }
+                            const n = Number(raw);
+                            if (!Number.isFinite(n)) return;
+                            setScoreValue(
+                              criterion.id,
+                              Math.min(max, Math.max(0, Math.round(n))),
+                            );
+                          }}
+                          className="h-full w-8 bg-transparent text-center text-lg font-bold tabular-nums text-foreground outline-none placeholder:text-muted-foreground/70 disabled:opacity-60"
+                        />
+                        <span
+                          id={`score-max-mobile-${criterion.id}`}
+                          className="pb-px text-xs tabular-nums text-muted-foreground"
+                        >
+                          / {max}
+                        </span>
+                      </div>
                     </div>
                   </div>
 
