@@ -7,34 +7,29 @@ import { Clock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { clearClientAuthArtifacts } from "@/lib/auth/clear-client-session";
-import { SESSION_MODE_COOKIE } from "@/lib/auth/session-mode";
-import { createClient } from "@/lib/supabase/client";
 
 /** Auto sign-out after this much user inactivity (admin + judge). */
 export const IDLE_TIMEOUT_MS = 25 * 60 * 1000;
 /** Warn before hard logout so drafts can be finished. */
 export const IDLE_WARN_MS = 23 * 60 * 1000;
 
+/**
+ * Intentional interaction only. Do NOT include `mousemove` — trackpad/mouse
+ * jitter was resetting the timer and preventing judges from ever timing out.
+ */
 const ACTIVITY_EVENTS = [
   "mousedown",
-  "mousemove",
   "keydown",
   "scroll",
   "touchstart",
-  "click",
+  "pointerdown",
   "wheel",
 ] as const;
 
-async function forceLogoutToLogin() {
+function forceLogoutToLogin() {
   clearClientAuthArtifacts();
-  try {
-    const supabase = createClient();
-    await supabase.auth.signOut({ scope: "local" });
-  } catch {
-    // Ignore missing env on edge cases.
-  }
-  document.cookie = `${SESSION_MODE_COOKIE}=; Max-Age=0; Path=/`;
-  window.location.assign("/login?error=session_timeout");
+  // Full cookie clear via logout route, then land on the timeout message.
+  window.location.assign("/api/auth/logout?error=session_timeout");
 }
 
 /**
@@ -44,6 +39,7 @@ async function forceLogoutToLogin() {
 export function IdleSessionGuard() {
   const lastActivityRef = useRef(Date.now());
   const loggingOutRef = useRef(false);
+  const warnOpenRef = useRef(false);
   const [warnOpen, setWarnOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const reduced = useReducedMotion();
@@ -54,6 +50,7 @@ export function IdleSessionGuard() {
 
   const staySignedIn = useCallback(() => {
     lastActivityRef.current = Date.now();
+    warnOpenRef.current = false;
     setWarnOpen(false);
   }, []);
 
@@ -61,7 +58,8 @@ export function IdleSessionGuard() {
     let throttleUntil = 0;
 
     function markActivity() {
-      if (warnOpen) return;
+      // While the warning is up, only "Stay signed in" extends the session.
+      if (warnOpenRef.current || loggingOutRef.current) return;
       const now = Date.now();
       if (now < throttleUntil) return;
       throttleUntil = now + 1000;
@@ -73,11 +71,13 @@ export function IdleSessionGuard() {
       const idleFor = Date.now() - lastActivityRef.current;
       if (idleFor >= IDLE_TIMEOUT_MS) {
         loggingOutRef.current = true;
+        warnOpenRef.current = false;
         setWarnOpen(false);
-        void forceLogoutToLogin();
+        forceLogoutToLogin();
         return;
       }
-      if (idleFor >= IDLE_WARN_MS) {
+      if (idleFor >= IDLE_WARN_MS && !warnOpenRef.current) {
+        warnOpenRef.current = true;
         setWarnOpen(true);
       }
     }
@@ -93,7 +93,9 @@ export function IdleSessionGuard() {
     }
     document.addEventListener("visibilitychange", onVisibility);
 
-    const intervalId = window.setInterval(checkIdle, 10_000);
+    // Check often enough that the 2-minute warn window is reliable even when
+    // the tab was background-throttled and then focused again.
+    const intervalId = window.setInterval(checkIdle, 5_000);
     lastActivityRef.current = Date.now();
 
     return () => {
@@ -103,7 +105,9 @@ export function IdleSessionGuard() {
       document.removeEventListener("visibilitychange", onVisibility);
       window.clearInterval(intervalId);
     };
-  }, [warnOpen]);
+    // Mount once — do not rebind when the warning opens (that used to reset
+    // lastActivity and push logout out by another full 25 minutes).
+  }, []);
 
   if (!mounted) return null;
 
@@ -142,9 +146,9 @@ export function IdleSessionGuard() {
               id="session-expiry-desc"
               className="mt-2 text-sm leading-relaxed text-muted-foreground"
             >
-              You&apos;ve been idle. Sign-out happens in about two minutes.
-              Stay signed in to keep unsaved work — evaluation drafts on this
-              device are preserved until then.
+              You&apos;ve been idle for about 23 minutes. Sign-out happens in
+              about two minutes. Stay signed in to keep working — evaluation
+              drafts on this device are preserved until then.
             </p>
             <div className="mt-6 flex flex-wrap gap-2">
               <Button type="button" onClick={staySignedIn} className="flex-1">
@@ -156,7 +160,7 @@ export function IdleSessionGuard() {
                 className="flex-1"
                 onClick={() => {
                   loggingOutRef.current = true;
-                  void forceLogoutToLogin();
+                  forceLogoutToLogin();
                 }}
               >
                 Sign out now

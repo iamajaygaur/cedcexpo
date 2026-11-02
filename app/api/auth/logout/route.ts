@@ -50,7 +50,13 @@ async function clearSession() {
 
 function loginRedirect(request: NextRequest) {
   const switchAccount = request.nextUrl.searchParams.get("switch") === "1";
-  const loginPath = switchAccount ? "/login?switch=1" : "/login";
+  const sessionTimeout =
+    request.nextUrl.searchParams.get("error") === "session_timeout";
+  const loginPath = switchAccount
+    ? "/login?switch=1"
+    : sessionTimeout
+      ? "/login?error=session_timeout"
+      : "/login";
   return NextResponse.redirect(absoluteUrl(request, loginPath), 303);
 }
 
