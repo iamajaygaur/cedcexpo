@@ -11,6 +11,17 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 - Nothing queued yet — next work lands here before the next tag.
 
+## [1.1.1] — 2026-11-02
+
+### Added
+
+- Admin preview escape hatch on the judge shell: **Admin View** sidebar link (above Dashboard) and gold **Back to Admin** banner
+
+### Changed
+
+- Admin Manage nav labels: Teams Management, Judge Management, Judge Groups, Judging Assignments
+- Groups “Manage judges” / create actions use primary gold instead of near-black fill
+
 ## [1.1.0] — 2026-11-02
 
 ### Added
@@ -117,7 +128,8 @@ Initial product baseline.
 
 - Judge sign-out redirecting to the error page
 
-[Unreleased]: https://github.com/iamajaygaur/cedcexpo/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/iamajaygaur/cedcexpo/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/iamajaygaur/cedcexpo/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/iamajaygaur/cedcexpo/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/iamajaygaur/cedcexpo/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/iamajaygaur/cedcexpo/compare/v0.3.0...v1.0.0

@@ -4,7 +4,7 @@ Judging and evaluation PWA for **CU Denver College of Engineering, Design and Co
 
 **Product name:** CEDC Expo  
 **Institution:** University of Colorado Denver · CEDC  
-**Current version:** [1.1.0](./CHANGELOG.md) · shown in-app as `v1.1.0` · see [Releases](#releases)
+**Current version:** [1.1.1](./CHANGELOG.md) · shown in-app as `v1.1.1` · see [Releases](#releases)
 
 ## Quick start
 
@@ -62,6 +62,7 @@ We use **trunk-based development** on `main` with [SemVer](https://semver.org/) 
 
 | Version | Tag | What it marks |
 |---------|-----|----------------|
+| 1.1.1 | `v1.1.1` | Admin return from judge preview; clearer Manage nav labels |
 | 1.1.0 | `v1.1.0` | App-wide UI states (empty/loading/error/offline/slow/search/session) |
 | 1.0.1 | `v1.0.1` | In-app version badge (login, sidebars, footers, Settings) |
 | 1.0.0 | `v1.0.0` | Expo-ready: reliability, Groups/Judges boards, click affordances |
