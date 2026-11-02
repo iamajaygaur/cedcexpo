@@ -10,6 +10,7 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ### Fixed
 
 - App version badge reads `package.json` directly (and lockfile root stays in sync) so local/dev no longer sticks on a stale `NEXT_PUBLIC_APP_VERSION` from an old `next.config` load
+- E2E CI build no longer fails when Supabase GitHub secrets are empty (uses build placeholders; auth specs still skip until secrets are set)
 
 ### Planned
 

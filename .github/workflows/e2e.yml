@@ -42,6 +42,22 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
+      # `next build` prerenders routes that construct a Supabase client. Empty
+      # GitHub secrets make that throw. Use placeholders so the build (and
+      # public smoke e2e) still run; authenticated specs skip when E2E_* unset.
+      - name: Ensure Supabase env for build
+        run: |
+          if [ -z "${NEXT_PUBLIC_SUPABASE_URL}" ]; then
+            echo "NEXT_PUBLIC_SUPABASE_URL=https://placeholder.supabase.co" >> "$GITHUB_ENV"
+            echo "::warning::NEXT_PUBLIC_SUPABASE_URL secret is empty — using placeholder for build. Add repo secrets for real e2e."
+          fi
+          if [ -z "${NEXT_PUBLIC_SUPABASE_ANON_KEY}" ]; then
+            echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.placeholder" >> "$GITHUB_ENV"
+          fi
+          if [ -z "${SUPABASE_SERVICE_ROLE_KEY}" ]; then
+            echo "SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.placeholder" >> "$GITHUB_ENV"
+          fi
+
       - name: Build
         run: npm run build
 
