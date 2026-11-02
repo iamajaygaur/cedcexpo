@@ -92,7 +92,7 @@ export function JudgeShell({
       {/* ── Desktop sidebar ─────────────────────────────────── */}
       <aside
         data-app-sidebar
-        className="glass-sidebar fixed inset-y-0 left-0 z-40 hidden flex-col overflow-hidden md:flex"
+        className="glass-sidebar fixed inset-y-0 left-0 z-40 hidden flex-col overflow-hidden lg:flex"
       >
         <div className="flex items-center gap-3 border-b border-sidebar-border px-5 py-5">
           <div className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-none bg-white/08">
@@ -196,7 +196,7 @@ export function JudgeShell({
       {/* ── Mobile drawer ────────────────────────────────────── */}
       {open ? (
         <div
-          className="fixed inset-0 z-50 md:hidden"
+          className="fixed inset-0 z-50 lg:hidden"
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
@@ -304,7 +304,7 @@ export function JudgeShell({
       ) : null}
 
       {/* ── Main content ─────────────────────────────────────── */}
-      <div className="flex min-h-svh min-w-0 flex-col md:pl-[var(--app-sidebar-width)]">
+      <div className="flex min-h-svh min-w-0 flex-col lg:pl-[var(--app-sidebar-width)]">
         <OfflineBanner />
         {isAdminPreview ? (
           <div

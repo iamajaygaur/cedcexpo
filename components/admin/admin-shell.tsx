@@ -135,7 +135,7 @@ export function AdminShell({
 
       <aside
         data-app-sidebar
-        className="glass-sidebar fixed inset-y-0 left-0 z-40 hidden flex-col overflow-hidden md:flex"
+        className="glass-sidebar fixed inset-y-0 left-0 z-40 hidden flex-col overflow-hidden lg:flex"
       >
         <SidebarBrand />
         <SidebarNav pathname={pathname} className="sidebar-scroll flex-1" />
@@ -146,7 +146,7 @@ export function AdminShell({
 
       {open ? (
         <div
-          className="fixed inset-0 z-50 md:hidden"
+          className="fixed inset-0 z-50 lg:hidden"
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
@@ -184,7 +184,7 @@ export function AdminShell({
         </div>
       ) : null}
 
-      <div className="flex min-h-svh min-w-0 flex-col md:pl-[var(--app-sidebar-width)]">
+      <div className="flex min-h-svh min-w-0 flex-col lg:pl-[var(--app-sidebar-width)]">
         <OfflineBanner />
         <AppTopBar
           userName={userName}

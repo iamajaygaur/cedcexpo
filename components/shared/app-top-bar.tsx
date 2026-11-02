@@ -106,7 +106,7 @@ export function AppTopBar({
         {showMenuButton ? (
           <button
             type="button"
-            className="relative z-40 flex size-11 shrink-0 touch-manipulation items-center justify-center rounded-xl border border-border bg-muted/60 text-foreground transition-colors hover:bg-muted md:hidden"
+            className="relative z-40 flex size-11 shrink-0 touch-manipulation items-center justify-center rounded-xl border border-border bg-muted/60 text-foreground transition-colors hover:bg-muted lg:hidden"
             onClick={() => onOpenNav?.()}
             aria-label="Open navigation"
           >
