@@ -66,13 +66,13 @@ export function LoginForm({
             ? "Invalid username or password."
             : null);
 
+  // suppressHydrationWarning: Chrome iOS autofill injects __gcruniqueid before hydrate.
   return (
     <form
       method="post"
       action="/api/auth/login"
       autoComplete="on"
       className="space-y-5"
-      /* Chrome iOS autofill injects __gcruniqueid before hydrate — not our bug */
       suppressHydrationWarning
       onSubmit={() => {
         // Sync only for password type — do not setState before submit (FormData).
