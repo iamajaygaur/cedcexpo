@@ -89,7 +89,7 @@ export default async function EvaluateTeamPage({
         <p className="text-sm text-muted-foreground">{message}</p>
         <div className="flex flex-wrap justify-center gap-2">
           <Button asChild>
-            <Link href="/judge/dashboard">Back to assigned projects</Link>
+            <Link href="/judge/projects">Back to evaluations</Link>
           </Button>
           {isAdmin ? (
             <Button asChild variant="outline">

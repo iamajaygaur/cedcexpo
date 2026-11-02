@@ -91,9 +91,12 @@ export function JudgeShell({
             <AppLogo href="/judge/dashboard" className="h-9 w-9" />
           </div>
           <div className="min-w-0">
-            <p className="truncate text-[14px] font-bold tracking-tight text-sidebar-primary">
+            <Link
+              href="/judge/dashboard"
+              className="block truncate text-[14px] font-bold tracking-tight text-sidebar-primary hover:underline"
+            >
               CEDC Expo
-            </p>
+            </Link>
             <p className="truncate text-[10px] font-semibold uppercase tracking-[0.1em] text-sidebar-foreground/40">
               Judge
             </p>
@@ -185,18 +188,31 @@ export function JudgeShell({
           />
           <aside className="glass-sidebar absolute inset-y-0 left-0 flex w-[min(100%,300px)] max-w-[85vw] flex-col shadow-2xl animate-in slide-in-from-left duration-200">
             <div className="flex items-center justify-between gap-2 border-b border-sidebar-border px-4 py-4">
-              <div className="min-w-0">
-                <p
-                  id={titleId}
-                  className="truncate text-sm font-bold text-sidebar-primary"
-                >
-                  CEDC Expo
-                </p>
-                {userName ? (
-                  <p className="truncate text-[11px] text-sidebar-foreground/50">
-                    {userName}
+              <div className="flex min-w-0 items-center gap-2.5">
+                <AppLogo
+                  href="/judge/dashboard"
+                  className="h-8 w-8"
+                  onClick={() => setOpen(false)}
+                />
+                <div className="min-w-0">
+                  <p
+                    id={titleId}
+                    className="truncate text-sm font-bold text-sidebar-primary"
+                  >
+                    <Link
+                      href="/judge/dashboard"
+                      className="hover:underline"
+                      onClick={() => setOpen(false)}
+                    >
+                      CEDC Expo
+                    </Link>
                   </p>
-                ) : null}
+                  {userName ? (
+                    <p className="truncate text-[11px] text-sidebar-foreground/50">
+                      {userName}
+                    </p>
+                  ) : null}
+                </div>
               </div>
               <button
                 type="button"
@@ -261,7 +277,7 @@ export function JudgeShell({
           userName={userName}
           userRole={userRole}
           searchPlaceholder="Search projects…"
-          settingsHref="/judge/dashboard"
+          settingsHref="/judge/help"
           onOpenNav={() => setOpen(true)}
           onSearch={() => router.push("/judge/projects")}
           compactAccount

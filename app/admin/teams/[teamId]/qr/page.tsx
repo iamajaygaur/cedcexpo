@@ -42,7 +42,7 @@ export default async function TeamQrPage({ params }: PageProps) {
       </div>
       <PageHeader
         breadcrumbs={[
-          { label: "Teams", href: "/admin/teams" },
+          { label: "Teams", href: `/admin/teams?eventId=${typed.event_id}` },
           { label: `Team ${typed.team_number}` },
           { label: "QR" },
         ]}

@@ -13,6 +13,10 @@ import {
 
 import { AdminActionForm } from "@/components/admin/admin-action-form";
 import { showAppFeedbackFromResult } from "@/components/shared/app-feedback";
+import {
+  FILTER_SELECT_CLASS,
+  FilterToolbar,
+} from "@/components/shared/filter-toolbar";
 import { GroupBadge } from "@/components/shared/group-badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -174,7 +178,7 @@ export function AssignmentsManager({
       className="space-y-4"
     >
       <div className="dash-table-shell">
-        <div className="flex flex-col gap-3 border-b border-border p-4 lg:flex-row lg:items-center">
+        <FilterToolbar inset>
           <div className="min-w-0 flex-1">
             <SearchInput
               value={query}
@@ -192,7 +196,7 @@ export function AssignmentsManager({
             </span>
             <Select
               aria-label="Filter by department"
-              className="h-10 w-auto min-w-[8.5rem] shrink-0 rounded-md"
+              className={cn(FILTER_SELECT_CLASS, "sm:min-w-[8.5rem]")}
               value={deptFilter}
               onChange={(e) => {
                 setDeptFilter(e.target.value);
@@ -209,7 +213,7 @@ export function AssignmentsManager({
 
             <Select
               aria-label="Filter by group"
-              className="h-10 w-auto min-w-[8.5rem] shrink-0 rounded-md"
+              className={cn(FILTER_SELECT_CLASS, "sm:min-w-[8.5rem]")}
               value={groupFilter}
               onChange={(e) => {
                 setGroupFilter(e.target.value);
@@ -225,7 +229,7 @@ export function AssignmentsManager({
               ))}
             </Select>
           </div>
-        </div>
+        </FilterToolbar>
 
         <div className="overflow-x-auto">
           <table className="w-full min-w-[980px] text-left text-sm">

@@ -457,7 +457,7 @@ export function EvaluationForm({
             onDismiss: () => {
               if (successRedirectRef.current) {
                 successRedirectRef.current = false;
-                router.push("/judge/dashboard");
+                router.push("/judge/projects");
                 router.refresh();
               }
             },

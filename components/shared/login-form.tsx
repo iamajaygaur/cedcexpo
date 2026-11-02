@@ -26,6 +26,8 @@ type LoginFormProps = {
   configured?: boolean;
   supportEmail?: string;
   switchingAccount?: boolean;
+  /** Safe deep-link after login (from middleware `?next=`). */
+  nextPath?: string | null;
 };
 
 export function LoginForm({
@@ -35,6 +37,7 @@ export function LoginForm({
   configured = true,
   supportEmail = SUPPORT_EMAIL,
   switchingAccount = false,
+  nextPath = null,
 }: LoginFormProps) {
   void supportEmail;
   const [showPassword, setShowPassword] = useState(false);
@@ -80,6 +83,7 @@ export function LoginForm({
         window.setTimeout(() => setSubmitting(true), 0);
       }}
     >
+      {nextPath ? <input type="hidden" name="next" value={nextPath} /> : null}
       <div className="space-y-2">
         <label className="block text-xs font-semibold tracking-wider text-muted-foreground uppercase">
           Log In Role

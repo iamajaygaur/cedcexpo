@@ -1,16 +1,18 @@
 "use client";
 
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import {
   AlertTriangle,
   Building2,
   ChevronRight,
   Copy,
+  Eye,
   IdCard,
   KeyRound,
   Pencil,
+  Plus,
   Save,
   StickyNote,
   Trash2,
@@ -20,6 +22,10 @@ import {
 
 import { AdminActionForm } from "@/components/admin/admin-action-form";
 import { AssignedGroupPicker } from "@/components/admin/assigned-group-picker";
+import {
+  JudgesFilterBar,
+  type JudgesViewMode,
+} from "@/components/admin/judges-filter-bar";
 import { JudgesImportDialog } from "@/components/admin/judges-import-dialog";
 import { showAppFeedbackFromResult } from "@/components/shared/app-feedback";
 import { GroupBadge } from "@/components/shared/group-badge";
@@ -34,11 +40,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { SearchInput } from "@/components/ui/search-input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { TEAM_DEPARTMENTS } from "@/lib/teams/constants";
 import {
   createJudgeAction,
   deleteAllJudgesAction,
@@ -203,11 +209,14 @@ function JudgeEditorForm({
   eventId,
   groups,
   judge,
+  defaultGroupId = "",
   onCancel,
 }: {
   eventId: string | null;
   groups: JudgeGroup[];
   judge?: JudgeRow | null;
+  /** Pre-select panel when creating from a Kanban column. */
+  defaultGroupId?: string;
   onCancel: () => void;
 }) {
   const router = useRouter();
@@ -216,6 +225,7 @@ function JudgeEditorForm({
   const [firstName, setFirstName] = useState(initialNames.firstName);
   const [lastName, setLastName] = useState(initialNames.lastName);
   const username = usernameFromNameParts(firstName, lastName);
+  const initialGroupId = judge?.group?.id ?? defaultGroupId;
 
   return (
     <AdminActionForm
@@ -232,7 +242,7 @@ function JudgeEditorForm({
       <PageHeader
         className="mb-6"
         breadcrumbs={[
-          { label: "Judges", href: "/admin/judges" },
+          { label: "Judges", onClick: onCancel },
           { label: isEdit ? "Edit Judge" : "Add Judge" },
         ]}
         title={isEdit ? "Edit Judge" : "Add Judge"}
@@ -425,7 +435,7 @@ function JudgeEditorForm({
               <AssignedGroupPicker
                 id="judge_group_id"
                 groups={groups}
-                defaultValue={judge?.group?.id ?? ""}
+                defaultValue={initialGroupId}
                 disabled={!eventId}
               />
               {!eventId ? (
@@ -745,6 +755,146 @@ function JudgeDetailDialog({
   );
 }
 
+function JudgesMatrixTable({
+  rows,
+  onOpen,
+  onEdit,
+  onDelete,
+}: {
+  rows: JudgeRow[];
+  onOpen: (judge: JudgeRow) => void;
+  onEdit: (judge: JudgeRow) => void;
+  onDelete: (judge: JudgeRow) => void;
+}) {
+  if (rows.length === 0) {
+    return (
+      <EmptyState
+        title="No judges to show"
+        description="Add judges or clear filters to populate the matrix."
+      />
+    );
+  }
+
+  return (
+    <div className="dash-table-shell overflow-hidden">
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[720px] text-left text-sm">
+          <thead className="bg-muted/50 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
+            <tr>
+              <th className="px-4 py-3">Judge</th>
+              <th className="px-4 py-3">Login</th>
+              <th className="px-4 py-3">Company</th>
+              <th className="px-4 py-3">Domain</th>
+              <th className="px-4 py-3">Panel</th>
+              <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((judge) => {
+              const name = judge.profiles?.full_name ?? "Judge";
+              return (
+                <tr
+                  key={judge.id}
+                  className="ui-interactive-quiet border-t border-border/70"
+                >
+                  <td className="px-4 py-3">
+                    <button
+                      type="button"
+                      className="flex max-w-full items-center gap-2.5 text-left"
+                      onClick={() => onOpen(judge)}
+                    >
+                      <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-bold text-muted-foreground">
+                        {initials(name)}
+                      </span>
+                      <span className="truncate font-semibold text-foreground">
+                        {name}
+                      </span>
+                    </button>
+                  </td>
+                  <td className="px-4 py-3 text-muted-foreground">
+                    {loginFor(judge)}
+                  </td>
+                  <td className="px-4 py-3 text-muted-foreground">
+                    {judge.organization?.trim() || "—"}
+                  </td>
+                  <td className="px-4 py-3">
+                    {judge.department?.trim() ? (
+                      <span className="inline-flex rounded-full bg-muted px-2.5 py-0.5 text-[11px] font-semibold text-foreground">
+                        {judge.department.trim()}
+                      </span>
+                    ) : (
+                      <span className="text-muted-foreground">—</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3">
+                    {judge.group ? (
+                      <GroupBadge
+                        colorKey={judge.group.color_key}
+                        name={judge.group.name}
+                        size="sm"
+                      />
+                    ) : (
+                      <span className="text-xs text-muted-foreground">
+                        Unassigned
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3">
+                    <span
+                      className={cn(
+                        "inline-flex rounded-full px-2.5 py-0.5 text-[11px] font-semibold",
+                        judge.active
+                          ? "bg-tertiary/15 text-tertiary"
+                          : "bg-muted text-muted-foreground",
+                      )}
+                    >
+                      {judge.active ? "Active" : "Inactive"}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center justify-end gap-1.5">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon-sm"
+                        aria-label={`Edit ${name}`}
+                        onClick={() => onEdit(judge)}
+                      >
+                        <Pencil className="size-3.5" />
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon-sm"
+                        className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                        aria-label={`Delete ${name}`}
+                        onClick={() => onDelete(judge)}
+                      >
+                        <Trash2 className="size-3.5" />
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon-sm"
+                        aria-label={`View details for ${name}`}
+                        title="View"
+                        onClick={() => onOpen(judge)}
+                      >
+                        <Eye className="size-3.5" />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 export function JudgesManager({
   eventId,
   judges,
@@ -757,9 +907,13 @@ export function JudgesManager({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formKey, setFormKey] = useState(0);
   const [query, setQuery] = useState("");
+  const [domainFilter, setDomainFilter] = useState("all");
+  const [companyFilter, setCompanyFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">(
     "all",
   );
+  const [viewMode, setViewMode] = useState<JudgesViewMode>("kanban");
+  const [createGroupId, setCreateGroupId] = useState("");
   const [importOpen, setImportOpen] = useState(false);
   const [deleteAllOpen, setDeleteAllOpen] = useState(false);
   const [deleteJudge, setDeleteJudge] = useState<JudgeRow | null>(null);
@@ -783,11 +937,45 @@ export function JudgesManager({
     [judges, editingId],
   );
 
+  const domainOptions = useMemo(() => {
+    const fromData = new Set<string>();
+    for (const j of judges) {
+      const d = j.department?.trim();
+      if (d) fromData.add(d);
+    }
+    const ordered = TEAM_DEPARTMENTS.filter((d) => fromData.has(d));
+    const extras = [...fromData]
+      .filter((d) => !(TEAM_DEPARTMENTS as readonly string[]).includes(d))
+      .sort((a, b) => a.localeCompare(b));
+    return [...ordered, ...extras];
+  }, [judges]);
+
+  const companyOptions = useMemo(() => {
+    const set = new Set<string>();
+    for (const j of judges) {
+      const org = j.organization?.trim();
+      if (org) set.add(org);
+    }
+    return [...set].sort((a, b) => a.localeCompare(b));
+  }, [judges]);
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return judges.filter((judge) => {
       if (statusFilter === "active" && !judge.active) return false;
       if (statusFilter === "inactive" && judge.active) return false;
+      if (
+        domainFilter !== "all" &&
+        (judge.department?.trim() ?? "") !== domainFilter
+      ) {
+        return false;
+      }
+      if (
+        companyFilter !== "all" &&
+        (judge.organization?.trim() ?? "") !== companyFilter
+      ) {
+        return false;
+      }
       if (!q) return true;
       const haystack = [
         judge.profiles?.full_name,
@@ -802,7 +990,14 @@ export function JudgesManager({
         .toLowerCase();
       return haystack.includes(q);
     });
-  }, [judges, query, statusFilter]);
+  }, [judges, query, statusFilter, domainFilter, companyFilter]);
+
+  function clearFilters() {
+    setQuery("");
+    setDomainFilter("all");
+    setCompanyFilter("all");
+    setStatusFilter("all");
+  }
 
   const sortedGroups = useMemo(
     () =>
@@ -845,6 +1040,14 @@ export function JudgesManager({
   function backToList() {
     setMode("list");
     setEditingId(null);
+    setCreateGroupId("");
+  }
+
+  function openCreate(groupId = "") {
+    setEditingId(null);
+    setCreateGroupId(groupId);
+    setFormKey((k) => k + 1);
+    setMode("create");
   }
 
   if (mode === "create" || mode === "edit") {
@@ -854,6 +1057,7 @@ export function JudgesManager({
         eventId={eventId}
         groups={groups}
         judge={mode === "edit" ? editingJudge : null}
+        defaultGroupId={createGroupId}
         onCancel={backToList}
       />
     );
@@ -904,11 +1108,7 @@ export function JudgesManager({
               type="button"
               size="lg"
               className="gap-2"
-              onClick={() => {
-                setEditingId(null);
-                setFormKey((k) => k + 1);
-                setMode("create");
-              }}
+              onClick={() => openCreate()}
             >
               <UserPlus className="size-4" aria-hidden />
               Add Judge
@@ -917,82 +1117,101 @@ export function JudgesManager({
         }
       />
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="min-w-0 flex-1">
-          <SearchInput
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search judges by name, login, org, or department…"
-            aria-label="Search judges"
-          />
-        </div>
-        <Select
-          value={statusFilter}
-          onChange={(e) =>
-            setStatusFilter(e.target.value as "all" | "active" | "inactive")
-          }
-          className="h-10 w-full shrink-0 sm:w-auto sm:min-w-[10rem]"
-          aria-label="Filter by status"
-        >
-          <option value="all">All status</option>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-        </Select>
-      </div>
+      <JudgesFilterBar
+        query={query}
+        onQueryChange={setQuery}
+        domain={domainFilter}
+        onDomainChange={setDomainFilter}
+        domains={domainOptions}
+        company={companyFilter}
+        onCompanyChange={setCompanyFilter}
+        companies={companyOptions}
+        status={statusFilter}
+        onStatusChange={setStatusFilter}
+        view={viewMode}
+        onViewChange={setViewMode}
+      />
 
       {judges.length > 0 && filtered.length === 0 ? (
-        <ZeroResults
-          query={query}
-          onClear={() => {
-            setQuery("");
-            setStatusFilter("all");
-          }}
-        />
-      ) : sortedGroups.length === 0 && unassigned.length === 0 ? (
-        <EmptyState
-          title={
-            judges.length === 0
-              ? "No judges yet"
-              : eventId
-                ? "Panels need color groups"
-                : "Select an active event"
-          }
-          description={
-            judges.length === 0
-              ? "Add a judge or import a roster, then assign them to color panels."
-              : eventId
-                ? "Create color groups first, then assign judges to panels."
-                : "Choose an active event to organize judges by panel."
-          }
-          action={
-            judges.length === 0 ? (
-              <Button
-                type="button"
-                size="sm"
-                className="gap-2"
-                onClick={() => {
-                  setEditingId(null);
-                  setFormKey((k) => k + 1);
-                  setMode("create");
-                }}
-              >
-                <UserPlus className="size-3.5" aria-hidden />
-                Add Judge
-              </Button>
-            ) : null
-          }
-        />
+        <ZeroResults query={query} onClear={clearFilters} />
       ) : (
-        <div
-          className="grid gap-3 overflow-x-auto pb-1"
-          style={{
-            // Equal columns that grow to fill the row; scroll only when too narrow.
-            gridTemplateColumns: `repeat(${
-              sortedGroups.length +
-              (unassigned.length > 0 || sortedGroups.length === 0 ? 1 : 0)
-            }, minmax(14rem, 1fr))`,
-          }}
-        >
+        <AnimatePresence mode="wait" initial={false}>
+          {viewMode === "matrix" ? (
+            <motion.div
+              key="matrix"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <JudgesMatrixTable
+                rows={[...filtered].sort((a, b) =>
+                  (a.profiles?.full_name ?? "").localeCompare(
+                    b.profiles?.full_name ?? "",
+                  ),
+                )}
+                onOpen={setDetailJudge}
+                onEdit={(judge) => {
+                  setEditingId(judge.id);
+                  setFormKey((k) => k + 1);
+                  setMode("edit");
+                }}
+                onDelete={setDeleteJudge}
+              />
+            </motion.div>
+          ) : sortedGroups.length === 0 && unassigned.length === 0 ? (
+            <motion.div
+              key="empty"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <EmptyState
+                title={
+                  judges.length === 0
+                    ? "No judges yet"
+                    : eventId
+                      ? "Panels need color groups"
+                      : "Select an active event"
+                }
+                description={
+                  judges.length === 0
+                    ? "Add a judge or import a roster, then assign them to color panels."
+                    : eventId
+                      ? "Create color groups first, then assign judges to panels."
+                      : "Choose an active event to organize judges by panel."
+                }
+                action={
+                  judges.length === 0 ? (
+                    <Button
+                      type="button"
+                      size="sm"
+                      className="gap-2"
+                      onClick={() => openCreate()}
+                    >
+                      <UserPlus className="size-3.5" aria-hidden />
+                      Add Judge
+                    </Button>
+                  ) : null
+                }
+              />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="kanban"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="grid gap-3 overflow-x-auto pb-1"
+              style={{
+                gridTemplateColumns: `repeat(${
+                  sortedGroups.length +
+                  (unassigned.length > 0 || sortedGroups.length === 0 ? 1 : 0)
+                }, minmax(14rem, 1fr))`,
+              }}
+            >
           {sortedGroups.map((group) => {
             const token = getGroupColorToken(group.color_key);
             const columnJudges = filtered
@@ -1124,22 +1343,23 @@ export function JudgesManager({
                   )}
                 </ul>
 
-                <footer className="mt-auto space-y-1.5 px-3 pt-1 pb-3">
-                  <p className="flex items-center gap-1 text-[11px] text-muted-foreground">
+                <footer className="mt-auto space-y-2 px-3 pt-1 pb-3">
+                  <div className="flex items-center justify-between gap-2 text-[11px] text-muted-foreground">
                     <span className="font-medium text-foreground">
-                      {teamCount} team{teamCount === 1 ? "" : "s"}
+                      {teamCount} team{teamCount === 1 ? "" : "s"} assigned
                     </span>
-                    <span aria-hidden>·</span>
-                    <span className={cn("font-medium", tone.className)}>
-                      {formatDelta(delta)} avg
+                    <span className="inline-flex items-center gap-1">
+                      <span className={cn("font-medium", tone.className)}>
+                        {formatDelta(delta)} avg
+                      </span>
+                      {tone.warn ? (
+                        <AlertTriangle
+                          className={cn("size-3", tone.className)}
+                          aria-label={tone.label}
+                        />
+                      ) : null}
                     </span>
-                    {tone.warn ? (
-                      <AlertTriangle
-                        className={cn("size-3", tone.className)}
-                        aria-label={tone.label}
-                      />
-                    ) : null}
-                  </p>
+                  </div>
                   <div className="h-1.5 overflow-hidden rounded-full bg-muted">
                     <div
                       className="h-full rounded-full transition-[width] duration-500"
@@ -1149,6 +1369,21 @@ export function JudgesManager({
                       }}
                     />
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => openCreate(group.id)}
+                    disabled={!eventId}
+                    className={cn(
+                      "ui-interactive-quiet inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-md border text-sm font-semibold",
+                      token.bgClass,
+                      token.textClass,
+                      token.ringClass,
+                      "disabled:cursor-not-allowed disabled:opacity-50",
+                    )}
+                  >
+                    <Plus className="size-4" aria-hidden />
+                    Assign Judge
+                  </button>
                 </footer>
               </section>
             );
@@ -1251,7 +1486,9 @@ export function JudgesManager({
               </ul>
             </section>
           ) : null}
-        </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       )}
 
       <JudgeDetailDialog

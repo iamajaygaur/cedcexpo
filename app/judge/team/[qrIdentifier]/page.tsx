@@ -22,7 +22,7 @@ export default async function JudgeTeamQrPage({ params }: PageProps) {
           regenerated — ask expo staff for a new code.
         </p>
         <Button asChild>
-          <Link href="/judge/dashboard">Back to assigned projects</Link>
+          <Link href="/judge/projects">Back to evaluations</Link>
         </Button>
       </div>
     );
@@ -61,7 +61,7 @@ export default async function JudgeTeamQrPage({ params }: PageProps) {
           has not been assigned to a judging group yet.
         </p>
         <Button asChild>
-          <Link href="/judge/dashboard">Back to assigned projects</Link>
+          <Link href="/judge/projects">Back to evaluations</Link>
         </Button>
       </div>
     );
@@ -100,7 +100,7 @@ export default async function JudgeTeamQrPage({ params }: PageProps) {
         </p>
       )}
       <Button asChild className="min-h-11">
-        <Link href="/judge/dashboard">Return to assigned projects</Link>
+        <Link href="/judge/projects">Back to evaluations</Link>
       </Button>
     </div>
   );

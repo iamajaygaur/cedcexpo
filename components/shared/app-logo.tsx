@@ -10,12 +10,14 @@ type AppLogoProps = {
   className?: string;
   href?: string;
   variant?: "mark" | "horizontal";
+  onClick?: () => void;
 };
 
 export function AppLogo({
   className,
   href = "/",
   variant = "mark",
+  onClick,
 }: AppLogoProps) {
   const src =
     variant === "horizontal"
@@ -43,6 +45,7 @@ export function AppLogo({
   return (
     <Link
       href={href}
+      onClick={onClick}
       className={cn(
         "inline-flex items-center gap-2",
         variant === "horizontal"

@@ -21,6 +21,10 @@ import {
 import { AnalyticsGauge } from "@/components/admin/analytics-gauge";
 import { GroupHorizBar as HorizBar } from "@/components/admin/group-progress-bars";
 import { GroupBadge } from "@/components/shared/group-badge";
+import {
+  FILTER_SELECT_CLASS,
+  FilterToolbar,
+} from "@/components/shared/filter-toolbar";
 import { EmptyState, ZeroResults } from "@/components/shared/ui-states";
 import { SearchInput } from "@/components/ui/search-input";
 import { Select } from "@/components/ui/select";
@@ -345,31 +349,34 @@ export function LiveMonitor({
       </section>
 
       <section className="space-y-4">
-        <div className="flex flex-nowrap items-center gap-3">
-          <span className="shrink-0 text-sm font-medium text-muted-foreground whitespace-nowrap">
-            Sort by:
-          </span>
-          <Select
-            value={tab}
-            onChange={(e) => setTab(e.target.value as Tab)}
-            className="h-10 min-w-[8.5rem] shrink-0 rounded-md"
-            aria-label="View by team or judge"
-          >
-            <option value="teams">By team</option>
-            <option value="judges">By judge</option>
-          </Select>
-          <SearchInput
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={
-              tab === "teams"
-                ? "Search teams or projects…"
-                : "Search judges…"
-            }
-            className="min-w-0 flex-1 max-w-sm"
-            aria-label="Search monitor rows"
-          />
-        </div>
+        <FilterToolbar className="dash-table-shell border border-border p-4">
+          <div className="min-w-0 flex-1">
+            <SearchInput
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={
+                tab === "teams"
+                  ? "Search teams or projects…"
+                  : "Search judges…"
+              }
+              aria-label="Search monitor rows"
+            />
+          </div>
+          <div className="flex flex-nowrap items-center gap-2 overflow-x-auto">
+            <span className="shrink-0 text-sm font-medium text-muted-foreground whitespace-nowrap">
+              Sort by:
+            </span>
+            <Select
+              value={tab}
+              onChange={(e) => setTab(e.target.value as Tab)}
+              className={cn(FILTER_SELECT_CLASS, "sm:min-w-[8.5rem]")}
+              aria-label="View by team or judge"
+            >
+              <option value="teams">By team</option>
+              <option value="judges">By judge</option>
+            </Select>
+          </div>
+        </FilterToolbar>
 
         {tab === "teams" ? (
           <TeamLiveTable

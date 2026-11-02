@@ -215,9 +215,12 @@ function SidebarBrand({ compact = false }: { compact?: boolean }) {
       </div>
       {!compact && (
         <div className="min-w-0">
-          <p className="truncate text-[14px] font-bold tracking-tight text-sidebar-primary">
+          <Link
+            href="/admin/dashboard"
+            className="block truncate text-[14px] font-bold tracking-tight text-sidebar-primary hover:underline"
+          >
             CEDC Expo
-          </p>
+          </Link>
           <p className="truncate text-[10px] font-semibold uppercase tracking-[0.1em] text-sidebar-foreground/40">
             Admin
           </p>

@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils";
 export type PageBreadcrumb = {
   label: string;
   href?: string;
+  /** Same-page reset (e.g. exit create/edit) — preferred over same-URL href. */
+  onClick?: () => void;
 };
 
 type PageHeaderProps = {
@@ -49,7 +51,15 @@ export function PageHeader({
                       /
                     </span>
                   ) : null}
-                  {crumb.href && !isLast ? (
+                  {!isLast && crumb.onClick ? (
+                    <button
+                      type="button"
+                      onClick={crumb.onClick}
+                      className="cursor-pointer transition-colors hover:text-primary"
+                    >
+                      {crumb.label}
+                    </button>
+                  ) : crumb.href && !isLast ? (
                     <Link
                       href={crumb.href}
                       className="transition-colors hover:text-primary"

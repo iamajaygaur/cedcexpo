@@ -6,6 +6,7 @@ import {
   applySessionCookieOptions,
   type SessionMode,
 } from "@/lib/auth/session-mode";
+import { safeNextPathForRole } from "@/lib/auth/safe-next-path";
 import { dashboardPathForRole } from "@/lib/auth/session";
 import {
   authEmailFromUsername,
@@ -265,8 +266,13 @@ export async function POST(request: NextRequest) {
     }
   }
 
+  const nextRaw = String(formData.get("next") ?? "").trim();
+  const destination = isAppRole(profile.role)
+    ? safeNextPathForRole(nextRaw || null, profile.role)
+    : dashboardPathForRole("judge");
+
   const response = NextResponse.redirect(
-    absoluteUrl(request, dashboardPathForRole(profile.role)),
+    absoluteUrl(request, destination),
     303,
   );
 

@@ -15,6 +15,7 @@ type LoginViewProps = {
   configured: boolean;
   switchingAccount: boolean;
   year: number;
+  nextPath?: string | null;
 };
 
 export function LoginView({
@@ -24,6 +25,7 @@ export function LoginView({
   configured,
   switchingAccount,
   year,
+  nextPath = null,
 }: LoginViewProps) {
   return (
     <div className="relative flex min-h-dvh items-center justify-center overflow-hidden bg-background px-4 py-8 sm:px-6">
@@ -192,6 +194,7 @@ export function LoginView({
               noticeMessage={noticeMessage}
               configured={configured}
               switchingAccount={switchingAccount}
+              nextPath={nextPath}
             />
 
             {/* Footer links & Trust Badge */}

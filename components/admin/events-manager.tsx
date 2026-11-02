@@ -180,7 +180,7 @@ function EventEditorForm({
       <PageHeader
         className="mb-6"
         breadcrumbs={[
-          { label: "Events", href: "/admin/events" },
+          { label: "Events", onClick: () => onDone?.() },
           { label: isEdit ? "Edit" : "Create New" },
         ]}
         title={isEdit ? "Edit Expo Event" : "Create Expo Event"}

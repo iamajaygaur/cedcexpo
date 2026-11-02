@@ -23,6 +23,7 @@ import { AdminActionForm } from "@/components/admin/admin-action-form";
 import { TeamsImportDialog } from "@/components/admin/teams-import-dialog";
 import { showAppFeedbackFromResult } from "@/components/shared/app-feedback";
 import { GroupBadge } from "@/components/shared/group-badge";
+import { FILTER_SELECT_CLASS, FilterToolbar } from "@/components/shared/filter-toolbar";
 import { PageHeader } from "@/components/shared/page-header";
 import { EmptyState, ZeroResults } from "@/components/shared/ui-states";
 import { Button } from "@/components/ui/button";
@@ -178,7 +179,7 @@ function TeamEditorForm({
       <PageHeader
         className="mb-6"
         breadcrumbs={[
-          { label: "Teams", href: "/admin/teams" },
+          { label: "Teams", onClick: onCancel },
           { label: team ? "Edit Team" : "Add New Team" },
         ]}
         title="Add / Edit Team"
@@ -529,7 +530,7 @@ export function TeamsManager({
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
         className="dash-table-shell"
       >
-        <div className="flex flex-col gap-3 border-b border-border p-4 lg:flex-row lg:items-center">
+        <FilterToolbar inset>
           <div className="min-w-0 flex-1">
             <SearchInput
               value={query}
@@ -551,7 +552,7 @@ export function TeamsManager({
                 setDeptFilter(e.target.value);
                 setPage(1);
               }}
-              className="h-10 w-auto min-w-[9rem] shrink-0 rounded-md"
+              className={FILTER_SELECT_CLASS}
               aria-label="Filter by department"
             >
               <option value="all">All Departments</option>
@@ -567,7 +568,7 @@ export function TeamsManager({
                 setStatusFilter(e.target.value);
                 setPage(1);
               }}
-              className="h-10 w-auto min-w-[8.5rem] shrink-0 rounded-md"
+              className={cn(FILTER_SELECT_CLASS, "sm:min-w-[8.5rem]")}
               aria-label="Filter by status"
             >
               <option value="all">All Statuses</option>
@@ -581,7 +582,7 @@ export function TeamsManager({
                 setGroupFilter(e.target.value);
                 setPage(1);
               }}
-              className="h-10 w-auto min-w-[8.5rem] shrink-0 rounded-md"
+              className={cn(FILTER_SELECT_CLASS, "sm:min-w-[8.5rem]")}
               aria-label="Filter by group"
             >
               <option value="all">All Groups</option>
@@ -593,7 +594,7 @@ export function TeamsManager({
               ))}
             </Select>
           </div>
-        </div>
+        </FilterToolbar>
 
         <div className="overflow-x-auto">
           <table className="w-full min-w-[780px] text-left text-sm">

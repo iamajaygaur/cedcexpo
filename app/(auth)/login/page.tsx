@@ -20,6 +20,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const noticeMessage = params.notice?.trim() || null;
   const switchingAccount = params.switch === "1";
   const year = new Date().getFullYear();
+  const nextPath = params.next?.trim() || null;
 
   return (
     <LoginView
@@ -29,6 +30,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
       configured={configured}
       switchingAccount={switchingAccount}
       year={year}
+      nextPath={nextPath}
     />
   );
 }
