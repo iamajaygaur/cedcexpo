@@ -673,7 +673,7 @@ export function EvaluationForm({
                         />
                         <span
                           id={`score-max-mobile-${criterion.id}`}
-                          className="pb-px text-xs tabular-nums text-muted-foreground"
+                          className="pb-px text-xs font-bold tabular-nums text-foreground"
                         >
                           / {max}
                         </span>
