@@ -865,7 +865,7 @@ export function EvaluationForm({
       {/* Sticky score + submit — hide while the virtual keyboard is open */}
       <div
         className={cn(
-          "fixed inset-x-0 bottom-0 z-30 border-t border-[color-mix(in_srgb,var(--cu-gold)_28%,var(--border))] bg-card/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_28px_rgba(25,28,29,0.08)] backdrop-blur transition-transform duration-200 md:left-[min(260px,30vw)] md:z-40 md:translate-y-0 md:pointer-events-auto",
+          "fixed inset-x-0 bottom-0 z-30 border-t border-[color-mix(in_srgb,var(--cu-gold)_28%,var(--border))] bg-card/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_28px_rgba(25,28,29,0.08)] backdrop-blur transition-transform duration-200 md:left-[var(--app-sidebar-width)] md:translate-y-0 md:pointer-events-auto",
           keyboardOpen
             ? "pointer-events-none translate-y-full md:translate-y-0"
             : "translate-y-0",
