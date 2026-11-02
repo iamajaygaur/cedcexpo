@@ -15,6 +15,7 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Idle logout actually fires after 25 minutes: warning no longer resets the timer, mouse-move jitter no longer counts as activity, and logout clears cookies via `/api/auth/logout`
 - Judge evaluation submit requires a score out of max and a comment on every criterion (UI + server)
 - Tablet/pad widths use the collapsible drawer + menu button (fixed sidebar starts at `lg`)
+- Judge login username is normalized to lowercase on desktop and mobile (same slug either way)
 
 ### Planned
 

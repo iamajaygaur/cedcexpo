@@ -42,11 +42,30 @@ export function LoginForm({
   void supportEmail;
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [username, setUsername] = useState("");
   const [activeRole, setActiveRole] = useState<"judge" | "admin">(
     noticeMessage ? "admin" : "judge",
   );
   const passwordRef = useRef<HTMLInputElement>(null);
   const slowSubmit = useSlowPending(submitting);
+
+  function setRole(next: "judge" | "admin") {
+    setActiveRole(next);
+    // Judge usernames are always lowercase alphanumerics (same on phone + desktop).
+    if (next === "judge") {
+      setUsername((prev) =>
+        prev.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 64),
+      );
+    }
+  }
+
+  function onUsernameChange(raw: string) {
+    if (activeRole === "judge") {
+      setUsername(raw.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 64));
+      return;
+    }
+    setUsername(raw);
+  }
 
   useEffect(() => {
     if (switchingAccount) {
@@ -91,7 +110,7 @@ export function LoginForm({
         <div className="grid grid-cols-2 gap-2 rounded-xl border border-border/50 bg-muted/60 p-1">
           <button
             type="button"
-            onClick={() => setActiveRole("judge")}
+            onClick={() => setRole("judge")}
             className={`relative flex cursor-pointer items-center justify-center gap-2 rounded-lg py-2.5 text-xs font-bold transition-colors ${
               activeRole === "judge"
                 ? "text-foreground"
@@ -111,7 +130,7 @@ export function LoginForm({
 
           <button
             type="button"
-            onClick={() => setActiveRole("admin")}
+            onClick={() => setRole("admin")}
             className={`relative flex cursor-pointer items-center justify-center gap-2 rounded-lg py-2.5 text-xs font-bold transition-colors ${
               activeRole === "admin"
                 ? "text-foreground"
@@ -150,8 +169,10 @@ export function LoginForm({
             id="username"
             name="username"
             type={activeRole === "admin" ? "email" : "text"}
+            value={username}
+            onChange={(e) => onUsernameChange(e.target.value)}
             autoComplete="username"
-            autoCapitalize="none"
+            autoCapitalize="off"
             autoCorrect="off"
             spellCheck={false}
             inputMode={activeRole === "admin" ? "email" : "text"}
@@ -159,7 +180,7 @@ export function LoginForm({
             suppressHydrationWarning
             placeholder={
               activeRole === "judge"
-                ? "Username (e.g. ajaygaur)"
+                ? "Username (e.g. judge1last1)"
                 : "admin@ucdenver.edu"
             }
             disabled={!configured}
@@ -176,7 +197,7 @@ export function LoginForm({
             className="text-xs text-muted-foreground"
           >
             {activeRole === "judge"
-              ? "Judges use the assigned username provided by event organizers."
+              ? "Use your assigned username in lowercase (firstname + lastname, no spaces)."
               : "Admins use their registered institutional email address."}
           </motion.p>
         </AnimatePresence>

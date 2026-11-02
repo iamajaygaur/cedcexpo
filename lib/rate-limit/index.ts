@@ -174,7 +174,13 @@ export async function checkLoginRateLimit(
 export async function checkLoginUsernameRateLimit(
   username: string,
 ): Promise<RateLimitResult> {
-  const key = username.trim().toLowerCase() || "unknown";
+  const trimmed = username.trim().toLowerCase();
+  // Match login slug rules so "Judge1Last1" and "judge1last1" share one bucket.
+  const key = !trimmed
+    ? "unknown"
+    : trimmed.includes("@")
+      ? trimmed
+      : trimmed.replace(/[^a-z0-9]/g, "").slice(0, 64) || "unknown";
   return checkKeyedRateLimit(`login-user:${key}`, {
     windowMs: LOGIN_WINDOW_MS,
     maxAttempts: LOGIN_USERNAME_MAX,
