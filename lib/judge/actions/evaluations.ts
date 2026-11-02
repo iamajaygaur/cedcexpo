@@ -238,6 +238,9 @@ export async function submitEvaluationAction(
       if (score.score > Number(c.max_score)) {
         return actionFail(`Score for "${c.name}" exceeds maximum.`);
       }
+      if (!score.comment.trim()) {
+        return actionFail(`A comment is required for "${c.name}".`);
+      }
     }
 
     const draftResult = await saveEvaluationDraftAction(parsed.data);

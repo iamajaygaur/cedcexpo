@@ -225,6 +225,18 @@ export function EvaluationForm({
     [criteria, scores],
   );
 
+  const commentedCount = useMemo(
+    () =>
+      criteria.filter((c) => (scores[c.id]?.comment ?? "").trim().length > 0)
+        .length,
+    [criteria, scores],
+  );
+
+  const canSubmit =
+    criteria.length > 0 &&
+    enteredCount === criteria.length &&
+    commentedCount === criteria.length;
+
   const maxTotal = useMemo(
     () => criteria.reduce((sum, c) => sum + Number(c.max_score), 0),
     [criteria],
@@ -429,12 +441,24 @@ export function EvaluationForm({
       return;
     }
 
-    const missing = criteria.filter((c) => scores[c.id]?.score === null);
-    if (missing.length > 0) {
+    const missingScores = criteria.filter((c) => scores[c.id]?.score === null);
+    if (missingScores.length > 0) {
       setConfirmOpen(false);
       showAppFeedbackFromResult(
         false,
-        `Enter a score for every criterion (${missing.length} remaining).`,
+        `Enter a score out of ${maxPerCriterion} for every criterion (${missingScores.length} remaining).`,
+      );
+      return;
+    }
+
+    const missingComments = criteria.filter(
+      (c) => !(scores[c.id]?.comment ?? "").trim(),
+    );
+    if (missingComments.length > 0) {
+      setConfirmOpen(false);
+      showAppFeedbackFromResult(
+        false,
+        `Add a comment for every criterion (${missingComments.length} remaining).`,
       );
       return;
     }
@@ -595,8 +619,9 @@ export function EvaluationForm({
         />
         <p>
           <span className="font-semibold text-foreground">Instructions: </span>
-          Score 1–{maxPerCriterion} per criterion (max {maxTotal} total).
-          Comments are optional.
+          Enter a score out of {maxPerCriterion} for every criterion (max{" "}
+          {maxTotal} total). A comment is required on each criterion before
+          submit.
         </p>
       </div>
 
@@ -771,14 +796,22 @@ export function EvaluationForm({
                 ) : null}
 
                 <div className="mt-2.5 sm:mt-4">
+                  <label
+                    htmlFor={`comment-${criterion.id}`}
+                    className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wide text-muted-foreground"
+                  >
+                    Comments <span className="text-destructive">*</span>
+                  </label>
                   <Textarea
+                    id={`comment-${criterion.id}`}
                     value={row.comment}
                     disabled={readOnly}
+                    required
                     rows={2}
                     autoComplete="off"
                     autoCorrect="on"
                     enterKeyHint="done"
-                    placeholder={`Optional comments on ${criterion.name}...`}
+                    placeholder={`Required comments on ${criterion.name}...`}
                     onChange={(e) =>
                       setCriterionComment(criterion.id, e.target.value)
                     }
@@ -853,9 +886,11 @@ export function EvaluationForm({
                 saveStatus === "error" ? (saveError ?? undefined) : undefined
               }
             />
-            {enteredCount > 0 && enteredCount < criteria.length ? (
+            {!readOnly && criteria.length > 0 ? (
               <span className="text-xs text-muted-foreground">
                 {enteredCount}/{criteria.length} scored
+                {" · "}
+                {commentedCount}/{criteria.length} commented
               </span>
             ) : null}
           </div>
@@ -881,7 +916,12 @@ export function EvaluationForm({
                 size="lg"
                 className="min-h-11 flex-1 gap-2 touch-manipulation sm:flex-none"
                 onClick={() => setConfirmOpen(true)}
-                disabled={criteria.length === 0}
+                disabled={!canSubmit}
+                title={
+                  canSubmit
+                    ? undefined
+                    : "Enter a score and comment for every criterion"
+                }
               >
                 <Send className="size-4" aria-hidden />
                 Submit Evaluation
@@ -914,8 +954,8 @@ export function EvaluationForm({
               Submit evaluation?
             </h2>
             <p className="mt-2 text-sm text-muted-foreground">
-              You won&apos;t be able to edit scores after submission. Total
-              score: {totalScore} / {maxTotal}.
+              You won&apos;t be able to edit scores or comments after
+              submission. Total score: {totalScore} / {maxTotal}.
             </p>
             <div className="mt-6 flex justify-end gap-2">
               <Button

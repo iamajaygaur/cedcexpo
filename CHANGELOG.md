@@ -13,6 +13,7 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - E2E CI build no longer fails when Supabase GitHub secrets are empty (uses build placeholders; auth specs still skip until secrets are set)
 - Vercel install warnings: approve `sharp` / `unrs-resolver` via `allowScripts`, and drop invalid `cache-dir` npm env during install
 - Idle logout actually fires after 25 minutes: warning no longer resets the timer, mouse-move jitter no longer counts as activity, and logout clears cookies via `/api/auth/logout`
+- Judge evaluation submit requires a score out of max and a comment on every criterion (UI + server)
 
 ### Planned
 
