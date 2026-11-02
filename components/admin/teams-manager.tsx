@@ -24,6 +24,7 @@ import { TeamsImportDialog } from "@/components/admin/teams-import-dialog";
 import { showAppFeedbackFromResult } from "@/components/shared/app-feedback";
 import { GroupBadge } from "@/components/shared/group-badge";
 import { PageHeader } from "@/components/shared/page-header";
+import { EmptyState, ZeroResults } from "@/components/shared/ui-states";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -610,13 +611,37 @@ export function TeamsManager({
             <tbody>
               {pageRows.length === 0 ? (
                 <tr>
-                  <td
-                    colSpan={7}
-                    className="px-4 py-14 text-center text-muted-foreground"
-                  >
-                    {teams.length === 0
-                      ? "No teams yet. Click Add Team to create one."
-                      : "No teams match your search or filters."}
+                  <td colSpan={7} className="px-4 py-6">
+                    {teams.length === 0 ? (
+                      <EmptyState
+                        title="No teams yet"
+                        description="Add a team manually or import a CSV / Excel roster to get started."
+                        action={
+                          <Button
+                            type="button"
+                            size="sm"
+                            className="gap-2"
+                            onClick={() => {
+                              setEditingId(null);
+                              setMode("create");
+                            }}
+                          >
+                            <Plus className="size-3.5" aria-hidden />
+                            Add Team
+                          </Button>
+                        }
+                      />
+                    ) : (
+                      <ZeroResults
+                        query={query}
+                        onClear={() => {
+                          setQuery("");
+                          setDeptFilter("all");
+                          setStatusFilter("all");
+                          setGroupFilter("all");
+                        }}
+                      />
+                    )}
                   </td>
                 </tr>
               ) : (

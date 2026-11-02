@@ -22,6 +22,7 @@ import {
 
 import { AppFeedbackHost } from "@/components/shared/app-feedback";
 import { AppLogo } from "@/components/shared/app-logo";
+import { AppToastHost } from "@/components/shared/app-toast";
 import { AppTopBar } from "@/components/shared/app-top-bar";
 import { AppVersion } from "@/components/shared/app-version";
 import { IdleSessionGuard } from "@/components/shared/idle-session-guard";
@@ -196,6 +197,7 @@ export function AdminShell({
         </main>
       </div>
       <AppFeedbackHost />
+      <AppToastHost />
     </div>
   );
 }

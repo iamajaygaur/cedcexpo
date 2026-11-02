@@ -14,8 +14,10 @@ import {
 
 import Link from "next/link";
 
+import { FieldError, SlowPendingHint } from "@/components/shared/ui-states";
 import { clearClientAuthArtifacts } from "@/lib/auth/clear-client-session";
 import { SUPPORT_EMAIL } from "@/lib/contact";
+import { useSlowPending } from "@/hooks/use-slow-pending";
 
 type LoginFormProps = {
   authError?: string | null;
@@ -41,6 +43,7 @@ export function LoginForm({
     noticeMessage ? "admin" : "judge",
   );
   const passwordRef = useRef<HTMLInputElement>(null);
+  const slowSubmit = useSlowPending(submitting);
 
   useEffect(() => {
     if (switchingAccount) {
@@ -272,16 +275,11 @@ export function LoginForm({
         </motion.p>
       )}
 
-      {message && (
-        <motion.p
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          role="alert"
-          className="rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-xs font-medium text-destructive"
-        >
-          {message}
-        </motion.p>
-      )}
+      {message ? (
+        <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3">
+          <FieldError message={message} className="text-xs" />
+        </div>
+      ) : null}
 
       <motion.button
         type="submit"
@@ -310,6 +308,7 @@ export function LoginForm({
           "Configure env first"
         )}
       </motion.button>
+      <SlowPendingHint show={slowSubmit} className="text-center" />
     </form>
   );
 }

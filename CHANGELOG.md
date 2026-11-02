@@ -11,6 +11,22 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 - Nothing queued yet — next work lands here before the next tag.
 
+## [1.1.0] — 2026-11-02
+
+### Added
+
+- Shared animated UI-state kit: empty, loading skeletons, error panel, zero search results, field validation shake, permission denied
+- Soft success/error toast host alongside existing feedback dialogs
+- Slow-network banner + “still working…” pending cue after 2.5s
+- Session-expiry warning dialog 2 minutes before idle logout
+- `app/forbidden.tsx` via Next `authInterrupts` / `forbidden()`
+
+### Changed
+
+- Admin/judge route loading uses skeleton grids instead of a frozen spinner
+- Teams, Judges, and Live Monitor distinguish true empty vs filter/search zero
+- Offline banner covers offline + slow connection with motion enter/exit
+
 ## [1.0.1] — 2026-10-29
 
 ### Added
@@ -101,7 +117,8 @@ Initial product baseline.
 
 - Judge sign-out redirecting to the error page
 
-[Unreleased]: https://github.com/iamajaygaur/cedcexpo/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/iamajaygaur/cedcexpo/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/iamajaygaur/cedcexpo/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/iamajaygaur/cedcexpo/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/iamajaygaur/cedcexpo/compare/v0.3.0...v1.0.0
 [0.3.0]: https://github.com/iamajaygaur/cedcexpo/compare/v0.2.0...v0.3.0

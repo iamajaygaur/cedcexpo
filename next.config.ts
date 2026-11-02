@@ -67,6 +67,11 @@ function lanDevOrigins(): string[] {
 const nextConfig: NextConfig = {
   allowedDevOrigins: lanDevOrigins(),
 
+  experimental: {
+    // Enables next/navigation `forbidden()` / `unauthorized()` + app/forbidden.tsx
+    authInterrupts: true,
+  },
+
   // Surfaced as process.env.NEXT_PUBLIC_APP_VERSION (see lib/app-version.ts).
   env: {
     NEXT_PUBLIC_APP_VERSION: packageJson.version,

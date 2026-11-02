@@ -24,6 +24,7 @@ import { JudgesImportDialog } from "@/components/admin/judges-import-dialog";
 import { showAppFeedbackFromResult } from "@/components/shared/app-feedback";
 import { GroupBadge } from "@/components/shared/group-badge";
 import { PageHeader } from "@/components/shared/page-header";
+import { EmptyState, ZeroResults } from "@/components/shared/ui-states";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -939,14 +940,48 @@ export function JudgesManager({
         </Select>
       </div>
 
-      {sortedGroups.length === 0 && unassigned.length === 0 ? (
-        <p className="dash-empty py-14 text-sm text-muted-foreground">
-          {judges.length === 0
-            ? "No judges yet. Click Add Judge to create one."
-            : eventId
-              ? "Create color groups first, then assign judges to panels."
-              : "Select an active event to organize judges by panel."}
-        </p>
+      {judges.length > 0 && filtered.length === 0 ? (
+        <ZeroResults
+          query={query}
+          onClear={() => {
+            setQuery("");
+            setStatusFilter("all");
+          }}
+        />
+      ) : sortedGroups.length === 0 && unassigned.length === 0 ? (
+        <EmptyState
+          title={
+            judges.length === 0
+              ? "No judges yet"
+              : eventId
+                ? "Panels need color groups"
+                : "Select an active event"
+          }
+          description={
+            judges.length === 0
+              ? "Add a judge or import a roster, then assign them to color panels."
+              : eventId
+                ? "Create color groups first, then assign judges to panels."
+                : "Choose an active event to organize judges by panel."
+          }
+          action={
+            judges.length === 0 ? (
+              <Button
+                type="button"
+                size="sm"
+                className="gap-2"
+                onClick={() => {
+                  setEditingId(null);
+                  setFormKey((k) => k + 1);
+                  setMode("create");
+                }}
+              >
+                <UserPlus className="size-3.5" aria-hidden />
+                Add Judge
+              </Button>
+            ) : null
+          }
+        />
       ) : (
         <div
           className="grid gap-3 overflow-x-auto pb-1"

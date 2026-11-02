@@ -21,6 +21,7 @@ import {
 import { AnalyticsGauge } from "@/components/admin/analytics-gauge";
 import { GroupHorizBar as HorizBar } from "@/components/admin/group-progress-bars";
 import { GroupBadge } from "@/components/shared/group-badge";
+import { EmptyState, ZeroResults } from "@/components/shared/ui-states";
 import { SearchInput } from "@/components/ui/search-input";
 import { Select } from "@/components/ui/select";
 import type {
@@ -371,9 +372,19 @@ export function LiveMonitor({
         </div>
 
         {tab === "teams" ? (
-          <TeamLiveTable rows={filteredTeams} />
+          <TeamLiveTable
+            rows={filteredTeams}
+            hasSourceRows={snapshot.teams.length > 0}
+            query={query}
+            onClearQuery={() => setQuery("")}
+          />
         ) : (
-          <JudgeLiveTable rows={filteredJudges} />
+          <JudgeLiveTable
+            rows={filteredJudges}
+            hasSourceRows={snapshot.judges.length > 0}
+            query={query}
+            onClearQuery={() => setQuery("")}
+          />
         )}
       </section>
     </div>
@@ -717,7 +728,17 @@ function GroupLiveCard({
   );
 }
 
-function TeamLiveTable({ rows }: { rows: MonitorTeamRow[] }) {
+function TeamLiveTable({
+  rows,
+  hasSourceRows,
+  query,
+  onClearQuery,
+}: {
+  rows: MonitorTeamRow[];
+  hasSourceRows: boolean;
+  query: string;
+  onClearQuery: () => void;
+}) {
   return (
     <div className="dash-panel overflow-hidden">
       <table className="w-full text-left text-sm">
@@ -733,11 +754,16 @@ function TeamLiveTable({ rows }: { rows: MonitorTeamRow[] }) {
         <tbody>
           {rows.length === 0 ? (
             <tr>
-              <td
-                colSpan={5}
-                className="px-4 py-10 text-center text-muted-foreground"
-              >
-                No teams match this filter.
+              <td colSpan={5} className="px-4 py-6">
+                {!hasSourceRows ? (
+                  <EmptyState
+                    compact
+                    title="No teams in this event"
+                    description="Assign teams to groups to see live evaluation progress here."
+                  />
+                ) : (
+                  <ZeroResults query={query} onClear={onClearQuery} />
+                )}
               </td>
             </tr>
           ) : (
@@ -806,7 +832,17 @@ function TeamLiveTable({ rows }: { rows: MonitorTeamRow[] }) {
   );
 }
 
-function JudgeLiveTable({ rows }: { rows: MonitorJudgeRow[] }) {
+function JudgeLiveTable({
+  rows,
+  hasSourceRows,
+  query,
+  onClearQuery,
+}: {
+  rows: MonitorJudgeRow[];
+  hasSourceRows: boolean;
+  query: string;
+  onClearQuery: () => void;
+}) {
   return (
     <div className="dash-panel overflow-hidden">
       <table className="w-full text-left text-sm">
@@ -821,11 +857,16 @@ function JudgeLiveTable({ rows }: { rows: MonitorJudgeRow[] }) {
         <tbody>
           {rows.length === 0 ? (
             <tr>
-              <td
-                colSpan={4}
-                className="px-4 py-10 text-center text-muted-foreground"
-              >
-                No judges match this filter.
+              <td colSpan={4} className="px-4 py-6">
+                {!hasSourceRows ? (
+                  <EmptyState
+                    compact
+                    title="No judges in this event"
+                    description="Add judges and assign them to panels to track progress here."
+                  />
+                ) : (
+                  <ZeroResults query={query} onClear={onClearQuery} />
+                )}
               </td>
             </tr>
           ) : (

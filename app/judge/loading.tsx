@@ -1,14 +1,7 @@
-import { Loader2 } from "lucide-react";
+"use client";
+
+import { PageLoadingState } from "@/components/shared/ui-states";
 
 export default function JudgeLoading() {
-  return (
-    <div
-      className="flex min-h-[40vh] flex-1 flex-col items-center justify-center gap-3 px-4"
-      role="status"
-      aria-live="polite"
-    >
-      <Loader2 className="size-7 animate-spin text-primary" aria-hidden />
-      <p className="text-sm font-medium text-muted-foreground">Loading…</p>
-    </div>
-  );
+  return <PageLoadingState label="Loading judge workspace…" />;
 }

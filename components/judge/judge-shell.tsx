@@ -7,6 +7,7 @@ import { LayoutDashboard, ClipboardList, X, LifeBuoy } from "lucide-react";
 
 import { AppFeedbackHost } from "@/components/shared/app-feedback";
 import { AppLogo } from "@/components/shared/app-logo";
+import { AppToastHost } from "@/components/shared/app-toast";
 import { AppTopBar } from "@/components/shared/app-top-bar";
 import { AppVersion } from "@/components/shared/app-version";
 import { IdleSessionGuard } from "@/components/shared/idle-session-guard";
@@ -274,6 +275,7 @@ export function JudgeShell({
         </main>
       </div>
       <AppFeedbackHost />
+      <AppToastHost />
     </div>
   );
 }

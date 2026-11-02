@@ -2,8 +2,9 @@
 
 import { useActionState, useEffect, useRef, useState } from "react";
 
-import { PendingStatus } from "@/components/shared/motion-primitives";
 import { showAppFeedbackFromResult } from "@/components/shared/app-feedback";
+import { PendingStatus } from "@/components/shared/motion-primitives";
+import { FieldError } from "@/components/shared/ui-states";
 import type { ActionResult } from "@/lib/admin/action-result";
 import { cn } from "@/lib/utils";
 
@@ -75,11 +76,7 @@ export function AdminActionForm({
         {children}
       </fieldset>
       <PendingStatus show={pending} label={pendingLabel} />
-      {formError && !pending ? (
-        <p className="text-sm text-destructive" role="alert">
-          {formError}
-        </p>
-      ) : null}
+      {!pending ? <FieldError message={formError} className="text-sm" /> : null}
     </form>
   );
 }

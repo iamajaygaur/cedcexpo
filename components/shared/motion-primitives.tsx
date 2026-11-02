@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import {
   AnimatePresence,
@@ -211,14 +212,29 @@ export function LoadingSpinner({
 export function PendingStatus({
   show,
   label = "Working…",
+  slowLabel = "Still working — this can take a moment on expo Wi‑Fi…",
+  slowAfterMs = 2500,
 }: {
   show: boolean;
   label?: string;
+  slowLabel?: string;
+  slowAfterMs?: number;
 }) {
+  const [slow, setSlow] = useState(false);
+
+  useEffect(() => {
+    if (!show) {
+      setSlow(false);
+      return;
+    }
+    const id = window.setTimeout(() => setSlow(true), slowAfterMs);
+    return () => window.clearTimeout(id);
+  }, [show, slowAfterMs]);
+
   return (
     <AnimatePresence initial={false}>
       {show ? (
-        <motion.p
+        <motion.div
           key="pending"
           role="status"
           aria-live="polite"
@@ -230,9 +246,9 @@ export function PendingStatus({
         >
           <span className="inline-flex items-center gap-2 py-0.5">
             <Loader2 className="size-3.5 animate-spin text-primary" aria-hidden />
-            {label}
+            {slow ? slowLabel : label}
           </span>
-        </motion.p>
+        </motion.div>
       ) : null}
     </AnimatePresence>
   );
