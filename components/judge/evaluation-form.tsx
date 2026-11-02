@@ -43,6 +43,14 @@ type EvaluationFormProps = {
   adminPreview?: boolean;
 };
 
+/**
+ * Criterion copy in production often ends with a separator middot (" ·") that
+ * wraps onto its own line and reads as a stray bullet above the ABET chips.
+ */
+function formatCriterionDescription(raw: string | null | undefined): string {
+  return (raw ?? "").replace(/(?:\s*[·•∙⋅])+\s*$/u, "").trim();
+}
+
 /** Standard ABET EAC 1–7 wording for the reference note. */
 const ABET_REFERENCE: { code: string; label: string }[] = [
   {
@@ -604,7 +612,9 @@ export function EvaluationForm({
             const Icon = criterionIcon(criterion.name, index);
             const hasScore = row.score !== null;
             const descExpanded = Boolean(expandedDescriptions[criterion.id]);
-            const description = criterion.description?.trim() ?? "";
+            const description = formatCriterionDescription(
+              criterion.description,
+            );
             const longDescription = description.length > 110;
 
             return (
