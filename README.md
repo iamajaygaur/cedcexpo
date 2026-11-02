@@ -70,14 +70,17 @@ We use **trunk-based development** on `main` with [SemVer](https://semver.org/) 
 | 0.2.0 | `v0.2.0` | Commercial visual redesign |
 | 0.1.0 | `v0.1.0` | Initial judging app |
 
-The UI reads `package.json` → `NEXT_PUBLIC_APP_VERSION` (see `lib/app-version.ts`).  
-**Always bump `package.json` when you tag** so the badge matches the release.
+The UI imports `version` from `package.json` (see `lib/app-version.ts`).  
+**Always bump `package.json` and the root `package-lock.json` version when you tag** so local, lockfile, and production match.
+
+Version is **build-time**: restart `npm run dev` after a bump locally; production only updates after the next Vercel deploy of that commit. Do **not** set `NEXT_PUBLIC_APP_VERSION` in Vercel env vars — it can stale-override the package cut.
 
 **Ship a new version**
 
 1. Land work on `main` as usual.
-2. Move notes from `CHANGELOG.md` `Unreleased` into a new `X.Y.Z` section; bump `package.json` `version`.
+2. Move notes from `CHANGELOG.md` `Unreleased` into a new `X.Y.Z` section; bump `package.json` + lockfile root `version`.
 3. Commit, then tag: `git tag -a vX.Y.Z -m "vX.Y.Z"` and `git push origin main --tags`.
-4. Publish a GitHub Release from that tag (`gh release create vX.Y.Z`).
+4. Confirm Vercel production redeployed that commit (badge = `vX.Y.Z`).
+5. Publish a GitHub Release from that tag (`gh release create vX.Y.Z`).
 
 Full notes: [CHANGELOG.md](./CHANGELOG.md).

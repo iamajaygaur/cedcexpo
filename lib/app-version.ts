@@ -1,9 +1,15 @@
 /**
- * App SemVer — sourced from package.json via next.config `env` injection.
- * Bump package.json (+ CHANGELOG) when cutting a release; the UI follows.
+ * App SemVer — read directly from package.json so the UI matches the cut
+ * that was compiled (no stale next.config-only env cache).
+ * Bump package.json (+ CHANGELOG + lockfile root version) when releasing;
+ * restart local / redeploy production to show the new badge.
  */
-export const APP_VERSION =
-  process.env.NEXT_PUBLIC_APP_VERSION?.trim() || "0.0.0";
+import packageJson from "../package.json";
 
-/** Display label, e.g. `v1.0.1`. */
+export const APP_VERSION =
+  typeof packageJson.version === "string" && packageJson.version.trim()
+    ? packageJson.version.trim()
+    : "0.0.0";
+
+/** Display label, e.g. `v1.1.1`. */
 export const APP_VERSION_LABEL = `v${APP_VERSION}`;

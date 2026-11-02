@@ -7,9 +7,13 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+### Fixed
+
+- App version badge reads `package.json` directly (and lockfile root stays in sync) so local/dev no longer sticks on a stale `NEXT_PUBLIC_APP_VERSION` from an old `next.config` load
+
 ### Planned
 
-- Nothing queued yet — next work lands here before the next tag.
+- Nothing else queued yet — next work lands here before the next tag.
 
 ## [1.1.1] — 2026-11-02
 

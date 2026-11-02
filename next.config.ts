@@ -3,9 +3,11 @@ import os from "node:os";
 import { join } from "node:path";
 import type { NextConfig } from "next";
 
-const packageJson = JSON.parse(
-  readFileSync(join(__dirname, "package.json"), "utf8"),
-) as { version: string };
+const packageVersion = (
+  JSON.parse(readFileSync(join(__dirname, "package.json"), "utf8")) as {
+    version: string;
+  }
+).version;
 
 /**
  * Phones on Wi‑Fi hit the Mac via LAN IP (192.168.x.x), not localhost.
@@ -72,9 +74,10 @@ const nextConfig: NextConfig = {
     authInterrupts: true,
   },
 
-  // Surfaced as process.env.NEXT_PUBLIC_APP_VERSION (see lib/app-version.ts).
+  // Keep in sync for any code that still reads process.env; UI uses
+  // lib/app-version.ts which imports package.json directly.
   env: {
-    NEXT_PUBLIC_APP_VERSION: packageJson.version,
+    NEXT_PUBLIC_APP_VERSION: packageVersion,
   },
 
   // Prevent accidental caching of authenticated responses at the CDN/edge layer.
