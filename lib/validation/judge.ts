@@ -14,6 +14,19 @@ export const evaluationDraftSchema = z.object({
   ),
 });
 
-export const evaluationSubmitSchema = evaluationDraftSchema;
+/** Submit requires a non-empty comment on every scored criterion. */
+export const evaluationSubmitSchema = evaluationDraftSchema.superRefine(
+  (data, ctx) => {
+    data.scores.forEach((row, index) => {
+      if (!row.comment.trim()) {
+        ctx.addIssue({
+          code: "custom",
+          message: "A comment is required for every criterion before submit.",
+          path: ["scores", index, "comment"],
+        });
+      }
+    });
+  },
+);
 
 export type EvaluationDraftInput = z.infer<typeof evaluationDraftSchema>;
