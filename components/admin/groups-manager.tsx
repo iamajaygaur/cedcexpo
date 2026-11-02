@@ -304,7 +304,7 @@ export function GroupsManager({
             <Button
               type="button"
               size="lg"
-              className="order-1 gap-2 bg-foreground text-background hover:bg-foreground/90 sm:order-2"
+              className="order-1 gap-2 sm:order-2"
               disabled={availableColorKeys.length === 0}
               onClick={() => setCreateOpen(true)}
             >
@@ -630,7 +630,7 @@ export function GroupsManager({
                   <Button
                     type="button"
                     size="lg"
-                    className="h-11 flex-1 bg-foreground text-background hover:bg-foreground/90"
+                    className="h-11 flex-1"
                     onClick={() => setManageGroup(group)}
                   >
                     Manage judges
@@ -640,7 +640,7 @@ export function GroupsManager({
                     type="button"
                     variant="outline"
                     size="lg"
-                    className="h-11 flex-1 border-gray-300 bg-white/70 text-gray-800 hover:bg-white"
+                    className="h-11 flex-1"
                   >
                     <Link href={`/admin/assignments?eventId=${eventId}`}>
                       Assign teams

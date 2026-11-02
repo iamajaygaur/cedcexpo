@@ -73,7 +73,7 @@ export default async function AssignmentsPage({ searchParams }: PageProps) {
   return (
     <div>
       <PageHeader
-        breadcrumbs={[{ label: "Assignments" }]}
+        breadcrumbs={[{ label: "Judging Assignments" }]}
         title="Judging Assignments"
         description="Assign each team to up to two color groups (Eval #1 & Eval #2). All judges in those groups evaluate the team."
       />

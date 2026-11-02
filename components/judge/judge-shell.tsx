@@ -3,7 +3,14 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Suspense, useEffect, useId, useState } from "react";
-import { LayoutDashboard, ClipboardList, X, LifeBuoy } from "lucide-react";
+import {
+  ArrowLeft,
+  ClipboardList,
+  LayoutDashboard,
+  LifeBuoy,
+  ShieldCheck,
+  X,
+} from "lucide-react";
 
 import { AppFeedbackHost } from "@/components/shared/app-feedback";
 import { AppLogo } from "@/components/shared/app-logo";
@@ -50,6 +57,7 @@ export function JudgeShell({
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const titleId = useId();
+  const isAdminPreview = userRole === "admin";
 
   useEffect(() => {
     setOpen(false);
@@ -98,7 +106,7 @@ export function JudgeShell({
               CEDC Expo
             </Link>
             <p className="truncate text-[10px] font-semibold uppercase tracking-[0.1em] text-sidebar-foreground/40">
-              Judge
+              {isAdminPreview ? "Admin preview" : "Judge"}
             </p>
           </div>
         </div>
@@ -107,6 +115,17 @@ export function JudgeShell({
           className="sidebar-scroll flex flex-1 flex-col gap-1 px-3 py-4"
           aria-label="Judge"
         >
+          {isAdminPreview ? (
+            <NavLink
+              href="/admin/dashboard"
+              prefetch
+              showSpinner
+              className="group relative mb-2 flex min-h-11 items-center gap-3 rounded-xl border border-sidebar-primary/35 bg-sidebar-primary/10 px-3 py-2 text-[13px] font-semibold text-sidebar-primary transition-colors hover:bg-sidebar-primary/15"
+            >
+              <ShieldCheck className="size-[18px] shrink-0" aria-hidden />
+              Admin View
+            </NavLink>
+          ) : null}
           {JUDGE_NAV.map(({ href, label, icon: Icon }) => {
             const active = isActivePath(pathname, href);
             return (
@@ -153,7 +172,9 @@ export function JudgeShell({
                 <p className="truncate text-[12px] font-semibold text-sidebar-foreground/80">
                   {userName}
                 </p>
-                <p className="text-[10px] text-sidebar-foreground/40">Judge</p>
+                <p className="text-[10px] text-sidebar-foreground/40">
+                  {isAdminPreview ? "Administrator" : "Judge"}
+                </p>
               </div>
             </div>
           ) : null}
@@ -227,6 +248,18 @@ export function JudgeShell({
               className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-4"
               aria-label="Judge mobile drawer"
             >
+              {isAdminPreview ? (
+                <NavLink
+                  href="/admin/dashboard"
+                  prefetch
+                  showSpinner
+                  onClick={() => setOpen(false)}
+                  className="relative mb-2 flex min-h-12 touch-manipulation items-center gap-3 rounded-xl border border-sidebar-primary/35 bg-sidebar-primary/10 px-3 py-2.5 text-[14px] font-semibold text-sidebar-primary"
+                >
+                  <ShieldCheck className="size-5 shrink-0" aria-hidden />
+                  Admin View
+                </NavLink>
+              ) : null}
               {JUDGE_NAV.map(({ href, label, icon: Icon }) => {
                 const active = isActivePath(pathname, href);
                 return (
@@ -273,11 +306,29 @@ export function JudgeShell({
       {/* ── Main content ─────────────────────────────────────── */}
       <div className="flex min-h-svh min-w-0 flex-col md:pl-[var(--app-sidebar-width)]">
         <OfflineBanner />
+        {isAdminPreview ? (
+          <div
+            role="status"
+            className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 border-b border-primary/25 bg-[color-mix(in_srgb,var(--cu-gold)_18%,white)] px-4 py-2.5 text-center text-sm text-foreground"
+          >
+            <span>
+              Admin preview of the judge workspace — you stay signed in as
+              admin.
+            </span>
+            <Link
+              href="/admin/dashboard"
+              className="inline-flex items-center gap-1.5 rounded-md border border-primary/30 bg-primary px-3 py-1.5 text-xs font-bold text-primary-foreground transition-colors hover:brightness-105"
+            >
+              <ArrowLeft className="size-3.5" aria-hidden />
+              Back to Admin
+            </Link>
+          </div>
+        ) : null}
         <AppTopBar
           userName={userName}
           userRole={userRole}
           searchPlaceholder="Search projects…"
-          settingsHref="/judge/help"
+          settingsHref={isAdminPreview ? "/admin/settings" : "/judge/help"}
           onOpenNav={() => setOpen(true)}
           onSearch={() => router.push("/judge/projects")}
           compactAccount

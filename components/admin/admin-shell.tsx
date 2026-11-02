@@ -49,10 +49,10 @@ const ADMIN_SECTIONS: { title: string; items: NavItem[] }[] = [
   {
     title: "Manage",
     items: [
-      { href: "/admin/teams", label: "Teams", icon: Users },
-      { href: "/admin/judges", label: "Judges", icon: Gavel },
-      { href: "/admin/groups", label: "Groups", icon: Layers },
-      { href: "/admin/assignments", label: "Assignments", icon: ClipboardCheck },
+      { href: "/admin/teams", label: "Teams Management", icon: Users },
+      { href: "/admin/judges", label: "Judge Management", icon: Gavel },
+      { href: "/admin/groups", label: "Judge Groups", icon: Layers },
+      { href: "/admin/assignments", label: "Judging Assignments", icon: ClipboardCheck },
     ],
   },
   {

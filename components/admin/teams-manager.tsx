@@ -482,9 +482,9 @@ export function TeamsManager({
       className="space-y-6"
     >
       <PageHeader
-        title="Teams"
+        title="Teams Management"
         description="Manage all participating teams and their evaluation status."
-        breadcrumbs={[{ label: "Teams" }]}
+        breadcrumbs={[{ label: "Teams Management" }]}
         actions={
           <>
             <Button
