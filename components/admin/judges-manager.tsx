@@ -22,6 +22,8 @@ import {
 
 import { AdminActionForm } from "@/components/admin/admin-action-form";
 import { AssignedGroupPicker } from "@/components/admin/assigned-group-picker";
+import { JudgeAvatarForm } from "@/components/admin/judge-avatar-form";
+import { JudgeAvatarPicker } from "@/components/admin/judge-avatar-picker";
 import {
   JudgesFilterBar,
   type JudgesViewMode,
@@ -31,6 +33,7 @@ import { showAppFeedbackFromResult } from "@/components/shared/app-feedback";
 import { GroupBadge } from "@/components/shared/group-badge";
 import { PageHeader } from "@/components/shared/page-header";
 import { EmptyState, ZeroResults } from "@/components/shared/ui-states";
+import { UserAvatar } from "@/components/shared/user-avatar";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -69,7 +72,7 @@ export type GroupTeamSummary = {
 };
 
 export type JudgeRow = Judge & {
-  profiles: Pick<Profile, "full_name" | "email"> | null;
+  profiles: Pick<Profile, "full_name" | "email" | "avatar_url"> | null;
   group?: Pick<
     JudgeGroup,
     "id" | "name" | "color_key" | "display_order"
@@ -84,13 +87,6 @@ type JudgesManagerProps = {
   /** Opens the password dialog for this judge (from dashboard help banner). */
   focusJudgeId?: string | null;
 };
-
-function initials(name: string | null | undefined) {
-  if (!name?.trim()) return "?";
-  const parts = name.trim().split(/\s+/);
-  if (parts.length === 1) return parts[0]!.slice(0, 2).toUpperCase();
-  return `${parts[0]![0] ?? ""}${parts[parts.length - 1]?.[0] ?? ""}`.toUpperCase();
-}
 
 function loginFor(judge: JudgeRow) {
   const name = judge.profiles?.full_name?.trim();
@@ -224,13 +220,30 @@ function JudgeEditorForm({
   const initialNames = splitFullName(judge?.profiles?.full_name ?? "");
   const [firstName, setFirstName] = useState(initialNames.firstName);
   const [lastName, setLastName] = useState(initialNames.lastName);
+  const [pendingAvatar, setPendingAvatar] = useState<File | null>(null);
   const username = usernameFromNameParts(firstName, lastName);
   const initialGroupId = judge?.group?.id ?? defaultGroupId;
+  const displayName =
+    [firstName, lastName]
+      .map((part) => part.trim())
+      .filter(Boolean)
+      .join(" ") || "Judge";
+
+  async function createJudgeWithOptionalAvatar(
+    prev: Parameters<typeof createJudgeAction>[0],
+    formData: FormData,
+  ) {
+    if (pendingAvatar) {
+      formData.set("avatar", pendingAvatar);
+    }
+    return createJudgeAction(prev, formData);
+  }
 
   return (
     <AdminActionForm
-      action={isEdit ? updateJudgeAction : createJudgeAction}
+      action={isEdit ? updateJudgeAction : createJudgeWithOptionalAvatar}
       onSuccess={() => {
+        setPendingAvatar(null);
         onCancel();
         router.refresh();
       }}
@@ -272,6 +285,19 @@ function JudgeEditorForm({
 
       <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="space-y-6">
+          {judge ? (
+            <JudgeAvatarForm
+              judgeId={judge.id}
+              fullName={judge.profiles?.full_name ?? "Judge"}
+              avatarUrl={judge.profiles?.avatar_url ?? null}
+            />
+          ) : (
+            <JudgeAvatarPicker
+              fullName={displayName}
+              file={pendingAvatar}
+              onChange={setPendingAvatar}
+            />
+          )}
           <section className="dash-form-panel">
             <div className="mb-4 flex items-center gap-2">
               <IdCard className="size-4 text-muted-foreground" aria-hidden />
@@ -495,9 +521,12 @@ function JudgeDetailDialog({
         <div className="overflow-y-auto px-6 py-6 pr-12 sm:px-8 sm:py-8 sm:pr-14">
           <div className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex min-w-0 items-center gap-4">
-              <span className="flex size-16 shrink-0 items-center justify-center rounded-full bg-muted text-lg font-bold text-muted-foreground sm:size-[4.5rem] sm:text-xl">
-                {initials(name)}
-              </span>
+              <UserAvatar
+                name={name}
+                src={judge.profiles?.avatar_url}
+                size="lg"
+                className="bg-muted text-muted-foreground"
+              />
               <div className="min-w-0">
                 <DialogHeader className="gap-1 space-y-0 text-left">
                   <DialogTitle className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
@@ -532,8 +561,17 @@ function JudgeDetailDialog({
             </div>
           </div>
 
+          <div className="mb-5">
+            <JudgeAvatarForm
+              judgeId={judge.id}
+              fullName={name}
+              avatarUrl={judge.profiles?.avatar_url ?? null}
+              compact
+            />
+          </div>
+
           <div className="space-y-5">
-            <section className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6">
+            <section className="dash-panel p-5 sm:p-6">
               <h3 className="mb-4 text-xs font-bold tracking-[0.08em] text-muted-foreground uppercase">
                 Profile
               </h3>
@@ -579,7 +617,7 @@ function JudgeDetailDialog({
               </dl>
             </section>
 
-            <section className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6">
+            <section className="dash-panel p-5 sm:p-6">
               <h3 className="mb-4 text-xs font-bold tracking-[0.08em] text-muted-foreground uppercase">
                 Assignment
               </h3>
@@ -614,7 +652,7 @@ function JudgeDetailDialog({
               </dl>
             </section>
 
-            <section className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6">
+            <section className="dash-panel p-5 sm:p-6">
               <h3 className="mb-4 text-xs font-bold tracking-[0.08em] text-muted-foreground uppercase">
                 Assigned teams ({teams.length})
               </h3>
@@ -804,9 +842,12 @@ function JudgesMatrixTable({
                       className="flex max-w-full items-center gap-2.5 text-left"
                       onClick={() => onOpen(judge)}
                     >
-                      <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-bold text-muted-foreground">
-                        {initials(name)}
-                      </span>
+                      <UserAvatar
+                        name={name}
+                        src={judge.profiles?.avatar_url}
+                        size="sm"
+                        className="size-8 bg-muted text-[10px] text-muted-foreground"
+                      />
                       <span className="truncate font-semibold text-foreground">
                         {name}
                       </span>
@@ -1254,7 +1295,7 @@ export function JudgesManager({
 
                 <ul className="flex flex-1 flex-col gap-2 px-2 pb-2">
                   {columnJudges.length === 0 ? (
-                    <li className="rounded-xl border border-dashed border-border bg-white/50 px-3 py-6 text-center text-xs text-muted-foreground">
+                    <li className="dash-empty px-3 py-6 text-xs text-muted-foreground">
                       No judges in this panel
                     </li>
                   ) : (
@@ -1275,14 +1316,17 @@ export function JudgesManager({
                             }}
                             aria-label={`View details for ${name}`}
                             className={cn(
-                              "ui-interactive group/card w-full rounded-xl border border-border/80 bg-white p-3 text-left shadow-sm",
+                              "ui-interactive group/card dash-metric w-full p-3 text-left",
                               !judge.active && "opacity-70",
                             )}
                           >
                             <div className="flex items-start gap-2">
-                              <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-[11px] font-bold text-muted-foreground">
-                                {initials(name)}
-                              </span>
+                              <UserAvatar
+                                name={name}
+                                src={judge.profiles?.avatar_url ?? null}
+                                size="md"
+                                className="size-9 bg-muted text-[11px] text-muted-foreground ring-1 ring-border sm:size-9"
+                              />
                               <div className="min-w-0 flex-1">
                                 <p className="truncate text-sm font-semibold text-foreground">
                                   {name}
@@ -1401,7 +1445,7 @@ export function JudgesManager({
               </header>
               <ul className="flex flex-1 flex-col gap-2 px-2 pb-3">
                 {unassigned.length === 0 ? (
-                  <li className="rounded-xl border border-dashed border-border bg-white/50 px-3 py-6 text-center text-xs text-muted-foreground">
+                  <li className="dash-empty px-3 py-6 text-xs text-muted-foreground">
                     Everyone is assigned
                   </li>
                 ) : (
@@ -1421,12 +1465,15 @@ export function JudgesManager({
                             }
                           }}
                           aria-label={`View details for ${name}`}
-                          className="ui-interactive group/card w-full rounded-xl border border-border/80 bg-white p-3 text-left shadow-sm"
+                          className="ui-interactive group/card dash-metric w-full p-3 text-left"
                         >
                           <div className="flex items-start gap-2">
-                            <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-[11px] font-bold text-muted-foreground">
-                              {initials(name)}
-                            </span>
+                            <UserAvatar
+                              name={name}
+                              src={judge.profiles?.avatar_url}
+                              size="md"
+                              className="size-9 bg-muted text-[11px] text-muted-foreground ring-1 ring-border sm:size-9"
+                            />
                             <div className="min-w-0 flex-1">
                               <p className="truncate text-sm font-semibold text-foreground">
                                 {name}

@@ -102,7 +102,7 @@ export default async function EvaluateTeamPage({
   }
 
   return (
-    <div className="mx-auto max-w-5xl">
+    <div className="mx-auto w-full max-w-7xl">
       {adminPreview || access.workspace.isAdminPreview ? (
         <div
           role="status"

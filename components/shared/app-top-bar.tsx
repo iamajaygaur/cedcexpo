@@ -13,12 +13,14 @@ import {
 
 import { clientSignOut } from "@/lib/auth/client-sign-out";
 import { NotificationBell } from "@/components/shared/notification-bell";
+import { UserAvatar } from "@/components/shared/user-avatar";
 import { SearchInput } from "@/components/ui/search-input";
 import { cn } from "@/lib/utils";
 
 type AppTopBarProps = {
   userName?: string;
   userRole?: "admin" | "judge";
+  userAvatarUrl?: string | null;
   searchPlaceholder?: string;
   settingsHref?: string;
   onSearch?: (query: string) => void;
@@ -32,6 +34,7 @@ type AppTopBarProps = {
 export function AppTopBar({
   userName,
   userRole,
+  userAvatarUrl,
   searchPlaceholder = "Search teams, judges, events...",
   settingsHref = "/admin/settings",
   onSearch,
@@ -45,14 +48,6 @@ export function AppTopBar({
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuId = useId();
-
-  const initials =
-    (userName ?? "U")
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((p) => p[0]?.toUpperCase() ?? "")
-      .join("") || "U";
 
   const roleLabel =
     userRole === "admin" ? "Admin" : userRole === "judge" ? "Judge" : "Account";
@@ -155,12 +150,11 @@ export function AppTopBar({
               aria-label={`Account menu for ${userName || roleLabel}`}
               onClick={() => setMenuOpen((v) => !v)}
             >
-              <span
-                className="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary text-[11px] font-bold text-primary-foreground sm:size-10 sm:text-xs"
-                aria-hidden
-              >
-                {initials}
-              </span>
+              <UserAvatar
+                name={userName}
+                src={userAvatarUrl}
+                size="md"
+              />
               <span
                 className={cn(
                   "min-w-0 flex-1 text-left",

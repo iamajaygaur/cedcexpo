@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Suspense, useEffect, useId, useState } from "react";
 import {
   ArrowLeft,
+  Camera,
   ClipboardList,
   LayoutDashboard,
   LifeBuoy,
@@ -23,6 +24,7 @@ import { NavigationProgress } from "@/components/shared/navigation-progress";
 import { OfflineBanner } from "@/components/shared/offline-banner";
 import { PwaInstallHint } from "@/components/shared/pwa-install-hint";
 import { SignOutButton } from "@/components/shared/sign-out-button";
+import { UserAvatar } from "@/components/shared/user-avatar";
 import { cn } from "@/lib/utils";
 
 const JUDGE_NAV = [
@@ -46,12 +48,14 @@ type JudgeShellProps = {
   children: React.ReactNode;
   userName?: string;
   userRole?: "admin" | "judge";
+  userAvatarUrl?: string | null;
 };
 
 export function JudgeShell({
   children,
   userName,
   userRole = "judge",
+  userAvatarUrl,
 }: JudgeShellProps) {
   const pathname = usePathname();
   const router = useRouter();
@@ -160,14 +164,12 @@ export function JudgeShell({
         <div className="space-y-1 border-t border-sidebar-border px-3 py-4">
           {userName ? (
             <div className="mb-2 flex items-center gap-2.5 px-3">
-              <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
-                {(userName ?? "J")
-                  .split(/\s+/)
-                  .filter(Boolean)
-                  .slice(0, 2)
-                  .map((p) => p[0]?.toUpperCase() ?? "")
-                  .join("") || "J"}
-              </div>
+              <UserAvatar
+                name={userName}
+                src={userAvatarUrl}
+                size="sm"
+                tone="sidebar"
+              />
               <div className="min-w-0">
                 <p className="truncate text-[12px] font-semibold text-sidebar-foreground/80">
                   {userName}
@@ -178,6 +180,14 @@ export function JudgeShell({
               </div>
             </div>
           ) : null}
+          <Link
+            href="/judge/settings"
+            prefetch
+            className="flex min-h-11 items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium text-sidebar-foreground/60 transition-colors hover:bg-white/[0.04] hover:text-sidebar-foreground"
+          >
+            <Camera className="size-[18px] shrink-0" aria-hidden />
+            Profile settings
+          </Link>
           <Link
             href="/judge/help"
             prefetch
@@ -283,6 +293,16 @@ export function JudgeShell({
                 );
               })}
               <NavLink
+                href="/judge/settings"
+                prefetch
+                showSpinner
+                onClick={() => setOpen(false)}
+                className="relative flex min-h-12 touch-manipulation items-center gap-3 rounded-xl px-3 py-2.5 text-[14px] font-medium text-sidebar-foreground/80 transition-colors hover:bg-white/[0.04] hover:text-sidebar-foreground"
+              >
+                <Camera className="size-5 shrink-0" aria-hidden />
+                Profile settings
+              </NavLink>
+              <NavLink
                 href="/judge/help"
                 prefetch
                 showSpinner
@@ -327,8 +347,11 @@ export function JudgeShell({
         <AppTopBar
           userName={userName}
           userRole={userRole}
+          userAvatarUrl={userAvatarUrl}
           searchPlaceholder="Search projects…"
-          settingsHref={isAdminPreview ? "/admin/settings" : "/judge/help"}
+          settingsHref={
+            isAdminPreview ? "/admin/settings" : "/judge/settings"
+          }
           onOpenNav={() => setOpen(true)}
           onSearch={() => router.push("/judge/projects")}
           compactAccount

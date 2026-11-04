@@ -33,7 +33,9 @@ export default async function GroupsPage({ searchParams }: PageProps) {
 
   let groups: GroupCardData[] = [];
   let unassignedJudges: Array<
-    Judge & { profiles: Pick<Profile, "full_name" | "email"> | null }
+    Judge & {
+      profiles: Pick<Profile, "full_name" | "email" | "avatar_url"> | null;
+    }
   > = [];
 
   if (event) {
@@ -47,7 +49,7 @@ export default async function GroupsPage({ searchParams }: PageProps) {
     const { data: members, error: membersError } = await supabase
       .from(TABLES.judgeGroupMembers)
       .select(
-        "id, judge_id, group_id, is_lead, judges(*, profiles(full_name, email))",
+        "id, judge_id, group_id, is_lead, judges(*, profiles(full_name, email, avatar_url))",
       )
       .eq("event_id", event.id);
     if (membersError) throw new Error(membersError.message);
@@ -66,7 +68,7 @@ export default async function GroupsPage({ searchParams }: PageProps) {
 
     const { data: allJudges, error: judgesError } = await supabase
       .from(TABLES.judges)
-      .select("*, profiles(full_name, email)")
+      .select("*, profiles(full_name, email, avatar_url)")
       .eq("active", true)
       .order("created_at");
     if (judgesError) throw new Error(judgesError.message);
@@ -129,7 +131,9 @@ export default async function GroupsPage({ searchParams }: PageProps) {
 
     unassignedJudges = (
       (allJudges ?? []) as Array<
-        Judge & { profiles: Pick<Profile, "full_name" | "email"> | null }
+        Judge & {
+          profiles: Pick<Profile, "full_name" | "email" | "avatar_url"> | null;
+        }
       >
     ).filter((j) => !assignedJudgeIds.has(j.id));
   }

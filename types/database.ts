@@ -19,6 +19,8 @@ export type Profile = {
   email: string;
   full_name: string;
   role: UserRole;
+  /** Public Storage URL for the profile picture, or null when unset. */
+  avatar_url: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -171,6 +173,7 @@ export type Database = {
           email: string;
           full_name?: string;
           role?: UserRole;
+          avatar_url?: string | null;
           created_at?: string;
           updated_at?: string;
         };

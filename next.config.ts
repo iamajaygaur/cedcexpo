@@ -72,6 +72,10 @@ const nextConfig: NextConfig = {
   experimental: {
     // Enables next/navigation `forbidden()` / `unauthorized()` + app/forbidden.tsx
     authInterrupts: true,
+    // Profile photo uploads (JPEG/PNG/WebP/GIF up to 2 MB).
+    serverActions: {
+      bodySizeLimit: "2mb",
+    },
   },
 
   // Keep in sync for any code that still reads process.env; UI uses

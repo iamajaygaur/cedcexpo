@@ -28,7 +28,7 @@ export default async function JudgeDashboardPage({ searchParams }: PageProps) {
   const previewJudges = isAdmin ? await listJudgesForPreview() : [];
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6 md:space-y-8">
+    <div className="mx-auto w-full max-w-7xl space-y-6 md:space-y-8">
       <PageHeader
         breadcrumbs={[{ label: "Dashboard" }]}
         title="Judge Dashboard"
@@ -98,9 +98,11 @@ export default async function JudgeDashboardPage({ searchParams }: PageProps) {
       ) : null}
 
       {workspace.blockReason === "event_ended" ? (
-        <div className="rounded-md border border-border bg-muted/40 px-4 py-10 text-center">
-          <h2 className="text-lg font-semibold">This expo has ended</h2>
-          <p className="mx-auto mt-2 max-w-lg text-sm text-muted-foreground">
+        <div className="dash-empty space-y-2">
+          <h2 className="text-lg font-semibold text-foreground">
+            This expo has ended
+          </h2>
+          <p className="mx-auto max-w-lg text-sm text-muted-foreground">
             {workspace.event ? (
               <>
                 <strong>{workspace.event.name}</strong> is{" "}
@@ -162,7 +164,7 @@ export default async function JudgeDashboardPage({ searchParams }: PageProps) {
                 ) : null}
               </div>
             ) : (
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {workspace.projects.map((project) => (
                   <ProjectCard
                     key={project.team.id}

@@ -13,6 +13,7 @@ export type SessionProfile = {
   email: string;
   fullName: string;
   role: UserRole;
+  avatarUrl: string | null;
 };
 
 export function dashboardPathForRole(role: AppRole): string {
@@ -40,7 +41,7 @@ export async function getSessionProfile(): Promise<SessionProfile | null> {
 
   const { data: profile, error: profileError } = await supabase
     .from(TABLES.profiles)
-    .select("id, email, full_name, role")
+    .select("id, email, full_name, role, avatar_url")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -57,6 +58,7 @@ export async function getSessionProfile(): Promise<SessionProfile | null> {
     email: profile.email,
     fullName: profile.full_name,
     role: profile.role,
+    avatarUrl: profile.avatar_url ?? null,
   };
 }
 

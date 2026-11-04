@@ -19,7 +19,7 @@ export function ProgressCard({ completed, total, className }: ProgressCardProps)
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className={cn("dash-panel--featured p-5 md:p-6", className)}
+      className={cn("dash-panel dash-panel--featured p-5 md:p-6", className)}
     >
       <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
         <div>
@@ -34,7 +34,7 @@ export function ProgressCard({ completed, total, className }: ProgressCardProps)
         </div>
         <span
           className={cn(
-            "rounded-lg px-3 py-1.5 text-xs font-bold",
+            "rounded-full px-3 py-1.5 text-xs font-bold",
             done
               ? "bg-tertiary/15 text-tertiary"
               : "bg-primary-container text-on-primary-container",

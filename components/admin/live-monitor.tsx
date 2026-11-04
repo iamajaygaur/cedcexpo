@@ -26,6 +26,7 @@ import {
   FilterToolbar,
 } from "@/components/shared/filter-toolbar";
 import { EmptyState, ZeroResults } from "@/components/shared/ui-states";
+import { UserAvatar } from "@/components/shared/user-avatar";
 import { SearchInput } from "@/components/ui/search-input";
 import { Select } from "@/components/ui/select";
 import type {
@@ -880,12 +881,22 @@ function JudgeLiveTable({
             rows.map((row) => (
               <tr key={row.judge.id} className="border-t border-border">
                 <td className="px-4 py-3">
-                  <p className="font-medium">
-                    {row.profile?.full_name ?? "Judge"}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {row.profile?.email}
-                  </p>
+                  <div className="flex items-center gap-2.5">
+                    <UserAvatar
+                      name={row.profile?.full_name ?? "Judge"}
+                      src={row.profile?.avatar_url}
+                      size="sm"
+                      className="bg-muted text-muted-foreground"
+                    />
+                    <div className="min-w-0">
+                      <p className="truncate font-medium">
+                        {row.profile?.full_name ?? "Judge"}
+                      </p>
+                      <p className="truncate text-xs text-muted-foreground">
+                        {row.profile?.email}
+                      </p>
+                    </div>
+                  </div>
                 </td>
                 <td className="px-4 py-3">
                   {row.group ? (

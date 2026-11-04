@@ -18,6 +18,7 @@ export default async function JudgeLayout({
     <JudgeShell
       userName={profile.fullName || profile.email}
       userRole={profile.role === "admin" ? "admin" : "judge"}
+      userAvatarUrl={profile.avatarUrl}
     >
       {children}
     </JudgeShell>

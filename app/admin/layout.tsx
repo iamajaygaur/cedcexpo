@@ -10,8 +10,9 @@ export default async function AdminLayout({
 
   return (
     <AdminShell
-      userName="CEDC Desk"
+      userName={profile.fullName || profile.email}
       userRole={profile.role === "admin" ? "admin" : "judge"}
+      userAvatarUrl={profile.avatarUrl}
     >
       {children}
     </AdminShell>

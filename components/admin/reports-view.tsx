@@ -434,7 +434,7 @@ export function ReportsView({
           </div>
         </div>
 
-        <div className="overflow-hidden rounded-md border border-border">
+        <div className="dash-table-shell">
           <table className="w-full text-left text-sm">
             <thead className="bg-muted/60 text-xs uppercase tracking-wider text-muted-foreground">
               <tr>

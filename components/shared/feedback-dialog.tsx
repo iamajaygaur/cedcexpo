@@ -101,13 +101,16 @@ export function FeedbackDialog({
     <AnimatePresence>
       {open ? (
         <div
-          className="fixed inset-0 z-[200] flex items-center justify-center p-4"
+          className="pointer-events-auto fixed inset-0 z-[300] flex items-center justify-center p-4"
           role="presentation"
+          // Radix Dialog sets body { pointer-events: none }; restore hits here so
+          // Continue / dismiss work when feedback opens above an open modal.
+          style={{ pointerEvents: "auto" }}
         >
           <motion.button
             type="button"
             aria-label="Dismiss"
-            className="absolute inset-0 cursor-pointer bg-black/50"
+            className="pointer-events-auto absolute inset-0 cursor-pointer bg-black/50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -122,7 +125,7 @@ export function FeedbackDialog({
             aria-describedby={
               description ? "feedback-dialog-desc" : undefined
             }
-            className="relative z-10 w-full max-w-[calc(100%-2rem)] overflow-hidden rounded-md border border-border bg-background p-6 text-center shadow-lg sm:max-w-md"
+            className="pointer-events-auto relative z-10 w-full max-w-[calc(100%-2rem)] overflow-hidden rounded-2xl border border-border bg-background p-6 text-center shadow-lg sm:max-w-md"
             initial={
               reduced
                 ? { opacity: 0 }

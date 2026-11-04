@@ -1,15 +1,23 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans } from "next/font/google";
+import { DM_Sans, Inter } from "next/font/google";
 
 import { EphemeralSessionGuard } from "@/components/shared/ephemeral-session-guard";
 import { MotionProvider } from "@/components/shared/motion-provider";
 import { ServiceWorkerRegister } from "@/components/shared/service-worker-register";
 import "./globals.css";
 
-/** Single commercial sans — clean product UI + titles without quirky display serifs. */
+/** Existing CEDC product UI — kept during BoardUI dual-system redesign. */
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin"],
+  display: "swap",
+});
+
+/** BoardUI theme typeface (`styles/theme.css` reads --font-inter). */
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  axes: ["opsz"],
   display: "swap",
 });
 
@@ -55,7 +63,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} min-h-svh`}
+      className={`${dmSans.variable} ${inter.variable} min-h-svh antialiased`}
       suppressHydrationWarning
     >
       <body className="flex min-h-svh max-w-[100dvw] flex-col overflow-x-clip">

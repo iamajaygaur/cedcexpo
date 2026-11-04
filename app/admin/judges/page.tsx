@@ -7,11 +7,26 @@ import { OpsEventEmpty } from "@/components/admin/ops-event-empty";
 import { resolveOperationalEvent } from "@/lib/admin/event-context";
 import { requireAdminClient } from "@/lib/admin/guard";
 import { TABLES } from "@/lib/supabase/tables";
-import type { JudgeGroup } from "@/types/database";
+import type { JudgeGroup, Profile } from "@/types/database";
 
 type PageProps = {
   searchParams: Promise<{ eventId?: string; focus?: string }>;
 };
+
+type ProfileFields = Pick<Profile, "full_name" | "email" | "avatar_url">;
+
+function normalizeProfile(
+  raw: ProfileFields | ProfileFields[] | null | undefined,
+): ProfileFields | null {
+  if (!raw) return null;
+  const profile = Array.isArray(raw) ? raw[0] : raw;
+  if (!profile) return null;
+  return {
+    full_name: profile.full_name ?? "",
+    email: profile.email ?? "",
+    avatar_url: profile.avatar_url ?? null,
+  };
+}
 
 export default async function JudgesPage({ searchParams }: PageProps) {
   const { eventId, focus } = await searchParams;
@@ -23,7 +38,7 @@ export default async function JudgesPage({ searchParams }: PageProps) {
 
   const { data: judgesData, error: judgesError } = await supabase
     .from(TABLES.judges)
-    .select("*, profiles(full_name, email)")
+    .select("*, profiles(full_name, email, avatar_url)")
     .order("created_at", { ascending: false });
   if (judgesError) throw new Error(judgesError.message);
 
@@ -93,6 +108,7 @@ export default async function JudgesPage({ searchParams }: PageProps) {
 
   const judges: JudgeRow[] = ((judgesData ?? []) as JudgeRow[]).map((j) => ({
     ...j,
+    profiles: normalizeProfile(j.profiles),
     group: membershipByJudge.get(j.id) ?? null,
   }));
 

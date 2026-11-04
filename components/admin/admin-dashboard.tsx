@@ -648,7 +648,7 @@ function MetricCard({
       variants={itemVariants}
       className={cn(
         "flex h-full min-w-0 flex-col gap-2 px-3 py-3 sm:flex-row sm:items-start sm:gap-3 sm:px-4 sm:py-3.5",
-        featured ? "dash-panel--featured rounded-xl p-4 sm:p-5" : "dash-metric",
+        featured ? "dash-panel dash-panel--featured p-4 sm:p-5" : "dash-metric",
       )}
     >
       <span

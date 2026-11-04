@@ -48,6 +48,7 @@ import {
 } from "@/lib/admin/actions/groups";
 import { groupColorKeys, getGroupColorToken } from "@/lib/groups/color-tokens";
 import { GroupBadge } from "@/components/shared/group-badge";
+import { UserAvatar } from "@/components/shared/user-avatar";
 import type { Judge, JudgeGroup, Profile } from "@/types/database";
 import { cn } from "@/lib/utils";
 
@@ -56,7 +57,7 @@ type MemberRow = {
   judge_id: string;
   is_lead: boolean;
   judges: (Judge & {
-    profiles: Pick<Profile, "full_name" | "email"> | null;
+    profiles: Pick<Profile, "full_name" | "email" | "avatar_url"> | null;
   }) | null;
 };
 
@@ -74,16 +75,11 @@ type GroupsManagerProps = {
   eventId: string;
   groups: GroupCardData[];
   unassignedJudges: Array<
-    Judge & { profiles: Pick<Profile, "full_name" | "email"> | null }
+    Judge & {
+      profiles: Pick<Profile, "full_name" | "email" | "avatar_url"> | null;
+    }
   >;
 };
-
-function initialsFromName(name: string) {
-  const parts = name.trim().split(/\s+/).filter(Boolean);
-  if (parts.length === 0) return "?";
-  if (parts.length === 1) return parts[0]!.slice(0, 2).toUpperCase();
-  return `${parts[0]![0] ?? ""}${parts[1]![0] ?? ""}`.toUpperCase();
-}
 
 function KpiBlock({
   icon: Icon,
@@ -896,15 +892,12 @@ export function GroupsManager({
                         className="flex items-center justify-between gap-2 dash-metric px-3 py-2"
                       >
                         <span className="flex min-w-0 items-center gap-2 text-sm">
-                          <span
-                            className={cn(
-                              "flex size-7 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold",
-                              token.bgClass,
-                              token.textClass,
-                            )}
-                          >
-                            {initialsFromName(name)}
-                          </span>
+                          <UserAvatar
+                            name={name}
+                            src={m.judges?.profiles?.avatar_url}
+                            size="sm"
+                            className={cn(token.bgClass, token.textClass)}
+                          />
                           <span className="truncate">
                             {name}
                             {m.is_lead ? " (Lead)" : ""}

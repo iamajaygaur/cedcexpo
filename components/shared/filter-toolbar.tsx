@@ -64,7 +64,7 @@ export function FilterViewToggle({
       role="group"
       aria-label={ariaLabel}
       className={cn(
-        "flex w-full shrink-0 rounded-md border border-border bg-muted/50 p-0.5 sm:ml-auto sm:w-auto",
+        "flex w-full shrink-0 rounded-xl border border-border bg-muted/50 p-0.5 sm:ml-auto sm:w-auto",
         className,
       )}
     >

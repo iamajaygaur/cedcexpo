@@ -30,6 +30,7 @@ import { NavLink } from "@/components/shared/nav-link";
 import { NavigationProgress } from "@/components/shared/navigation-progress";
 import { OfflineBanner } from "@/components/shared/offline-banner";
 import { SignOutButton } from "@/components/shared/sign-out-button";
+import { UserAvatar } from "@/components/shared/user-avatar";
 import { cn } from "@/lib/utils";
 
 type NavItem = {
@@ -90,12 +91,14 @@ type AdminShellProps = {
   children: React.ReactNode;
   userName?: string;
   userRole?: "admin" | "judge";
+  userAvatarUrl?: string | null;
 };
 
 export function AdminShell({
   children,
   userName,
   userRole = "admin",
+  userAvatarUrl,
 }: AdminShellProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -140,7 +143,7 @@ export function AdminShell({
         <SidebarBrand />
         <SidebarNav pathname={pathname} className="sidebar-scroll flex-1" />
         <div className="border-t border-sidebar-border px-3 py-4">
-          <SidebarFooter userName={userName} />
+          <SidebarFooter userName={userName} userAvatarUrl={userAvatarUrl} />
         </div>
       </aside>
 
@@ -178,7 +181,7 @@ export function AdminShell({
               onNavigate={() => setOpen(false)}
             />
             <div className="border-t border-sidebar-border px-3 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-              <SidebarFooter userName={userName} />
+              <SidebarFooter userName={userName} userAvatarUrl={userAvatarUrl} />
             </div>
           </aside>
         </div>
@@ -189,6 +192,7 @@ export function AdminShell({
         <AppTopBar
           userName={userName}
           userRole={userRole}
+          userAvatarUrl={userAvatarUrl}
           onOpenNav={() => setOpen(true)}
           compactAccount
         />
@@ -288,19 +292,23 @@ function SidebarNav({
   );
 }
 
-function SidebarFooter({ userName }: { userName?: string }) {
+function SidebarFooter({
+  userName,
+  userAvatarUrl,
+}: {
+  userName?: string;
+  userAvatarUrl?: string | null;
+}) {
   return (
     <div className="space-y-1">
       {userName ? (
         <div className="mb-2 flex items-center gap-2.5 px-3">
-          <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
-            {(userName ?? "U")
-              .split(/\s+/)
-              .filter(Boolean)
-              .slice(0, 2)
-              .map((p) => p[0]?.toUpperCase() ?? "")
-              .join("") || "U"}
-          </div>
+          <UserAvatar
+            name={userName}
+            src={userAvatarUrl}
+            size="sm"
+            tone="sidebar"
+          />
           <div className="min-w-0">
             <p className="truncate text-[12px] font-semibold text-sidebar-foreground/80">
               {userName}

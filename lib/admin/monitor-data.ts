@@ -35,7 +35,7 @@ export type MonitorTeamRow = {
 
 export type MonitorJudgeRow = {
   judge: Judge;
-  profile: Pick<Profile, "full_name" | "email"> | null;
+  profile: Pick<Profile, "full_name" | "email" | "avatar_url"> | null;
   group: JudgeGroup | null;
   expected: number;
   submitted: number;
@@ -109,7 +109,7 @@ export async function loadMonitorSnapshot(
       .eq("event_id", eventId),
     supabase
       .from(TABLES.judges)
-      .select("*, profiles(full_name, email)")
+      .select("*, profiles(full_name, email, avatar_url)")
       .eq("active", true),
   ]);
 
@@ -134,7 +134,7 @@ export async function loadMonitorSnapshot(
   >[];
 
   type JudgeWithProfile = Judge & {
-    profiles: Pick<Profile, "full_name" | "email"> | null;
+    profiles: Pick<Profile, "full_name" | "email" | "avatar_url"> | null;
   };
   const judgeList = (judges ?? []) as JudgeWithProfile[];
   const activeJudgeIds = new Set(judgeList.map((j) => j.id));

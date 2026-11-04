@@ -67,7 +67,7 @@ export function ProjectCard({ project, previewJudgeId }: ProjectCardProps) {
     >
       <div className="mb-3 flex items-center justify-between gap-3">
         <p className="dash-section-label">Team {project.team.team_number}</p>
-        <span className="rounded-md bg-muted/80 px-2.5 py-1 text-[11px] font-semibold text-muted-foreground">
+        <span className="rounded-full bg-muted/80 px-2.5 py-1 text-[11px] font-semibold text-muted-foreground">
           {booth.startsWith("Table") || booth.startsWith("Booth")
             ? booth.replace(/^Booth\s*/i, "Table ")
             : `Table ${booth}`}
@@ -80,7 +80,7 @@ export function ProjectCard({ project, previewJudgeId }: ProjectCardProps) {
 
       <div
         className={cn(
-          "mb-6 inline-flex w-fit items-center gap-2 rounded-md border border-border/70 bg-muted/35 px-2.5 py-1 text-xs font-semibold sm:text-sm",
+          "mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-border/70 bg-muted/35 px-2.5 py-1 text-xs font-semibold sm:text-sm",
           meta.textClass,
         )}
       >
@@ -91,7 +91,7 @@ export function ProjectCard({ project, previewJudgeId }: ProjectCardProps) {
       <div className="mt-auto">
         <span
           className={cn(
-            "inline-flex h-11 w-full items-center justify-center gap-2 rounded-md text-xs font-bold tracking-wide uppercase transition-colors",
+            "inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl text-xs font-bold tracking-wide uppercase transition-colors",
             action.outline
               ? "border border-primary text-primary group-hover/project:bg-primary/5"
               : "bg-primary text-primary-foreground group-hover/project:brightness-[1.03]",

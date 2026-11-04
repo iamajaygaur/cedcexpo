@@ -15,6 +15,7 @@ import {
   toLoginUsername,
   usernameFromNameParts,
 } from "@/lib/auth/username";
+import { writeAvatarForProfile } from "@/lib/profile/avatar-storage";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { TABLES } from "@/lib/supabase/tables";
 import { judgeFormSchema } from "@/lib/validation/admin";
@@ -141,10 +142,25 @@ export async function createJudgeAction(
       if (memberError) return actionFail(memberError.message);
     }
 
+    // Optional profile photo (Add Judge form). Excel import never sends this —
+    // those judges keep initials until a photo is added later.
+    const avatar = formData.get("avatar");
+    let photoNote = "";
+    if (avatar instanceof File && avatar.size > 0) {
+      const photoResult = await writeAvatarForProfile({
+        supabase: admin,
+        profileId: created.user.id,
+        file: avatar,
+      });
+      if (!photoResult.ok) {
+        photoNote = ` Account created, but photo failed: ${photoResult.message}`;
+      }
+    }
+
     revalidatePath("/admin/judges");
     revalidatePath("/admin/groups");
     return actionOk(
-      `Judge created. Login username: ${usernameParsed.username}. Share the temporary password securely.`,
+      `Judge created. Login username: ${usernameParsed.username}. Share the temporary password securely.${photoNote}`,
     );
   } catch (e) {
     return actionFail(

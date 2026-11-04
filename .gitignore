@@ -50,7 +50,10 @@ yarn-error.log*
 next-env.d.ts
 
 # local tooling / agent caches
-.cursor/
+.cursor/*
+!.cursor/mcp.json
+!.cursor/rules/
+!.cursor/rules/**
 .agents/
 graphify-out/
 .planning/

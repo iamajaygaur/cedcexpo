@@ -3,6 +3,7 @@ import { AdminPasswordForm } from "@/components/admin/admin-password-form";
 import { PageHeader } from "@/components/admin/page-header";
 import { SettingsForm } from "@/components/admin/settings-form";
 import { AppFooter } from "@/components/shared/app-footer";
+import { ProfileAvatarForm } from "@/components/shared/profile-avatar-form";
 import { resolveOperationalEvent } from "@/lib/admin/event-context";
 import { requireAdminClient } from "@/lib/admin/guard";
 import { APP_VERSION_LABEL } from "@/lib/app-version";
@@ -14,7 +15,7 @@ type PageProps = {
 
 export default async function SettingsPage({ searchParams }: PageProps) {
   const { eventId } = await searchParams;
-  const { supabase } = await requireAdminClient();
+  const { supabase, profile } = await requireAdminClient();
   const { event, events, lockedEvent } = await resolveOperationalEvent(
     supabase,
     eventId,
@@ -26,20 +27,26 @@ export default async function SettingsPage({ searchParams }: PageProps) {
       <PageHeader
         breadcrumbs={[{ label: "Settings" }]}
         title="Settings"
-        description="Event configuration, password, and production notes."
+        description="Profile photo, event configuration, password, and production notes."
       />
 
       <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
-        {event ? (
-          <SettingsForm event={event} />
-        ) : (
-          <OpsEventEmpty
-            lockedEvent={lockedEvent}
-            hasAnyEvent={events.length > 0}
-          />
-        )}
+        <ProfileAvatarForm
+          fullName={profile.fullName || profile.email}
+          email={profile.email}
+          avatarUrl={profile.avatarUrl}
+        />
         <AdminPasswordForm />
       </div>
+
+      {event ? (
+        <SettingsForm event={event} />
+      ) : (
+        <OpsEventEmpty
+          lockedEvent={lockedEvent}
+          hasAnyEvent={events.length > 0}
+        />
+      )}
 
       {lockedEvent && event ? (
         <OpsEventEmpty lockedEvent={lockedEvent} hasAnyEvent />

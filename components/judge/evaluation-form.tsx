@@ -872,7 +872,7 @@ export function EvaluationForm({
         )}
         aria-hidden={keyboardOpen || undefined}
       >
-        <div className="mx-auto flex max-w-5xl flex-col gap-2.5 px-4 py-3 sm:flex-row sm:items-center sm:justify-between md:px-8">
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-2.5 px-4 py-3 sm:flex-row sm:items-center sm:justify-between md:px-8">
           <div className="flex min-w-0 flex-wrap items-center gap-2 sm:gap-3">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Your Score
