@@ -30,5 +30,10 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    // BoardUI demo templates are not used by product routes. Keeping them out
+    // of `next build` typecheck avoids optional peer failures (react-table, etc.).
+    "components/application"
+  ]
 }
