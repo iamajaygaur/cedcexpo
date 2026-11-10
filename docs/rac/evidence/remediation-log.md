@@ -14,6 +14,14 @@ Append-only. Newest entries at the top.
 
 **Artifacts:** `npm-audit-20261110.txt`, `npm-audit-20261110.json`, `npm-audit-20261110-after-fix.txt`
 
+## 2026-11-10 — CI failures on main (E2E + Security)
+
+| ID | Source | Severity | Finding | Action | Status |
+|----|--------|----------|---------|--------|--------|
+| CI-E2E | GitHub Actions | High | `next build` typecheck failed on BoardUI demo `data-table` missing `@tanstack/react-table` | Exclude `components/application` from `tsconfig.json` (demos not in product routes) | Fixed |
+| CI-AUD | GitHub Actions | High | Security job failed: `npm audit --audit-level=high` (Next CVEs + unfixable `xlsx`) | Upgrade `next`/`eslint-config-next` to 16.4.6; gate via `scripts/check-npm-audit.mjs` with documented `xlsx` allowlist | Fixed |
+| — | Dependabot | Info | Major bumps (TS 7 / ESLint 10) opened disruptive PRs | Dependabot ignores semver-major | Fixed |
+
 ## Template for future rows
 
 | ID | Source | Severity | Finding | Action | Status |

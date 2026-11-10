@@ -6,17 +6,21 @@ updates:
     schedule:
       interval: weekly
       day: monday
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 5
     labels:
       - dependencies
       - security
+    # Avoid disruptive major bumps (Dependabot opened TS 7 / ESLint 10 PRs).
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     groups:
-      production-deps:
+      production-patch-minor:
         dependency-type: production
         update-types:
           - "minor"
           - "patch"
-      development-deps:
+      development-patch-minor:
         dependency-type: development
         update-types:
           - "minor"
@@ -29,3 +33,6 @@ updates:
     labels:
       - dependencies
       - security
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]

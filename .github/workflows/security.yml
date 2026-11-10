@@ -31,8 +31,15 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Production dependency audit
-        # Fail the job on high/critical so findings are visible in CI evidence.
-        run: npm audit --omit=dev --audit-level=high
+        # Fails on high/critical except documented accepted risks (see script).
+        run: node scripts/check-npm-audit.mjs npm-audit.json
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit
+          path: npm-audit.json
+          retention-days: 30
 
   codeql:
     name: CodeQL (SAST)
@@ -40,11 +47,11 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      - uses: github/codeql-action/init@v3
+      - uses: github/codeql-action/init@v4
         with:
           languages: javascript-typescript
           queries: security-extended
-      - uses: github/codeql-action/autobuild@v3
-      - uses: github/codeql-action/analyze@v3
+      - uses: github/codeql-action/autobuild@v4
+      - uses: github/codeql-action/analyze@v4
         with:
           category: "/language:javascript-typescript"
