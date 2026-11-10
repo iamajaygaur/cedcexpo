@@ -1,0 +1,50 @@
+# SAST + dependency vulnerability scanning (RAC §2, §3)
+name: Security
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Weekly dependency / CodeQL refresh
+    - cron: "0 14 * * 1"
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+concurrency:
+  group: security-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  npm-audit:
+    name: npm audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Production dependency audit
+        # Fail the job on high/critical so findings are visible in CI evidence.
+        run: npm audit --omit=dev --audit-level=high
+
+  codeql:
+    name: CodeQL (SAST)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+          queries: security-extended
+      - uses: github/codeql-action/autobuild@v3
+      - uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:javascript-typescript"

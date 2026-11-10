@@ -47,6 +47,10 @@ GitHub Actions secrets to enable auth coverage on PRs.
 
 Next.js App Router · TypeScript · Tailwind CSS · shadcn/ui · Supabase (Auth, Postgres, RLS, Realtime) · PWA
 
+## Security / RAC evidence
+
+University risk-assessment packet (architecture, controls, evidence checklist): **[docs/rac/README.md](./docs/rac/README.md)**.
+
 ## Roles
 
 | Role | Entry |
