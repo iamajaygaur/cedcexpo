@@ -30,10 +30,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": [
-    "node_modules",
-    // BoardUI demo templates — not routed by the product app; missing optional
-    // peers (e.g. @tanstack/react-table) must not break `next build` / E2E.
-    "components/application"
-  ]
+  "exclude": ["node_modules"]
 }
