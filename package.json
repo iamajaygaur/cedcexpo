@@ -16,7 +16,7 @@
     "unrs-resolver": true
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.5.7",
+    "@hookform/resolvers": "^7.0.3",
     "@remixicon/react": "^4.9.0",
     "@supabase/ssr": "^0.12.3",
     "@supabase/supabase-js": "^2.110.9",
