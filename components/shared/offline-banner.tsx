@@ -14,10 +14,10 @@ type OfflineBannerProps = {
  * Offline + slow-network strip. Keeps the shell informative — never a blank wall.
  */
 export function OfflineBanner({ className }: OfflineBannerProps) {
-  const { online, slow } = useNetworkStatus();
+  const { status } = useNetworkStatus();
   const reduced = useReducedMotion();
 
-  const mode = !online ? "offline" : slow ? "slow" : null;
+  const mode = status === "online" ? null : status;
 
   return (
     <AnimatePresence>

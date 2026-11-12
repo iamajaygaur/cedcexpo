@@ -9,6 +9,7 @@ import {
 } from "@/lib/admin/action-result";
 import { requireAdminClient } from "@/lib/admin/guard";
 import { isReportJobsTableMissing } from "@/lib/admin/report-jobs";
+import { canChangeEventStatus } from "@/lib/machines/event-status";
 import { ensureStandardCriteria } from "@/lib/scoring/ensure-standard-criteria";
 import { TABLES } from "@/lib/supabase/tables";
 import { eventFormSchema } from "@/lib/validation/admin";
@@ -91,6 +92,19 @@ export async function upsertEventAction(
     const { id, ...payload } = parsed.data;
 
     if (id) {
+      const { data: current, error: loadError } = await supabase
+        .from(TABLES.events)
+        .select("status")
+        .eq("id", id)
+        .maybeSingle();
+      if (loadError) return actionFail(loadError.message);
+      if (!current) return actionFail("Event not found");
+      if (!canChangeEventStatus(current.status, payload.status)) {
+        return actionFail(
+          `Cannot change event status from ${current.status} to ${payload.status}.`,
+        );
+      }
+
       const { error } = await supabase
         .from(TABLES.events)
         .update(payload)
@@ -165,6 +179,20 @@ export async function setEventStatusAction(
       status !== "archived"
     ) {
       return actionFail("Invalid status");
+    }
+
+    const { data: current, error: loadError } = await supabase
+      .from(TABLES.events)
+      .select("status")
+      .eq("id", id)
+      .maybeSingle();
+    if (loadError) return actionFail(loadError.message);
+    if (!current) return actionFail("Event not found");
+
+    if (!canChangeEventStatus(current.status, status)) {
+      return actionFail(
+        `Cannot change event status from ${current.status} to ${status}.`,
+      );
     }
 
     const { error } = await supabase

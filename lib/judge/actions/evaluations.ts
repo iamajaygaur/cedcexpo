@@ -17,6 +17,10 @@ import {
 import { createClient } from "@/lib/supabase/server";
 import { TABLES } from "@/lib/supabase/tables";
 import {
+  canSaveEvaluationDraft,
+  canSubmitEvaluation,
+} from "@/lib/machines/evaluation-status";
+import {
   evaluationDraftSchema,
   evaluationSubmitSchema,
 } from "@/lib/validation/judge";
@@ -110,10 +114,10 @@ export async function saveEvaluationDraftAction(
       return actionFail("This expo has ended. Judging is closed.");
     }
 
-    if (
-      access.project.evaluation?.status === "submitted" ||
-      access.project.assignmentId !== parsed.data.assignment_id
-    ) {
+    if (access.project.assignmentId !== parsed.data.assignment_id) {
+      return actionFail("Evaluation cannot be modified.");
+    }
+    if (!canSaveEvaluationDraft(access.project.evaluation?.status ?? null)) {
       return actionFail("Evaluation cannot be modified.");
     }
 
@@ -207,7 +211,7 @@ export async function submitEvaluationAction(
       return actionFail("This expo has ended. Judging is closed.");
     }
 
-    if (access.project.evaluation?.status === "submitted") {
+    if (!canSubmitEvaluation(access.project.evaluation?.status ?? null)) {
       return actionFail("Evaluation already submitted.");
     }
 

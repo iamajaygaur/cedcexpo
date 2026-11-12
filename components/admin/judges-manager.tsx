@@ -35,6 +35,8 @@ import { PageHeader } from "@/components/shared/page-header";
 import { EmptyState, ZeroResults } from "@/components/shared/ui-states";
 import { UserAvatar } from "@/components/shared/user-avatar";
 import { Button } from "@/components/ui/button";
+import { useMachine } from "@/lib/fsm";
+import { judgesScreenMachine } from "@/lib/machines/judges-manager";
 import {
   Dialog,
   DialogContent,
@@ -944,7 +946,7 @@ export function JudgesManager({
   focusJudgeId = null,
 }: JudgesManagerProps) {
   const router = useRouter();
-  const [mode, setMode] = useState<"list" | "create" | "edit">("list");
+  const { state: mode, send: sendScreen } = useMachine(judgesScreenMachine);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formKey, setFormKey] = useState(0);
   const [query, setQuery] = useState("");
@@ -1079,7 +1081,7 @@ export function JudgesManager({
   );
 
   function backToList() {
-    setMode("list");
+    sendScreen("BACK");
     setEditingId(null);
     setCreateGroupId("");
   }
@@ -1088,7 +1090,7 @@ export function JudgesManager({
     setEditingId(null);
     setCreateGroupId(groupId);
     setFormKey((k) => k + 1);
-    setMode("create");
+    sendScreen("CREATE");
   }
 
   if (mode === "create" || mode === "edit") {
@@ -1195,7 +1197,7 @@ export function JudgesManager({
                 onEdit={(judge) => {
                   setEditingId(judge.id);
                   setFormKey((k) => k + 1);
-                  setMode("edit");
+                  sendScreen("EDIT");
                 }}
                 onDelete={setDeleteJudge}
               />
@@ -1345,7 +1347,7 @@ export function JudgesManager({
                                     e.stopPropagation();
                                     setEditingId(judge.id);
                                     setFormKey((k) => k + 1);
-                                    setMode("edit");
+                                    sendScreen("EDIT");
                                   }}
                                 >
                                   <Pencil className="size-3.5" />
@@ -1491,7 +1493,7 @@ export function JudgesManager({
                                   e.stopPropagation();
                                   setEditingId(judge.id);
                                   setFormKey((k) => k + 1);
-                                  setMode("edit");
+                                  sendScreen("EDIT");
                                 }}
                               >
                                 <Pencil className="size-3.5" />
@@ -1554,7 +1556,7 @@ export function JudgesManager({
           setEditingId(detailJudge.id);
           setFormKey((k) => k + 1);
           setDetailJudge(null);
-          setMode("edit");
+          sendScreen("EDIT");
         }}
         onDelete={() => {
           if (!detailJudge) return;

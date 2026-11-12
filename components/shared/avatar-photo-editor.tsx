@@ -7,6 +7,8 @@ import { AvatarCropDialog } from "@/components/shared/avatar-crop-dialog";
 import { showAppToast } from "@/components/shared/app-toast";
 import { UserAvatar } from "@/components/shared/user-avatar";
 import type { ActionResult } from "@/lib/admin/action-result";
+import { useMachine } from "@/lib/fsm";
+import { avatarUploadMachine } from "@/lib/machines/avatar-upload";
 import { cn } from "@/lib/utils";
 
 type AvatarPhotoEditorProps = {
@@ -44,8 +46,13 @@ export function AvatarPhotoEditor({
 }: AvatarPhotoEditorProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [pending, startTransition] = useTransition();
+  const { state: uploadState, send: sendUpload } =
+    useMachine(avatarUploadMachine);
   const [cropSrc, setCropSrc] = useState<string | null>(null);
-  const [cropOpen, setCropOpen] = useState(false);
+  const cropOpen =
+    uploadState === "cropping" ||
+    uploadState === "exporting" ||
+    uploadState === "uploading";
 
   useEffect(() => {
     return () => {
@@ -54,12 +61,13 @@ export function AvatarPhotoEditor({
   }, [cropSrc]);
 
   function openPicker() {
-    if (pending) return;
+    if (pending || uploadState === "uploading") return;
     inputRef.current?.click();
   }
 
   function clearCropPreview() {
-    setCropOpen(false);
+    sendUpload("CANCEL");
+    sendUpload("RESET");
     setCropSrc((prev) => {
       if (prev) URL.revokeObjectURL(prev);
       return null;
@@ -67,23 +75,24 @@ export function AvatarPhotoEditor({
     if (inputRef.current) inputRef.current.value = "";
   }
 
-  function run(
-    action: (
-      prev: ActionResult,
-      formData: FormData,
-    ) => Promise<ActionResult>,
-    formData: FormData,
-  ) {
+  function runUpload(formData: FormData) {
+    sendUpload("EXPORT_DONE");
     startTransition(async () => {
-      const result = await action({ ok: true }, formData);
+      const result = await uploadAction({ ok: true }, formData);
       if (result.ok) {
+        sendUpload("UPLOAD_DONE");
         showAppToast({
           tone: "success",
           title: result.message ?? "Photo updated",
         });
-        clearCropPreview();
+        setCropSrc((prev) => {
+          if (prev) URL.revokeObjectURL(prev);
+          return null;
+        });
+        if (inputRef.current) inputRef.current.value = "";
         onUpdated?.();
       } else {
+        sendUpload("FAIL");
         showAppToast({
           tone: "error",
           title: result.message ?? "Could not update photo",
@@ -94,14 +103,15 @@ export function AvatarPhotoEditor({
 
   function onFileSelected(file: File | null) {
     if (!file) return;
+    sendUpload("PICK");
     if (cropSrc) URL.revokeObjectURL(cropSrc);
     const url = URL.createObjectURL(file);
     setCropSrc(url);
-    setCropOpen(true);
     if (inputRef.current) inputRef.current.value = "";
   }
 
   function onCropConfirm(file: File) {
+    sendUpload("CONFIRM_CROP");
     const formData = new FormData();
     formData.set("avatar", file);
     if (extraFields) {
@@ -109,7 +119,7 @@ export function AvatarPhotoEditor({
         formData.set(key, value);
       }
     }
-    run(uploadAction, formData);
+    runUpload(formData);
   }
 
   function onRemove() {
@@ -120,7 +130,21 @@ export function AvatarPhotoEditor({
         formData.set(key, value);
       }
     }
-    run(removeAction, formData);
+    startTransition(async () => {
+      const result = await removeAction({ ok: true }, formData);
+      if (result.ok) {
+        showAppToast({
+          tone: "success",
+          title: result.message ?? "Photo updated",
+        });
+        onUpdated?.();
+      } else {
+        showAppToast({
+          tone: "error",
+          title: result.message ?? "Could not update photo",
+        });
+      }
+    });
   }
 
   return (
@@ -214,7 +238,6 @@ export function AvatarPhotoEditor({
         pending={pending}
         onOpenChange={(open) => {
           if (!open) clearCropPreview();
-          else setCropOpen(true);
         }}
         onConfirm={onCropConfirm}
       />

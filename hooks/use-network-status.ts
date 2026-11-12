@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+
+import { useMachine } from "@/lib/fsm";
+import {
+  networkStatusFromFlags,
+  networkStatusMachine,
+} from "@/lib/machines/network-status";
 
 type NetworkConnection = {
   effectiveType?: string;
@@ -18,40 +24,45 @@ function readSlow(connection: NetworkConnection | undefined): boolean {
 
 /**
  * Online/offline + coarse slow-network signal for Expo Wi‑Fi UX.
+ * Backed by `networkStatusMachine`: online | slow | offline.
  */
 export function useNetworkStatus() {
-  const [online, setOnline] = useState(true);
-  const [slow, setSlow] = useState(false);
+  const { state, send } = useMachine(networkStatusMachine);
 
   useEffect(() => {
-    function syncOnline() {
-      setOnline(navigator.onLine);
-    }
-
-    function syncConnection() {
+    function sync() {
       const connection = (
         navigator as Navigator & { connection?: NetworkConnection }
       ).connection;
-      setSlow(readSlow(connection));
+      const next = networkStatusFromFlags(
+        navigator.onLine,
+        readSlow(connection),
+      );
+      if (next === "offline") send("OFFLINE");
+      else if (next === "slow") send("SLOW");
+      else send("ONLINE");
     }
 
-    syncOnline();
-    syncConnection();
+    sync();
 
-    window.addEventListener("online", syncOnline);
-    window.addEventListener("offline", syncOnline);
+    window.addEventListener("online", sync);
+    window.addEventListener("offline", sync);
 
     const connection = (
       navigator as Navigator & { connection?: NetworkConnection }
     ).connection;
-    connection?.addEventListener?.("change", syncConnection);
+    connection?.addEventListener?.("change", sync);
 
     return () => {
-      window.removeEventListener("online", syncOnline);
-      window.removeEventListener("offline", syncOnline);
-      connection?.removeEventListener?.("change", syncConnection);
+      window.removeEventListener("online", sync);
+      window.removeEventListener("offline", sync);
+      connection?.removeEventListener?.("change", sync);
     };
-  }, []);
+  }, [send]);
 
-  return { online, slow };
+  return {
+    online: state !== "offline",
+    slow: state === "slow",
+    status: state,
+  };
 }

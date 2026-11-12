@@ -7,6 +7,8 @@ import { Clock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { clearClientAuthArtifacts } from "@/lib/auth/clear-client-session";
+import { useMachine } from "@/lib/fsm";
+import { idleSessionMachine } from "@/lib/machines/idle-session";
 
 /** Auto sign-out after this much user inactivity (admin + judge). */
 export const IDLE_TIMEOUT_MS = 25 * 60 * 1000;
@@ -28,19 +30,19 @@ const ACTIVITY_EVENTS = [
 
 function forceLogoutToLogin() {
   clearClientAuthArtifacts();
-  // Full cookie clear via logout route, then land on the timeout message.
   window.location.assign("/api/auth/logout?error=session_timeout");
 }
 
 /**
  * Signs the user out after 25 minutes without interaction.
  * Shows a warning dialog 2 minutes prior so work isn't lost silently.
+ * States: active → warning → logging_out (idleSessionMachine).
  */
 export function IdleSessionGuard() {
   const lastActivityRef = useRef(Date.now());
-  const loggingOutRef = useRef(false);
-  const warnOpenRef = useRef(false);
-  const [warnOpen, setWarnOpen] = useState(false);
+  const { state, send } = useMachine(idleSessionMachine);
+  const stateRef = useRef(state);
+  stateRef.current = state;
   const [mounted, setMounted] = useState(false);
   const reduced = useReducedMotion();
 
@@ -50,35 +52,31 @@ export function IdleSessionGuard() {
 
   const staySignedIn = useCallback(() => {
     lastActivityRef.current = Date.now();
-    warnOpenRef.current = false;
-    setWarnOpen(false);
-  }, []);
+    send("STAY");
+  }, [send]);
 
   useEffect(() => {
     let throttleUntil = 0;
 
     function markActivity() {
-      // While the warning is up, only "Stay signed in" extends the session.
-      if (warnOpenRef.current || loggingOutRef.current) return;
+      if (stateRef.current !== "active") return;
       const now = Date.now();
       if (now < throttleUntil) return;
       throttleUntil = now + 1000;
       lastActivityRef.current = now;
+      send("ACTIVITY");
     }
 
     function checkIdle() {
-      if (loggingOutRef.current) return;
+      if (stateRef.current === "logging_out") return;
       const idleFor = Date.now() - lastActivityRef.current;
       if (idleFor >= IDLE_TIMEOUT_MS) {
-        loggingOutRef.current = true;
-        warnOpenRef.current = false;
-        setWarnOpen(false);
+        send("TIMEOUT");
         forceLogoutToLogin();
         return;
       }
-      if (idleFor >= IDLE_WARN_MS && !warnOpenRef.current) {
-        warnOpenRef.current = true;
-        setWarnOpen(true);
+      if (idleFor >= IDLE_WARN_MS && stateRef.current === "active") {
+        send("WARN");
       }
     }
 
@@ -93,8 +91,6 @@ export function IdleSessionGuard() {
     }
     document.addEventListener("visibilitychange", onVisibility);
 
-    // Check often enough that the 2-minute warn window is reliable even when
-    // the tab was background-throttled and then focused again.
     const intervalId = window.setInterval(checkIdle, 5_000);
     lastActivityRef.current = Date.now();
 
@@ -105,11 +101,11 @@ export function IdleSessionGuard() {
       document.removeEventListener("visibilitychange", onVisibility);
       window.clearInterval(intervalId);
     };
-    // Mount once — do not rebind when the warning opens (that used to reset
-    // lastActivity and push logout out by another full 25 minutes).
-  }, []);
+  }, [send]);
 
   if (!mounted) return null;
+
+  const warnOpen = state === "warning";
 
   return createPortal(
     <AnimatePresence>
@@ -159,7 +155,7 @@ export function IdleSessionGuard() {
                 variant="outline"
                 className="flex-1"
                 onClick={() => {
-                  loggingOutRef.current = true;
+                  send("SIGN_OUT");
                   forceLogoutToLogin();
                 }}
               >

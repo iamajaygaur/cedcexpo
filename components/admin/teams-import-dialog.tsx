@@ -33,6 +33,10 @@ import {
   type ImportedTeam,
   type TeamImportRowError,
 } from "@/lib/admin/team-import";
+import {
+  importStatusAfter,
+  type ImportStatus,
+} from "@/lib/machines/import-status";
 import { TEAM_DEPARTMENTS } from "@/lib/teams/constants";
 import { cn } from "@/lib/utils";
 
@@ -42,12 +46,6 @@ type TeamsImportDialogProps = {
   onOpenChange: (open: boolean) => void;
   onImported?: () => void;
 };
-
-type ImportStatus =
-  | { kind: "idle" }
-  | { kind: "success"; message: string }
-  | { kind: "error"; message: string }
-  | { kind: "partial"; message: string };
 
 async function parseFile(file: File): Promise<Record<string, string>[]> {
   const name = file.name.toLowerCase();
@@ -125,14 +123,14 @@ export function TeamsImportDialog({
     setFileName(null);
     setTeams([]);
     setErrors([]);
-    setStatus({ kind: "idle" });
+    setStatus((s) => importStatusAfter(s, "RESET"));
     setFailed([]);
     setPreviewPage(1);
     if (inputRef.current) inputRef.current.value = "";
   }
 
   async function onFileChange(file: File | null) {
-    setStatus({ kind: "idle" });
+    setStatus((s) => importStatusAfter(s, "RESET"));
     setFailed([]);
     setPreviewPage(1);
     if (!file) {

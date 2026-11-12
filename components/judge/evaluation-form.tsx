@@ -13,21 +13,20 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-import {
-  SaveStatusIndicator,
-  type SaveStatus,
-} from "@/components/judge/save-status-indicator";
+import { SaveStatusIndicator } from "@/components/judge/save-status-indicator";
 import {
   showAppFeedbackFromResult,
 } from "@/components/shared/app-feedback";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useMachine } from "@/lib/fsm";
 import type { AssignedProject } from "@/lib/judge/context";
 import {
   saveEvaluationDraftAction,
   submitEvaluationAction,
 } from "@/lib/judge/actions/evaluations";
 import type { CriterionWithAbet } from "@/lib/judge/evaluation-data";
+import { saveStatusMachine } from "@/lib/machines/save-status";
 import type { EvaluationScore, Event, Team } from "@/types/database";
 import { cn } from "@/lib/utils";
 
@@ -162,7 +161,7 @@ export function EvaluationForm({
   const [scores, setScores] = useState<ScoreState>(() =>
     buildScoreState(criteria, initialScores),
   );
-  const [saveStatus, setSaveStatus] = useState<SaveStatus>("idle");
+  const { state: saveStatus, send: sendSave } = useMachine(saveStatusMachine);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [offline, setOffline] = useState(false);
@@ -282,7 +281,7 @@ export function EvaluationForm({
         } else {
           setScores(cleaned);
           if (parsed.comments) setComments(parsed.comments);
-          setSaveStatus("unsaved");
+          sendSave("EDIT");
           dirtyRef.current = true;
           setNeedsSync(true);
         }
@@ -330,7 +329,8 @@ export function EvaluationForm({
       !project.assignmentId ||
       project.assignmentId === "00000000-0000-0000-0000-000000000000"
     ) {
-      setSaveStatus("error");
+      sendSave("SAVE");
+      sendSave("FAIL");
       setSaveError(
         "This team is not assigned to your judge group, so scores cannot be saved.",
       );
@@ -338,12 +338,12 @@ export function EvaluationForm({
     }
 
     savingRef.current = true;
-    setSaveStatus("saving");
+    sendSave("SAVE");
     setSaveError(null);
     persistLocal();
 
     if (offline) {
-      setSaveStatus("error");
+      sendSave("FAIL");
       setSaveError(
         "You're offline. Scores are kept on this device and will sync when you reconnect.",
       );
@@ -359,11 +359,11 @@ export function EvaluationForm({
     if (result.ok) {
       dirtyRef.current = false;
       setNeedsSync(false);
-      setSaveStatus("saved");
+      sendSave("SUCCESS");
       setSaveError(null);
       router.refresh();
     } else {
-      setSaveStatus("error");
+      sendSave("FAIL");
       setSaveError(result.message ?? "Could not save draft.");
       setNeedsSync(true);
     }
@@ -374,6 +374,7 @@ export function EvaluationForm({
     persistLocal,
     router,
     project.assignmentId,
+    sendSave,
   ]);
 
   useEffect(() => {
@@ -399,12 +400,12 @@ export function EvaluationForm({
 
   useEffect(() => {
     if (readOnly || !dirtyRef.current) return;
-    setSaveStatus("unsaved");
+    sendSave("EDIT");
     const timer = setTimeout(() => {
       void saveDraft();
     }, 2000);
     return () => clearTimeout(timer);
-  }, [comments, scores, readOnly, saveDraft]);
+  }, [comments, scores, readOnly, saveDraft, sendSave]);
 
   const setScoreValue = (criterionId: string, score: number | null) => {
     if (readOnly) return;

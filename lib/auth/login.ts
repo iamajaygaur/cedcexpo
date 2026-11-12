@@ -4,6 +4,7 @@ import { cookies, headers } from "next/headers";
 
 import { dashboardPathForRole } from "@/lib/auth/session";
 import { SESSION_MODE_COOKIE } from "@/lib/auth/session-mode";
+import { sessionModeFromRemember } from "@/lib/machines/session-mode";
 import {
   authEmailFromUsername,
   normalizeDisplayName,
@@ -199,7 +200,7 @@ export async function attemptLogin(
   }
 
   const cookieStore = await cookies();
-  const sessionMode = parsed.data.remember ? "persistent" : "ephemeral";
+  const sessionMode = sessionModeFromRemember(parsed.data.remember);
   cookieStore.set(SESSION_MODE_COOKIE, sessionMode, {
     path: "/",
     httpOnly: false,

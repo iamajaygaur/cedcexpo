@@ -11,7 +11,12 @@ import type {
   TeamMember,
 } from "@/types/database";
 
-export type EvalStatus = "not_started" | "in_progress" | "submitted";
+import {
+  deriveEvalStatus,
+  type DerivedEvalStatus,
+} from "@/lib/machines/evaluation-status";
+
+export type EvalStatus = DerivedEvalStatus;
 
 export type AssignedProject = {
   team: Team;
@@ -58,12 +63,6 @@ function emptyWorkspace(
     isAdminPreview: false,
     ...partial,
   };
-}
-
-function deriveEvalStatus(evaluation: Evaluation | null): EvalStatus {
-  if (!evaluation) return "not_started";
-  if (evaluation.status === "submitted") return "submitted";
-  return "in_progress";
 }
 
 type WorkspaceOptions = {

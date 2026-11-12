@@ -12,8 +12,9 @@ import { loadResultsBundle } from "@/lib/admin/results-data";
 import {
   isReportJobsTableMissing,
 } from "@/lib/admin/report-jobs";
+import { reportJobMachine } from "@/lib/machines/report-job";
 import { TABLES } from "@/lib/supabase/tables";
-import type { ReportType } from "@/types/database";
+import type { ReportJobStatus, ReportType } from "@/types/database";
 
 const REPORT_TYPES = new Set<ReportType>([
   "master",
@@ -153,10 +154,17 @@ export async function retryReportAction(
       return actionFail("Report not found");
     }
 
+    if (!reportJobMachine.can(job.status as ReportJobStatus, "RETRY")) {
+      return actionFail("This report cannot be retried in its current state.");
+    }
+
     await supabase
       .from(TABLES.reportJobs)
       .update({
-        status: "generating",
+        status: reportJobMachine.transition(
+          job.status as ReportJobStatus,
+          "RETRY",
+        ),
         error_message: null,
         updated_at: new Date().toISOString(),
       })

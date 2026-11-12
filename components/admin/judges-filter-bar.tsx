@@ -9,9 +9,10 @@ import {
 } from "@/components/shared/filter-toolbar";
 import { SearchInput } from "@/components/ui/search-input";
 import { Select } from "@/components/ui/select";
+import type { JudgesViewMode } from "@/lib/machines/judges-manager";
 import { cn } from "@/lib/utils";
 
-export type JudgesViewMode = "kanban" | "matrix";
+export type { JudgesViewMode };
 
 type JudgesFilterBarProps = {
   query: string;

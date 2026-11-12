@@ -8,6 +8,7 @@ import {
 } from "@/lib/auth/session-mode";
 import { safeNextPathForRole } from "@/lib/auth/safe-next-path";
 import { dashboardPathForRole } from "@/lib/auth/session";
+import { sessionModeFromRemember } from "@/lib/machines/session-mode";
 import {
   authEmailFromUsername,
   normalizeDisplayName,
@@ -149,9 +150,9 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  const sessionMode: SessionMode = parsed.data.remember
-    ? "persistent"
-    : "ephemeral";
+  const sessionMode: SessionMode = sessionModeFromRemember(
+    parsed.data.remember,
+  );
 
   const pendingCookies: Array<{
     name: string;

@@ -1,8 +1,9 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import type { SaveStatus } from "@/lib/machines/save-status";
 
-export type SaveStatus = "idle" | "saving" | "saved" | "unsaved" | "error";
+export type { SaveStatus };
 
 type SaveStatusIndicatorProps = {
   status: SaveStatus;

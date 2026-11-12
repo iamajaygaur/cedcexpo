@@ -26,6 +26,10 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { showAppFeedbackFromResult } from "@/components/shared/app-feedback";
 import { importJudgesAction } from "@/lib/admin/actions/judges";
 import {
+  importStatusAfter,
+  type ImportStatus,
+} from "@/lib/machines/import-status";
+import {
   buildJudgeImportTemplateCsv,
   detectCsvDelimiter,
   parseCsvText,
@@ -44,12 +48,6 @@ type JudgesImportDialogProps = {
   onOpenChange: (open: boolean) => void;
   onImported?: () => void;
 };
-
-type ImportStatus =
-  | { kind: "idle" }
-  | { kind: "success"; message: string }
-  | { kind: "error"; message: string }
-  | { kind: "partial"; message: string };
 
 async function parseFile(file: File): Promise<Record<string, string>[]> {
   const name = file.name.toLowerCase();
@@ -147,7 +145,7 @@ export function JudgesImportDialog({
         message: `Import failed: ${parsed.errors.length} row error${parsed.errors.length === 1 ? "" : "s"} — fix the file and try again.`,
       });
     } else {
-      setStatus({ kind: "idle" });
+      setStatus((s) => importStatusAfter(s, "RESET"));
     }
   }
 
@@ -157,14 +155,14 @@ export function JudgesImportDialog({
     setJudges([]);
     setErrors([]);
     setDefaultPassword("");
-    setStatus({ kind: "idle" });
+    setStatus((s) => importStatusAfter(s, "RESET"));
     setFailed([]);
     setPreviewPage(1);
     if (inputRef.current) inputRef.current.value = "";
   }
 
   async function onFileChange(file: File | null) {
-    setStatus({ kind: "idle" });
+    setStatus((s) => importStatusAfter(s, "RESET"));
     setFailed([]);
     if (!file) {
       resetLocal();

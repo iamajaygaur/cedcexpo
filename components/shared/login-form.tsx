@@ -18,6 +18,8 @@ import { FieldError, SlowPendingHint } from "@/components/shared/ui-states";
 import { clearClientAuthArtifacts } from "@/lib/auth/clear-client-session";
 import { SUPPORT_EMAIL } from "@/lib/contact";
 import { useSlowPending } from "@/hooks/use-slow-pending";
+import { useMachine } from "@/lib/fsm";
+import { loginFlowMachine } from "@/lib/machines/login-flow";
 
 type LoginFormProps = {
   authError?: string | null;
@@ -41,7 +43,8 @@ export function LoginForm({
 }: LoginFormProps) {
   void supportEmail;
   const [showPassword, setShowPassword] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const { state: loginState, send: sendLogin } = useMachine(loginFlowMachine);
+  const submitting = loginState === "submitting";
   const [username, setUsername] = useState("");
   const [activeRole, setActiveRole] = useState<"judge" | "admin">(
     noticeMessage ? "admin" : "judge",
@@ -99,7 +102,7 @@ export function LoginForm({
           passwordRef.current.type = "password";
         }
         // Defer busy UI so the browser can post the form first.
-        window.setTimeout(() => setSubmitting(true), 0);
+        window.setTimeout(() => sendLogin("SUBMIT"), 0);
       }}
     >
       {nextPath ? <input type="hidden" name="next" value={nextPath} /> : null}
